@@ -41,7 +41,7 @@ export class ApiModule implements NestModule{
     configure(consumer: MiddlewareConsumer) {
         consumer
             .apply(MiddlemainMiddleware) 
-            .exclude({ path: '/api/v1*', method: RequestMethod.ALL})
+            .exclude({ path: '/api/v1/chinasun/updated_files', method: RequestMethod.ALL},{ path: '/api/v1/sendmail', method: RequestMethod.ALL})
             .forRoutes({ path: '/*', method: RequestMethod.ALL });    
     }
 }
