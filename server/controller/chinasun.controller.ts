@@ -17,8 +17,11 @@ constructor(){
 getUpdated_details()
 {
     //show the latest data
-
-    return this.chinasunService.getUpdatedData();
+    this.chinasunService.getUpdatedData().then(v => {
+        console.log(v);
+        return v;
+      });
+    
 
 }
 

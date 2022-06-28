@@ -10,8 +10,8 @@ export class MiddlemainMiddleware implements NestMiddleware{
     }
     
     use(req: IncomingMessage, res: ServerResponse, next:any) {
-        console.log("here")
-        console.log(req.url)
+        // console.log("here")
+        // console.log(req.url)
         if(req.url.includes("/api/v1")){
             if(req.url.replace("/api/v1/i18n/","")!="ch"&&req.url.replace("/api/v1/i18n/","")!="en"){
                 res.writeHead(200, { 'content-type': 'application/json' })
