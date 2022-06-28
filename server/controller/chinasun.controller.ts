@@ -14,13 +14,10 @@ constructor(){
 }
   
 @Get('updated_files')
-getUpdated_details()
+async getUpdated_details()
 {
     //show the latest data
-    this.chinasunService.getUpdatedData().then(v => {
-        console.log(v);
-        return v;
-      });
+    return await this.chinasunService.getUpdatedData()
     
 
 }
