@@ -55,8 +55,8 @@ export class ChinasunService {
     // }
 
     getUpdatedData(){    
-        // get current time 
-        return new Promise(resolve => {
+
+            // get current time 
             var now = new Date(this.getCurrentTime().slice(0, 4)+"-"+this.getCurrentTime().slice(4,6)+"-"+this.getCurrentTime().slice(6,8));
             var lastfileDate;
             var diff;
@@ -131,7 +131,6 @@ export class ChinasunService {
                 }
      
             });
-          });
 
         
         // let File = xlsx.readFile(file,{type:'binary',cellDates:true});
