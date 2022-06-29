@@ -9,7 +9,7 @@ class FileOperator{
     
     }
 
-    static getFileList(path) {
+    static async getFileList(path) {
         return new Promise(function(resolve, reject) {
             fs.readdir(path, function (err, filename) {
                 // err handling
@@ -18,7 +18,7 @@ class FileOperator{
         });
     }
 
-    public static readFile(path) {
+    static async readFile(path) {
         let File;
         let Content;
         return new Promise(function(resolve, rejeact) {

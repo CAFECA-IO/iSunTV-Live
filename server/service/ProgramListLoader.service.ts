@@ -7,7 +7,7 @@ class ProgramlistLoader{
     }
     
     //get last file with specific path
-    static getLatestProgramList(path) {
+    static async getLatestProgramList(path) {
         let LastFile;
         FileOperator.getFileList(path).then(
             (value)=>{
@@ -24,7 +24,7 @@ class ProgramlistLoader{
         ) 
     }
     // with specific file path?
-    static getProgramList(path) {
+    static async getProgramList(path) {
         return new Promise(function(resolve, reject) {
             try{
                 const Sheet_json = FileOperator.readFile(path);
