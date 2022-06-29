@@ -43,3 +43,5 @@ class ProgramlistLoader{
         return jsonFormat;
     }
 }
+
+export {ProgramlistLoader};
