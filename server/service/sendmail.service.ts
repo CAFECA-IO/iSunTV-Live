@@ -1,14 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
-import { FormatterService } from '../service/formatter.service'; 
 
 @Injectable()
 export class SendMailService {
 
-  formatterService: FormatterService;
+
   // include the formatter
   constructor(){
-    this.formatterService=new FormatterService;
   }
 
   async sendMail(body): Promise<any>{
@@ -39,18 +37,21 @@ export class SendMailService {
         transporter.sendMail(mailOptions, (error) => {
             if (error)
             {
-                message = 'send failed';
-                resultCode = "04999999";
-                send_status = false;
+                resolve({
+                    message : 'send failed',
+                    resultCode : "04999999",
+                    send_status : false
+                }); 
             }
             else
             {
-                message = 'sent successfully';
-                resultCode = "00000000";
-                send_status = true;
+                resolve({
+                    message : 'sent successfully',
+                    resultCode : "00000000",
+                    send_status : true
+                }); 
+
             }
-            
-            resolve(this.formatterService.FormatData(send_status,resultCode, message,null)); 
 
         });
     });

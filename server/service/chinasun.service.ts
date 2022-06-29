@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common';
-import FileOperator from 'utils/FileOperator.service';
 import ProgramlistLoader from 'utils/ProgramListLoader.service';
 // import { FormatterService } from './formatter.service';
 
@@ -8,6 +7,7 @@ import ProgramlistLoader from 'utils/ProgramListLoader.service';
 export class ChinasunService {
 
     private static jsonFile: string = process.cwd()+'/playlist.json';
+    // json playlist
     private static xlsFolder: string = process.cwd()+'/xls';
 
     constructor(){
@@ -40,7 +40,7 @@ export class ChinasunService {
         console.log(time);
         const jsons = await ProgramlistLoader.getLatestProgramList(ChinasunService.xlsFolder);
         console.log(jsons);
-        }
+    }
     
         // let File = xlsx.readFile(file,{type:'binary',cellDates:true});
         // let Content = xlsx.utils.sheet_to_json(File.Sheets[File.SheetNames[0]]);
