@@ -17,13 +17,13 @@ class ProgramlistLoader {
         let fileList = await FileOperator.getFileList(path);      
         let fileIndex;
         fileIndex = fileList.length - 1;    
+        console.log(fileIndex);
         return new Promise(async (resolve, reject) => {
             // do while loop until programlist can be read or no file can be read        
             do {
         
                 try {
-        
-                    const result = await this.getProgramList(path+"/"+fileList[fileIndex]);
+                    const result = await this.getProgramList(path+"/"+fileList[fileIndex].name);
                     fileIndex = fileIndex - 1;
                     resolve(result);
                     break;
@@ -64,13 +64,14 @@ class ProgramlistLoader {
         // Error:
         // 1. invalid path
         // 2. File can't be read
-        return new Promise( async (resolve, reject) => {
+        return new Promise<any[]>( async (resolve, reject) => {
             // 
             try {
-    
+                console.log(path);
                 const file = await FileOperator.readFile(path);//  add wait
                 const excelJson = await FileOperator.excelToJson(file);
                 const result = this.formatProgramList(excelJson);
+                console.log(path);
                 resolve(result);
     
             } catch(e) {
