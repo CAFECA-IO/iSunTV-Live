@@ -1,10 +1,10 @@
 import FileOperator from './FileOperator.service';
-import fs from 'fs';
-import xlsx from 'xlsx';
+import FileError from './FileError';
 
 class ProgramlistLoader{
 // 放置所有的 param
-    private static LastFile: any;
+    private static lastFile: any;
+    private static fileIndex: number;
     constructor() {
 
     }
@@ -13,21 +13,32 @@ class ProgramlistLoader{
     static async getLatestProgramList(path) {
         // await
         const fileList = await FileOperator.getFileList(path);
-        this.LastFile = fileList;      
+        let result;
+        this.lastFile = fileList;      
 
             // 先排序再 do while loop 到拿到 programlist / 無檔案可拿為止
             // call getprogramlist-> if []/fail do again
-
-                return new Promise(async (resolve, reject) =>{
-
-                    try {
-                        const result = await FileOperator.readFile(this.LastFile[this.LastFile.length-1]);
-                        //->result
-                        resolve(result);
-                    } catch(e) {
-                        throw e;
-                    }
-
+            this.fileIndex = this.lastFile.length - 1;    
+            return new Promise(async (resolve, reject) =>{
+                    do {
+                        try {
+                            result = await FileOperator.readFile(this.lastFile[this.fileIndex]);         
+                            //->result
+                            this.fileIndex = this.fileIndex-1;
+                            resolve(result);
+                        } catch(e) {
+                            if (e.code === 'ENOENT'){
+                                reject(new FileError("08020001","invalid path"))   
+                            }else{
+                                // if file can't be read
+                                console.log("inner_flag")
+                                if (this.fileIndex==0) {
+                                    reject(new FileError("08020004","no json now"))
+                                }
+                            }
+                            
+                        }
+                    } while (this.fileIndex >= 0);
                 });
             }
         
@@ -36,7 +47,6 @@ class ProgramlistLoader{
         // Error:
         // 1. invalid path
         // 2. File can't be read
-        let Content; //->移到最開頭
         return new Promise( async (resolve, reject) => {
             try {
                 const file = await FileOperator.readFile(path);//  add wait
@@ -57,6 +67,7 @@ class ProgramlistLoader{
     }
     
     static formatProgramList(data) {
+        
         //format the data(待確認)
         // {
         //     "prgID": null,
@@ -66,16 +77,32 @@ class ProgramlistLoader{
         //     "prgComment": null
         //    }
         // 解不出來=null
-        var jsonFormat = {
-            "prgID": null,
-            "prgName": "解碼區塊鏈",
-            "PlayTime": "5\/23\/22 0:01",
-            "prgColumn": "訪談",
-            "prgComment": null            
-        }
+        
         // no invalid data
         // invalid(無法解析) => return []
-        return jsonFormat;
+        if (typeof data == 'undefined'){
+            return [];
+        }
+
+        data.map((program) => {
+            
+            if(typeof program.prgID == 'undefined') {
+                program.prgID = null;
+            } else if(typeof program.PlayTime == 'undefined') {
+                program.PlayTime = null;
+            } else if(typeof program.prgComment == 'undefined') {
+                program.prgComment = null;
+            }
+
+            return {
+                prgID: program.prgID,
+                prgName: program.prgName,
+                PlayTime: program.PlayTime,
+                prgColumn: program.prgColumn,
+                prgComment: program.prgComment,
+            };
+          })
+
     }
 }
 

@@ -4,7 +4,6 @@ import FileError from './FileError';
 
 class FileOperator{
 
-    private static xlsFolder: string = process.cwd()+'/xls';
     private static Content: any;
 
     constructor() {
@@ -37,12 +36,13 @@ class FileOperator{
                     };
                   })
                 .sort((a, b) => {
+                    //ascending sort
                     return a.ctime - b.ctime; 
                 })
                 .map((v) => {
                     return v.name; 
                 });
-                
+                console.log(result)
                 // file crua time (建立等等時間紀錄)
                 resolve(result);
             });
