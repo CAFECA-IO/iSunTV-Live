@@ -36,8 +36,7 @@ class ProgramlistLoader {
             
                     } else {
                         // call getprogramlist-> if []/fail do again
-                        // while loop continue
-
+                        // while loop continue here
                         // if read the last file -> throw the no file can be read error
                         if (fileIndex == -1) {
 
