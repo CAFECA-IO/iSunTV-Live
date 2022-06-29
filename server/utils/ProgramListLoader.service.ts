@@ -82,7 +82,6 @@ class ProgramlistLoader {
     
         });        
     }
-
     /**
      * original data resource is already formatted,
      * so this function is used to deal with the undefined condition 
