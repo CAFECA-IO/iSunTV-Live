@@ -42,7 +42,6 @@ class FileOperator{
                 .map((v) => {
                     return v.name; 
                 });
-                console.log(result)
                 // file crua time (建立等等時間紀錄)
                 resolve(result);
             });

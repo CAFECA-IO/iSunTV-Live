@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "module": "commonjs",
+    "rootDir": "server",
     "declaration": true,
     "removeComments": true,
     "emitDecoratorMetadata": true,
@@ -14,5 +15,8 @@
     "skipLibCheck": true,
     "resolveJsonModule": true,
     "esModuleInterop": true,
-  }
+  },
+  "include": [
+    "server/"
+  ]
 }

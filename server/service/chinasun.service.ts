@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import ProgramlistLoader from 'utils/ProgramListLoader.service';
+import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 // import { FormatterService } from './formatter.service';
 
 // add Programlist loader 
@@ -36,10 +36,9 @@ export class ChinasunService {
     }
 
     async getUpdatedData(){    
-        const time = this.getCurrentTime;
-        console.log(time);
+        const time = this.getCurrentTime();
         const jsons = await ProgramlistLoader.getLatestProgramList(ChinasunService.xlsFolder);
-        console.log(jsons);
+        return jsons;
     }
     
         // let File = xlsx.readFile(file,{type:'binary',cellDates:true});
