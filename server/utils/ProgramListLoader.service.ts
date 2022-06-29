@@ -6,6 +6,7 @@ class ProgramlistLoader {
     private static lastFile: any;
     private static fileIndex: number;
     private static xlsFolder: string = process.cwd()+'/xls';
+    private static DefaultJsonFile: string = process.cwd()+'/playlist.json';
 
     constructor() {
 
@@ -43,8 +44,11 @@ class ProgramlistLoader {
                             // if file can't be read
             
                             if (this.fileIndex == 0) {
-            
-                                reject(new FileError("08020004","no json now"))
+                                // read default json and return
+                                const file = await FileOperator.readFile(this.DefaultJsonFile);
+                                const excelJson = await FileOperator.excelToJson(file);  
+                                const result = this.formatProgramList(excelJson);                             
+                                resolve(result);
             
                             }
 
@@ -122,6 +126,7 @@ class ProgramlistLoader {
         return data;
     
     }
+
 }
 
 export default ProgramlistLoader;
