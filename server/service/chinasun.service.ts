@@ -4,7 +4,7 @@ import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 
 // add Programlist loader 
 @Injectable()
-export class ChinasunService {
+class ChinasunService {
 
     private static jsonFile: string = process.cwd()+'/playlist.json';
     // json playlist
@@ -61,5 +61,5 @@ export class ChinasunService {
         
     }
 
-
+export default ChinasunService;
 

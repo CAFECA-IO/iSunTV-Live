@@ -1,9 +1,11 @@
 import { Controller, Get, Res } from '@nestjs/common';
 
 @Controller()
-export class AppController {
+class AppController {
   @Get()
   getHello() {
     return 404;
   }
 }
+
+export default AppController;

@@ -1,11 +1,9 @@
 import { Module,OnModuleInit } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { join } from 'path';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { ApiModule } from './module/api.module';
-import * as path from 'path';
-import { I18nModule } from 'nestjs-i18n';
+import AppController from './app.controller';
+import AppService from './app.service';
+import ApiModule from './module/api.module';
 
 // 處理 Cookie + i18n
 @Module({
@@ -20,7 +18,7 @@ import { I18nModule } from 'nestjs-i18n';
   controllers: [AppController],
   providers: [AppService]
 })
-export class AppModule implements OnModuleInit{
+export class AppModule implements OnModuleInit {
   constructor(private appService: AppService) {
   }
 

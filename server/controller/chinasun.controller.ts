@@ -1,5 +1,5 @@
 import { Controller, Get ,Param} from '@nestjs/common';
-import { ChinasunService } from '../service/chinasun.service'; 
+import ChinasunService from '../service/chinasun.service'; 
 
 @Controller('chinasun')
 //export 寫下面
@@ -28,4 +28,4 @@ class ChinasunController {
     }
 
 }
-export {ChinasunController} ;
+export default ChinasunController ;

@@ -1,6 +1,6 @@
 import { MiddlewareConsumer, Module,NestModule, RequestMethod } from '@nestjs/common';
-import {ChinasunController} from '../controller/chinasun.controller'
-import { ChinasunService } from '../service/chinasun.service';
+import ChinasunController from '../controller/chinasun.controller'
+import ChinasunService from '../service/chinasun.service';
 import { SendMailController } from '../controller/sendmail.controller';
 import { SendMailService } from '../service/sendmail.service';
 import { MiddlemainMiddleware } from 'server/middleware/middlemain.middleware';
@@ -27,13 +27,14 @@ import { I18nController } from 'server/controller/i18n.controller';
         resolvers: [
             { use: QueryResolver, options: ['lang'] },
             AcceptLanguageResolver,
-          ]     }),
+        ]     
+      }),
   ],
   controllers: [I18nController, ChinasunController, SendMailController],
   providers: [ChinasunService, SendMailService]
 })
 
-export class ApiModule implements NestModule{
+class ApiModule implements NestModule {
     // find a way to specify route
     constructor(){
     }
@@ -45,3 +46,5 @@ export class ApiModule implements NestModule{
             .forRoutes({ path: '/*', method: RequestMethod.ALL });    
     }
 }
+
+export default ApiModule;

@@ -2,8 +2,9 @@ import { Injectable ,OnModuleInit} from '@nestjs/common';
 import * as fs from 'fs';
 import * as hound from 'hound';
 import * as xlsx from 'xlsx';
+
 @Injectable()
-export class AppService implements OnModuleInit {
+class AppService implements OnModuleInit {
 
   xlsFolder: string;
   jsonFile: string;
@@ -56,3 +57,5 @@ export class AppService implements OnModuleInit {
        })
   }
 }
+
+export default AppService;
