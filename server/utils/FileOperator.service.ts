@@ -4,15 +4,19 @@ import FileError from './FileError';
 
 class FileOperator{
 
-    private static Content: any;
     private static File: any;
     constructor() {
     
     }
-// time - unixtimestamp
+
+    /**
+     * get the filelist with given options
+     * @param path options to start the function with
+     * @returns a promise resolved result when the function is ready to be called
+     */
     static async getFileList(path) {
-        // 改 arrow function
-        return new Promise((resolve, reject) => {
+
+        return new Promise<any[]>((resolve, reject) => {
 
             fs.readdir(path, (err, files) => {
                 // err handling (add try catch)
@@ -43,45 +47,48 @@ class FileOperator{
 
                 })
                 .sort((a, b) => {
-                    //ascending sort
+                    //sort
                     return a.ctime - b.ctime; 
                 
                 })
-                .map((v) => {
 
-                    return v.name; 
-                
-                });
-                // file crua time (建立等等時間紀錄)
                 resolve(result);
             });
         });
     }
 
-    static excelToJson(Sheet_buffer): any {
-
-        this.Content = xlsx.utils.sheet_to_json(Sheet_buffer.Sheets[Sheet_buffer.SheetNames[0]]);
-        return this.Content;
+    /**
+     * transfer excelToJson with given options
+     * @param sheetBuffer options to start the function with
+     * @returns result when the transformation is completed
+     */
+    static excelToJson(sheetBuffer) {
+        // transfer excel to json
+        let result;
+        result = xlsx.utils.sheet_to_json(sheetBuffer.Sheets[sheetBuffer.SheetNames[0]]);
+        return result;
 
     }
-    
+
+    /**
+     * readfile with given options
+     * @param path options to start the function with
+     * @returns a promise resolved result when the function is ready to be called
+     */
     static async readFile(path) {
 
         return new Promise((resolve, reject) => {
             
             try {
-            
-                this.File = xlsx.readFile(path, { type:'binary', cellDates:true } )
-                resolve(this.File);
+                let File;
+                File = xlsx.readFile(path, { type:'binary', cellDates:true } )
+                resolve(File);
             
             } catch(e) {
-                // add code 編碼標準
-                // code: 0802xxxx
-                // 額外給一個 code
                 // Error:
                 // 1. invalid path
                 // 2. File can't be read
-                // error code , message
+                // return custom error code , message
                 if (e) {
             
                     if (e.code === 'ENOENT') {
