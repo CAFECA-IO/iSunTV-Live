@@ -23,9 +23,13 @@ export class ChinasunService {
 
         // normalize the month
         if (month < 10) {
+
             _month = '0'+month.toString();
+        
         } else {
+        
             _month = month.toString();
+        
         }
         
         var _day = currentTime.getDate().toString();
