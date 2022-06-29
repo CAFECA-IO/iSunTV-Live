@@ -10,35 +10,37 @@ export class ChinasunService {
     // json playlist
     private static xlsFolder: string = process.cwd()+'/xls';
 
-    constructor(){
+    constructor() {
 
     }
     
     // loop until get the data
-    getCurrentTime(){
+    getCurrentTime() {
 
         var currentTime = new Date();
         var month = (currentTime.getMonth() + 1);
         var _month;
 
         // normalize the month
-        if (month<10){
+        if (month < 10) {
             _month = '0'+month.toString();
-        }else{
+        } else {
             _month = month.toString();
         }
         
         var _day = currentTime.getDate().toString();
         var _year = currentTime.getFullYear().toString();
-        
+
         return _year+_month+_day;
     
     }
 
-    async getUpdatedData(){    
+    async getUpdatedData() {    
+
         const time = this.getCurrentTime();
-        const jsons = await ProgramlistLoader.getLatestProgramList(ChinasunService.xlsFolder);
-        return jsons;
+        const result = await ProgramlistLoader.getLatestProgramList(ChinasunService.xlsFolder);
+        return result;
+
     }
     
         // let File = xlsx.readFile(file,{type:'binary',cellDates:true});
