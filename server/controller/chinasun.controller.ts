@@ -30,8 +30,9 @@ class ChinasunController {
      * get the filelist with given options
      */
     initialize() {
-
-        this.chinasunService.jsonFolder = process.cwd() + this.configService.get('JSONFILE_DIR');
+        
+        this.chinasunService.xlsFolder = process.cwd() + this.configService.get('XLSFOLDER_DIR');
+        this.chinasunService.getUpdatedData();
     
     }
 

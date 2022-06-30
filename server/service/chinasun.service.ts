@@ -10,7 +10,7 @@ import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 class ChinasunService {
 
     /** @param {string} xlsFolder default xls folder path*/
-    jsonFolder: string;
+    xlsFolder: string;
 
     //the class constructor
     /**
@@ -55,7 +55,8 @@ class ChinasunService {
      */
     async getUpdatedData() {    
         
-        const result = await ProgramlistLoader.getNewProramList(this.jsonFolder);
+        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        global.playlist = result;
         return result;
 
     }

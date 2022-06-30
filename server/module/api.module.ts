@@ -64,76 +64,24 @@ class ApiModule implements OnModuleInit {
         watcher.on('create', async(file, stats) => {
 
           const data = await ProgramlistLoader.getLatestProgramList(process.cwd() + '/xls/'); 
-          console.log(data);
-          let jsonFile = process.cwd() + '/server/playlist.json';
-          
-          fs.writeFile(jsonFile, JSON.stringify(data), { 
-          
-            encoding:"utf8", 
-            flag:"w"
-          
-          }, (err) => { 
-          
-            if (err) {  
-          
-              console.log(err); 
-          
-            }
-          
-          });
-          
-          console.log(fs.readFileSync(jsonFile,'utf-8'));
+          global.playlist = data;
           console.log(file + ' was created');
+        
         });
 
-        watcher.on('change', async(file, stats)=> {
+        watcher.on('change', async(file, stats) => {
+
           const data = await ProgramlistLoader.getLatestProgramList(process.cwd() + '/xls/'); 
-          console.log(data);
-          let jsonFile = process.cwd() + '/server/playlist.json';
-          
-          fs.writeFile(jsonFile, JSON.stringify(data), { 
-          
-            encoding:"utf8", 
-            flag:"w"
-          
-          }, (err) => { 
-          
-            if (err) {  
-          
-              console.log(err); 
-          
-            }
-          
-          });
-          
-          console.log(fs.readFileSync(jsonFile,'utf-8'));
+          global.playlist = data;
           console.log(file + ' was created');
+        
         })
 
         watcher.on('delete', async(file) => {
 
           const data = await ProgramlistLoader.getLatestProgramList(process.cwd() + '/xls/'); 
-          console.log(data);
-          let jsonFile = process.cwd() + '/server/playlist.json';
-          
-          fs.writeFile(jsonFile, JSON.stringify(data), { 
-          
-            encoding:"utf8", 
-            flag:"w"
-          
-          }, (err) => { 
-          
-            if (err) {  
-          
-              console.log(err); 
-          
-            }
-          
-          });
-          
-          console.log(fs.readFileSync(jsonFile,'utf-8'));
-          console.log(file + ' was created');
-       
+          global.playlist = data;
+        
         })
       
       }

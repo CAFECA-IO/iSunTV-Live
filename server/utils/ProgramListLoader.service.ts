@@ -84,17 +84,6 @@ class ProgramlistLoader {
     }
 
     /**
-     * get the new programlist with given options
-     * @param data options to start the function with
-     * @returns formatted data without undefined
-     */ 
-    static async getNewProramList(path) {
-
-        const result = await FileOperator.readJSONFile(path);
-        return result;
-
-    }
-    /**
      * original data resource is already formatted,
      * so this function is used to deal with the undefined condition 
      * get the programlist with given options

@@ -106,41 +106,6 @@ class FileOperator{
         });
     }   
 
-    // return new file
-    static async readJSONFile(path) {
-
-        return new Promise((resolve, reject) => {
-            
-
-                let File;
-                let result;
-
-                fs.readFile(path, 'utf8', (err,data) => {
-
-                    if (err) {
-            
-                        if (err.code === 'ENOENT') {
-                
-                            reject(new FileError("08020001","invalid path"))
-                
-                        } else {
-                
-                            reject(new FileError("08020003","File can't be read"))
-                
-                        }
-                    }           
-
-                    result = JSON.parse(data);        
-                    resolve(result);
-
-                });
-            
-            } 
-        
-        );
-
-    } 
-
 }
 
 export default FileOperator;
