@@ -1,18 +1,25 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { SendMailService } from '../service/sendmail.service'; 
+import SendMailService from '../service/sendmail.service'; 
 
 @Controller('sendmail')
-export class SendMailController {
+class SendMailController {
   
 sendmailService: SendMailService;
 xlsFolder: string;
 
-constructor(){
-    this.sendmailService = new SendMailService;
-}
+  constructor() {
+    
+      this.sendmailService = new SendMailService;
+  
+  }
   
   @Post()
-  async sendMail(@Body() body):Promise<any>{
+  async sendMail(@Body() body):Promise<any> {
+
     return this.sendmailService.sendMail(body);
+
   }
+
 }
+
+export default SendMailController;

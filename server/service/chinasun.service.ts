@@ -1,20 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
-// import { FormatterService } from './formatter.service';
 
-// add Programlist loader 
+
+/**
+ * handle the programlist service for chinasun controller
+ * @service ChinasunService
+ */
 @Injectable()
 class ChinasunService {
 
-    jsonFile: string;
-    // json playlist
+    /** @param {string} xlsFolder default xls folder path*/
     xlsFolder: string;
 
+    //the class constructor
+    /**
+     * set the default constructor without param
+     */
     constructor() {
 
     }
     
-    // loop until get the data
+    //the function of getting current time 
+    /**
+     * return @param {string} result store the current yyyymmdd string
+     */
     getCurrentTime() {
 
         var currentTime = new Date();
@@ -34,14 +43,18 @@ class ChinasunService {
         
         var _day = currentTime.getDate().toString();
         var _year = currentTime.getFullYear().toString();
+        var result = _year+_month+_day;
 
-        return _year+_month+_day;
+        return result;
     
     }
 
+    //the function of getting updated data
+    /**
+     * return @param {string} result store the current yyyymmdd string
+     */
     async getUpdatedData() {    
 
-        const time = this.getCurrentTime();
         const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
         return result;
 

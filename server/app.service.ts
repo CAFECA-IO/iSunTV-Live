@@ -3,20 +3,19 @@ import * as fs from 'fs';
 import * as hound from 'hound';
 import * as xlsx from 'xlsx';
 
+// need to be modified
 @Injectable()
-class AppService implements OnModuleInit {
+class AppService {
 
   xlsFolder: string;
   jsonFile: string;
   Content: JSON;
 
-  onModuleInit() {
-    console.log("Initialize the action of watching");
-  }
+  constructor() {
 
-  constructor(){
     this.xlsFolder=process.cwd()+'/xls';
     this.Content=null;
+  
   }
 
   dostuff(){

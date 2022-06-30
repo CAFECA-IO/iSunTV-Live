@@ -7,9 +7,11 @@ import AppService from './app.service';
 import MiddlewaremainMiddleware from './middleware/middlewaremain.middleware';
 import ApiModule from './module/api.module';
 
+// import ConfigModule, ApiModule
 @Module({
 
   imports: [
+    // original host Module
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'build'),
       exclude: ['/api/v1*'],
@@ -24,16 +26,29 @@ import ApiModule from './module/api.module';
 
 })
 
+/**
+ * apply middleware
+ * @module AppModule
+ */
 class AppModule implements NestModule {
 
+  //the class constructor
+  /**
+   * set the default constructor without param
+   */
   constructor() {
-
+  
   }
 
-  // initialize middlemainmiddleware
+  //the function of getting current time 
+  /**
+   * @param {MiddlewareConsumer} consumer to import the MiddlewareConsumer in the funciton 
+   * return @param {string} result store the current yyyymmdd string
+   */
   configure(consumer: MiddlewareConsumer) {
 
-    // initialize api module?
+    // apply middlewaremain
+    // config exclude route and forRoutes
     consumer
       .apply(MiddlewaremainMiddleware) 
       .exclude({ path: '/api/v1/chinasun/updated_files', method: RequestMethod.ALL},{ path: '/api/v1/sendmail', method: RequestMethod.ALL})

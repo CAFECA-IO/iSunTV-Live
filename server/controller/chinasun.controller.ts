@@ -10,7 +10,7 @@ import ChinasunService from '../service/chinasun.service';
 @Controller('chinasun')
 class ChinasunController {
   
-    /** @param ChinasunService handle the programlist related service*/
+    /** @param {ChinasunService} chinasunService handle the programlist related service*/
     chinasunService : ChinasunService;
 
     //the class constructor
@@ -31,7 +31,6 @@ class ChinasunController {
      */
     initialize() {
 
-        this.chinasunService.jsonFile=process.cwd()+this.configService.get('JSONFILE_DIR');
         this.chinasunService.xlsFolder=process.cwd()+this.configService.get('XLSFOLDER_DIR');
     
     }
