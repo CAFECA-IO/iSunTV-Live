@@ -46,20 +46,8 @@ class ChinasunService {
         return result;
 
     }
-    
-        // let File = xlsx.readFile(file,{type:'binary',cellDates:true});
-        // let Content = xlsx.utils.sheet_to_json(File.Sheets[File.SheetNames[0]]);
-        // let jsonFile=process.cwd()+'/playlist.json';
-
-        // var data = fs.readFileSync(this.jsonFile,{encoding:'utf8', flag:'r'});
-        // var data_json = JSON.parse(data);
-        // if (typeof data_json != 'undefined'){
-        //     return this.formatterService.FormatData(true,"00000000","Return Programlist Data",data_json);
-        // }else{
-        //     return this.formatterService.FormatData(false,"04999999","Return Programlist Data",data_json);
-        // }
         
-    }
+}
 
 export default ChinasunService;
 

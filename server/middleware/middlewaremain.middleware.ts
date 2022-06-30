@@ -1,8 +1,14 @@
-import { HttpException, HttpStatus, NestMiddleware } from "@nestjs/common";
+import { NestMiddleware } from "@nestjs/common";
 import { ServerResponse, IncomingMessage } from 'http';
-export class MiddlemainMiddleware implements NestMiddleware{
 
-    constructor(){
+// middleware here don't need to initialize the controller
+class MiddlemainMiddleware implements NestMiddleware {
+
+    // need  some default value
+    configType: string;
+
+    constructor() {
+    
     }
     
     use(req: IncomingMessage, res: ServerResponse, next:any) {
@@ -41,3 +47,5 @@ export class MiddlemainMiddleware implements NestMiddleware{
         next();
       }
 }
+
+export default MiddlemainMiddleware;

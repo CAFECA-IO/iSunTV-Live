@@ -4,16 +4,16 @@ import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
 import AppController from './app.controller';
 import AppService from './app.service';
-import { MiddlemainMiddleware } from './middleware/middlemain.middleware';
+import MiddlewaremainMiddleware from './middleware/middlewaremain.middleware';
 import ApiModule from './module/api.module';
-// 處理 Cookie + i18n
+
 @Module({
+
   imports: [
     ServeStaticModule.forRoot({
       rootPath: join(__dirname, '..', 'build'),
       exclude: ['/api/v1*'],
     }),
-    //use i18n (try)
     ConfigModule.forRoot({
       isGlobal: true
     }),
@@ -21,26 +21,37 @@ import ApiModule from './module/api.module';
   ],
   controllers: [AppController],
   providers: [AppService]
+
 })
-export class AppModule implements NestModule {
-  
-  constructor() {
 
-  }
-
-  // // initialize the middleware
-  // initialize = () => {
-  //   this.mainmiddleware.configType="";
-  // }
+class AppModule implements NestModule {
   
   // no need to initialize middleware
+  middleware : MiddlewaremainMiddleware;
 
+  constructor() {
+    // no need to initialize middleware
+    this.middleware = new MiddlewaremainMiddleware();
+    this.initialize();
+  }
+
+  // no need to initialize middleware
+  initialize(){
+    // don't know the config
+    this.middleware.configType = "";
+  }
   
   // initialize middlemainmiddleware
   configure(consumer: MiddlewareConsumer) {
+
+    // initialize api module?
     consumer
-    .apply(MiddlemainMiddleware) 
-    .exclude({ path: '/api/v1/chinasun/updated_files', method: RequestMethod.ALL},{ path: '/api/v1/sendmail', method: RequestMethod.ALL})
-    .forRoutes({ path: '/*', method: RequestMethod.ALL });    
+      .apply(MiddlewaremainMiddleware) 
+      .exclude({ path: '/api/v1/chinasun/updated_files', method: RequestMethod.ALL},{ path: '/api/v1/sendmail', method: RequestMethod.ALL})
+      .forRoutes({ path: '/*', method: RequestMethod.ALL });    
+  
   }
+
 }
+
+export default AppModule;
