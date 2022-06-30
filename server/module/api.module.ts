@@ -1,4 +1,4 @@
-import { MiddlewareConsumer, Module,NestModule, OnModuleInit, RequestMethod } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import ChinasunController from '../controller/chinasun.controller'
 import ChinasunService from '../service/chinasun.service';
@@ -9,12 +9,12 @@ import {
     I18nModule,
     QueryResolver,
   } from 'nestjs-i18n';
-import { I18nController } from 'server/controller/i18n.controller';
 import AppService from 'server/app.service';
 
+// import ConfigModule, I18nModule, Controllers
 @Module({
+
   imports:[
-    //import i18n module
     ConfigModule,
     I18nModule.forRoot({
         fallbackLanguage: 'ch',  
@@ -32,23 +32,22 @@ import AppService from 'server/app.service';
         ]     
       }),
   ],
-  controllers: [I18nController, ChinasunController, SendMailController],
+  controllers: [ChinasunController, SendMailController],
   providers: [ChinasunService, SendMailService, AppService]
 })
 
-class ApiModule implements OnModuleInit{
-    // find a way to specify route
+// regsiter the watch event
+class ApiModule implements OnModuleInit {
 
-    
-    // export class AppModule implements OnModuleInit {
-      constructor(private appService: AppService) {
+      constructor() {
+
       }
     
       onModuleInit() {
-        console.log(`Watch the updates`);
-        this.appService.dostuff();
+
+        
       }
-    // }
+
 }
 
 export default ApiModule;

@@ -1,37 +1,53 @@
-import { Controller, Get ,Param} from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import ChinasunService from '../service/chinasun.service'; 
 
 
+/**
+ * handle the chinasun route
+ * @controller ChinasunController
+ */
 @Controller('chinasun')
-//export 寫下面
 class ChinasunController {
   
+    /** @param ChinasunService handle the programlist related service*/
     chinasunService : ChinasunService;
-    // 因為要用到 Config 所以需要新引入ConfigService
+
+    //the class constructor
+    /**
+     * set the default configservice and initialize the chinasun service
+     * @param configService options to let user use config in the controller
+     */
     constructor(private readonly configService: ConfigService) {
+    
         this.chinasunService= new ChinasunService();
         this.initialize();
+    
     }
 
-    // initialize the middleware
-    // chinasunService = Object.assign( new ChinasunService(), {
-    //     jsonFile: process.cwd()+this.configService.get('JSONFILE_DIR'),
-    //     xlsFolder: process.cwd()+this.configService.get('XLSFOLDER_DIR')
-    // });
+    //A initialization method
+    /**
+     * get the filelist with given options
+     */
+    initialize() {
 
-    initialize(){
         this.chinasunService.jsonFile=process.cwd()+this.configService.get('JSONFILE_DIR');
         this.chinasunService.xlsFolder=process.cwd()+this.configService.get('XLSFOLDER_DIR');
+    
     }
 
+    /**
+     * handle the chinasun/updated_files route
+     * @controller ChinasunController
+     */
     @Get('updated_files')
-    async getUpdated_details(){
-        //show the latest data
+    async getUpdated_details() {
+        //get the latest data
         const data = this.chinasunService.getUpdatedData();
         return await data;
     }
 
 }
+
 export default ChinasunController ;
 
