@@ -10,7 +10,7 @@ import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 class ChinasunService {
 
     /** @param {string} xlsFolder default xls folder path*/
-    xlsFolder: string;
+    jsonFolder: string;
 
     //the class constructor
     /**
@@ -54,8 +54,8 @@ class ChinasunService {
      * return @param {string} result store the current yyyymmdd string
      */
     async getUpdatedData() {    
-
-        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        
+        const result = await ProgramlistLoader.getNewProramList(this.jsonFolder);
         return result;
 
     }

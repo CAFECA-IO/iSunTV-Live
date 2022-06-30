@@ -82,6 +82,12 @@ class ProgramlistLoader {
     
         });        
     }
+    static async getNewProramList(path) {
+
+        const result = await FileOperator.readJSONFile(path);
+        return result;
+
+    }
     /**
      * original data resource is already formatted,
      * so this function is used to deal with the undefined condition 

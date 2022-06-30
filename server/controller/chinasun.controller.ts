@@ -31,7 +31,7 @@ class ChinasunController {
      */
     initialize() {
 
-        this.chinasunService.xlsFolder=process.cwd()+this.configService.get('XLSFOLDER_DIR');
+        this.chinasunService.jsonFolder = process.cwd() + this.configService.get('JSONFILE_DIR');
     
     }
 
@@ -42,7 +42,7 @@ class ChinasunController {
     @Get('updated_files')
     async getUpdated_details() {
         //get the latest data
-        const data = this.chinasunService.getUpdatedData();
+        const data = this.chinasunService.getUpdatedData();        
         return await data;
     }
 
