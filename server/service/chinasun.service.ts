@@ -6,9 +6,9 @@ import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 @Injectable()
 class ChinasunService {
 
-    private static jsonFile: string = process.cwd()+'/playlist.json';
+    jsonFile: string;
     // json playlist
-    private static xlsFolder: string = process.cwd()+'/xls';
+    xlsFolder: string;
 
     constructor() {
 
@@ -42,7 +42,7 @@ class ChinasunService {
     async getUpdatedData() {    
 
         const time = this.getCurrentTime();
-        const result = await ProgramlistLoader.getLatestProgramList(ChinasunService.xlsFolder);
+        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
         return result;
 
     }

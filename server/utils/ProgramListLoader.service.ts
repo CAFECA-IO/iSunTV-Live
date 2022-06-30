@@ -23,7 +23,7 @@ class ProgramlistLoader {
             do {
         
                 try {
-                    const result = await this.getProgramList(path+"/"+fileList[fileIndex].name);
+                    const result = await this.getProgramList(path+fileList[fileIndex].name);
                     fileIndex = fileIndex - 1;
                     resolve(result);
                     break;
@@ -91,16 +91,6 @@ class ProgramlistLoader {
      */   
     static formatProgramList(data) {
 
-        let jsonFormat = {
-
-            prgID: "",
-            prgName: "",
-            PlayTime: "",
-            prgColumn: "",
-            prgComment: "",
-
-        }
-
         // invalid(無法解析) => return []
         if (typeof data == 'undefined') {
 
@@ -111,6 +101,15 @@ class ProgramlistLoader {
         // assign the programlist to the formatted json with null
         const result = data.map((program) => {
 
+            let jsonFormat = {
+
+                prgID: "",
+                prgName: "",
+                PlayTime: "",
+                prgColumn: "",
+                prgComment: "",
+    
+            }
             // deal with normal program assigment
             jsonFormat.prgID = program.prgID;
             jsonFormat.prgName = program.prgName;

@@ -22,6 +22,7 @@ class FileOperator{
                 // err handling (add try catch)
                 // 1. invalid path
                 // 2. Folder can't be read
+                console.log(path);
                 if (err) {
                 
                     if (err.code === 'ENOENT') {
