@@ -25,22 +25,11 @@ import ApiModule from './module/api.module';
 })
 
 class AppModule implements NestModule {
-  
-  // no need to initialize middleware
-  middleware : MiddlewaremainMiddleware;
 
   constructor() {
-    // no need to initialize middleware
-    this.middleware = new MiddlewaremainMiddleware();
-    this.initialize();
+
   }
 
-  // no need to initialize middleware
-  initialize(){
-    // don't know the config
-    this.middleware.configType = "";
-  }
-  
   // initialize middlemainmiddleware
   configure(consumer: MiddlewareConsumer) {
 
