@@ -7,10 +7,20 @@ class MiddlemainMiddleware implements NestMiddleware {
     configType: string;
     formatter: FormatterService;
 
+    // a function is executed for handling request and response
+    //the class constructor
+    /**
+     * set the default constructor without param
+     */
     constructor() {
     
     }
-    
+    // a function is executed for handling request and response
+    /**
+     * @param {IncomingMessage} req store the current req message
+     * @param {ServerResponse} res store the server reponse
+     * @param {ServerResponse} next is the function that make the route direct to controller 
+     */    
     use(req: IncomingMessage, res: ServerResponse, next:any ) {
         
         // didn't use query
