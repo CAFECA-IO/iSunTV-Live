@@ -2,6 +2,10 @@ import { NestMiddleware } from "@nestjs/common";
 import { ServerResponse, IncomingMessage } from 'http';
 import FormatterService  from "server/utils/Formatter.service";
 
+/**
+ * handle the request and response
+ * @middleware MiddlemainMiddleware 
+ */
 class MiddlemainMiddleware implements NestMiddleware {
 
     configType: string;
