@@ -21,7 +21,7 @@ class ChinasunController {
      */
     constructor(private readonly configService: ConfigService) {
     
-        this.chinasunService= new ChinasunService();
+        this.chinasunService = new ChinasunService();
         this.initialize();
     
     }
@@ -31,9 +31,10 @@ class ChinasunController {
      * get the filelist with given options
      */
     initialize() {
-        
-        this.chinasunService.xlsFolder = process.cwd() + this.configService.get('XLSFOLDER_DIR');
-        this.chinasunService.getUpdatedData();
+        // 先執行config
+        const XLSFOLDER_DIR = process.cwd() + this.configService.get('XLSFOLDER_DIR');
+        const config = {XLSFOLDER_DIR};
+        this.chinasunService.initialize(config);
     
     }
 

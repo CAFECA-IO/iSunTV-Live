@@ -20,6 +20,14 @@ class ChinasunService {
 
     }
     
+    async initialize({XLSFOLDER_DIR}){
+        
+        this.xlsFolder = XLSFOLDER_DIR;
+        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        console.log(result);
+
+    }
+
     //the function of getting current time 
     /**
      * return @param {string} result store the current yyyymmdd string
