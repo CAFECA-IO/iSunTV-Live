@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
 
 
@@ -40,11 +41,12 @@ class ChinasunController {
      * handle the chinasun/updated_files route
      * @controller ChinasunController
      */
-    @Get('updated_files')
+    @Get('programlist')
     async getUpdated_details() {
         //get the latest data
-        const data = this.chinasunService.getUpdatedData();        
-        return await data;
+        const data = await this.chinasunService.getUpdatedData(); 
+        const result = FormatterService.formatData(true,"080200000","programlist",data);
+        return result;
     }
 
 }

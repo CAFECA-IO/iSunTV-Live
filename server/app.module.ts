@@ -51,7 +51,6 @@ class AppModule implements NestModule {
     // config exclude route and forRoutes
     consumer
       .apply(MiddlewaremainMiddleware) 
-      .exclude({ path: '/api/v1/chinasun/updated_files', method: RequestMethod.ALL},{ path: '/api/v1/sendmail', method: RequestMethod.ALL})
       .forRoutes({ path: '/*', method: RequestMethod.ALL });    
   
   }
