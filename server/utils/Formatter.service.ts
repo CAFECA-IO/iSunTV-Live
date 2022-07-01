@@ -1,12 +1,17 @@
 
 class FormatterService {
     
-
-    
     constructor() {
 
     }
-    
+    /**
+     * format the response data with normalization format
+     * @param success req is successful or not
+     * @param code response message code
+     * @param message reponse message
+     * @param payload reponse data
+     * @returns a promise resolved result when the function is ready to be called
+     */   
     static formatData(success:boolean,code:string,message:string,payload:any){
         
         let result = { 

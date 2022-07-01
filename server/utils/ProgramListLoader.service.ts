@@ -32,7 +32,7 @@ class ProgramlistLoader {
                     // throw invalid path error
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError("08020001","invalid path"))   
+                        reject(new FileError("08020002","invalid path"))   
             
                     } else {
                         // call getprogramlist-> if []/fail do again
@@ -40,7 +40,7 @@ class ProgramlistLoader {
                         // if read the last file -> throw the no file can be read error
                         if (fileIndex == -1) {
 
-                            reject(new FileError("08020004","no file can be read"))
+                            reject(new FileError("08020005","no file can be read"))
                         
                         }
 

@@ -27,11 +27,11 @@ class FileOperator{
                 
                     if (err.code === 'ENOENT') {
                 
-                        reject(new FileError("08020001","invalid path"))
+                        reject(new FileError("08020002","invalid path"))
                 
                     } else {
                 
-                        reject(new FileError("08020002","Folder can't be read"))
+                        reject(new FileError("08020003","Folder can't be read"))
                 
                     }
                 }
@@ -94,11 +94,11 @@ class FileOperator{
             
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError("08020001","invalid path"))
+                        reject(new FileError("08020002","invalid path"))
             
                     } else {
             
-                        reject(new FileError("08020003","File can't be read"))
+                        reject(new FileError("08020004","File can't be read"))
             
                     }
                 }
