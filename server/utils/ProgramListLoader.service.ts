@@ -1,5 +1,7 @@
 import FileOperator from './FileOperator.service';
 import FileError from './FileError';
+import {errorCode} from './ErrorCode';
+import {errorMessage} from './ErrorMessage';
 
 class ProgramlistLoader {
 
@@ -32,7 +34,7 @@ class ProgramlistLoader {
                     // throw invalid path error
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError("08020002","invalid path"))   
+                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))   
             
                     } else {
                         // call getprogramlist-> if []/fail do again
@@ -40,7 +42,7 @@ class ProgramlistLoader {
                         // if read the last file -> throw the no file can be read error
                         if (fileIndex == -1) {
 
-                            reject(new FileError("08020005","no file can be read"))
+                            reject(new FileError(errorCode.fileNotReadError,errorMessage.fileNotReadError))
                         
                         }
 

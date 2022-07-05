@@ -1,6 +1,8 @@
 import fs from 'fs';
 import xlsx from 'xlsx';
 import FileError from './FileError';
+import {errorCode}  from './ErrorCode';
+import {errorMessage}  from './ErrorMessage';
 
 class FileOperator{
 
@@ -27,11 +29,11 @@ class FileOperator{
                 
                     if (err.code === 'ENOENT') {
                 
-                        reject(new FileError("08020002","invalid path"))
+                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
                 
                     } else {
                 
-                        reject(new FileError("08020003","Folder can't be read"))
+                        reject(new FileError(errorCode.folderNoReadError,errorMessage.folderNoReadError))
                 
                     }
                 }
@@ -94,11 +96,11 @@ class FileOperator{
             
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError("08020002","invalid path"))
+                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
             
                     } else {
             
-                        reject(new FileError("08020004","File can't be read"))
+                        reject(new FileError(errorCode.fileNotReadError,errorMessage.fileNotReadError))
             
                     }
                 }

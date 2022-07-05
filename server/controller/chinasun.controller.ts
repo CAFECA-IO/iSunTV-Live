@@ -2,7 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
-
+import { errorCode } from 'server/utils/ErrorCode';
+import { errorMessage } from 'server/utils/ErrorMessage';
 
 /**
  * handle the chinasun route
@@ -45,8 +46,17 @@ class ChinasunController {
     @Get('programlist')
     async getUpdated_details() {
         //get the latest data
-        const data = await this.chinasunService.getUpdatedData(); 
-        const result = FormatterService.formatData(true,"080200000","programlist",data);
+        let data;
+        let result;
+
+        // handle the error
+        try{
+            data = await this.chinasunService.getUpdatedData(); 
+            result = FormatterService.formatData(true,errorCode.noErrorFound,"programlist",data);
+        }catch(e){
+            result = FormatterService.formatData(true,e.code,e.message,data);
+        }
+        
         return result;
     }
 
