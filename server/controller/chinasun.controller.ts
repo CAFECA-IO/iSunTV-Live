@@ -3,7 +3,6 @@ import { ConfigService } from '@nestjs/config';
 import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
 import { errorCode } from 'server/utils/ErrorCode';
-import { errorMessage } from 'server/utils/ErrorMessage';
 
 /**
  * handle the chinasun route
@@ -52,7 +51,7 @@ class ChinasunController {
         // handle the error
         try{
             data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true,errorCode.noErrorFound,"programlist",data);
+            result = FormatterService.formatData(true,errorCode.NO_ERROR_FOUND,"programlist",data);
         }catch(e){
             result = FormatterService.formatData(true,e.code,e.message,data);
         }

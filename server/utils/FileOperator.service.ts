@@ -29,11 +29,11 @@ class FileOperator{
                 
                     if (err.code === 'ENOENT') {
                 
-                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
+                        reject(new FileError(errorCode.INVALID_PATH_ERROR,errorMessage.invalidPathError))
                 
                     } else {
                 
-                        reject(new FileError(errorCode.folderNoReadError,errorMessage.folderNoReadError))
+                        reject(new FileError(errorCode.FOLDER_NO_READ_ERROR,errorMessage.folderNoReadError))
                 
                     }
                 }
@@ -96,11 +96,11 @@ class FileOperator{
             
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
+                        reject(new FileError(errorCode.INVALID_PATH_ERROR,errorMessage.invalidPathError))
             
                     } else {
             
-                        reject(new FileError(errorCode.fileNotReadError,errorMessage.fileNotReadError))
+                        reject(new FileError(errorCode.FILE_NOT_READ_ERROR,errorMessage.fileNotReadError))
             
                     }
                 }

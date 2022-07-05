@@ -1,11 +1,10 @@
 const errorCode = {
-
-    noErrorFound:"08020000",
-    apiNotSupportError:"08020001",
-    invalidPathError:"08020002",
-    folderNoReadError:"08020003",
-    fileNotReadError:"08020004",
-    noFileCanReadError: "08020005"
+    NO_ERROR_FOUND:"00000000",
+    API_NOT_SUPPORT_ERROR:"08020001",
+    INVALID_PATH_ERROR:"08020002",
+    FOLDER_NO_READ_ERROR:"08020003",
+    FILE_NOT_READ_ERROR:"08020004",
+    NO_FILE_CAN_READ_ERROR: "08020005"
 
 };
 
