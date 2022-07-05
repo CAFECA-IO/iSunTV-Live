@@ -1,19 +1,25 @@
-import { MiddlewareConsumer, Module,NestModule, RequestMethod } from '@nestjs/common';
+import { Module, OnModuleInit } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { ConfigService } from '@nestjs/config';
+import * as hound from 'hound';
+import fs from 'fs';
 import ChinasunController from '../controller/chinasun.controller'
 import ChinasunService from '../service/chinasun.service';
-import { SendMailController } from '../controller/sendmail.controller';
-import { SendMailService } from '../service/sendmail.service';
-import { MiddlemainMiddleware } from 'server/middleware/middlemain.middleware';
+import SendMailController from '../controller/sendmail.controller';
+import SendMailService from '../service/sendmail.service';
 import {
     AcceptLanguageResolver,
     I18nModule,
     QueryResolver,
   } from 'nestjs-i18n';
-import { I18nController } from 'server/controller/i18n.controller';
+import AppService from 'server/app.service';
+import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 
+// import ConfigModule, I18nModule, Controllers
 @Module({
+
   imports:[
-    //import i18n module
+    ConfigModule,
     I18nModule.forRoot({
         fallbackLanguage: 'ch',  
         fallbacks: {
@@ -30,21 +36,56 @@ import { I18nController } from 'server/controller/i18n.controller';
         ]     
       }),
   ],
-  controllers: [I18nController, ChinasunController, SendMailController],
-  providers: [ChinasunService, SendMailService]
+  controllers: [ChinasunController, SendMailController],
+  providers: [ChinasunService, SendMailService, AppService]
+
 })
 
-class ApiModule implements NestModule {
-    // find a way to specify route
-    constructor(){
-    }
-    
-    configure(consumer: MiddlewareConsumer) {
-        consumer
-            .apply(MiddlemainMiddleware) 
-            .exclude({ path: '/api/v1/chinasun/updated_files', method: RequestMethod.ALL},{ path: '/api/v1/sendmail', method: RequestMethod.ALL})
-            .forRoutes({ path: '/*', method: RequestMethod.ALL });    
-    }
-}
+// import ConfigModule, I18nModule, Controllers
+/**
+ * handle all api
+ * @module ApiModule
+ */
+class ApiModule implements OnModuleInit {
 
+      static chinasunService = ChinasunService;
+  
+      constructor(private readonly configService: ConfigService) {
+
+      }
+      // a function is executed after all controllers are imported 
+      /**
+       * return @param {string} result store the current yyyymmdd string
+       */
+      onModuleInit() {
+        // register the watcher
+        const watcher = hound.watch(process.cwd() + this.configService.get('XLSFOLDER_DIR'));
+
+        watcher.on('create', async(file, stats) => {
+
+          const data = await ProgramlistLoader.getLatestProgramList(process.cwd() + '/xls/'); 
+          global.playlist = data;
+          console.log(file + ' was created');
+        
+        });
+
+        watcher.on('change', async(file, stats) => {
+
+          const data = await ProgramlistLoader.getLatestProgramList(process.cwd() + '/xls/'); 
+          global.playlist = data;
+          console.log(file + ' was created');
+        
+        })
+
+        watcher.on('delete', async(file) => {
+
+          const data = await ProgramlistLoader.getLatestProgramList(process.cwd() + '/xls/'); 
+          global.playlist = data;
+        
+        })
+      
+      }
+
+}
+      
 export default ApiModule;

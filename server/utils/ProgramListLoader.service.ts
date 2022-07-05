@@ -1,5 +1,7 @@
 import FileOperator from './FileOperator.service';
 import FileError from './FileError';
+import {errorCode} from './ErrorCode';
+import {errorMessage} from './ErrorMessage';
 
 class ProgramlistLoader {
 
@@ -17,13 +19,13 @@ class ProgramlistLoader {
         let fileList = await FileOperator.getFileList(path);      
         let fileIndex;
         fileIndex = fileList.length - 1;    
+        console.log(fileIndex);
         return new Promise(async (resolve, reject) => {
             // do while loop until programlist can be read or no file can be read        
             do {
         
                 try {
-        
-                    const result = await this.getProgramList(path+"/"+fileList[fileIndex]);
+                    const result = await this.getProgramList(path+fileList[fileIndex].name);
                     fileIndex = fileIndex - 1;
                     resolve(result);
                     break;
@@ -32,16 +34,15 @@ class ProgramlistLoader {
                     // throw invalid path error
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError("08020001","invalid path"))   
+                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))   
             
                     } else {
                         // call getprogramlist-> if []/fail do again
-                        // while loop continue
-
+                        // while loop continue here
                         // if read the last file -> throw the no file can be read error
                         if (fileIndex == -1) {
 
-                            reject(new FileError("08020004","no file can be read"))
+                            reject(new FileError(errorCode.fileNotReadError,errorMessage.fileNotReadError))
                         
                         }
 
@@ -65,13 +66,14 @@ class ProgramlistLoader {
         // Error:
         // 1. invalid path
         // 2. File can't be read
-        return new Promise( async (resolve, reject) => {
+        return new Promise<any[]>( async (resolve, reject) => {
             // 
             try {
-    
+                console.log(path);
                 const file = await FileOperator.readFile(path);//  add wait
                 const excelJson = await FileOperator.excelToJson(file);
                 const result = this.formatProgramList(excelJson);
+                console.log(path);
                 resolve(result);
     
             } catch(e) {
@@ -92,16 +94,6 @@ class ProgramlistLoader {
      */   
     static formatProgramList(data) {
 
-        let jsonFormat = {
-
-            prgID: "",
-            prgName: "",
-            PlayTime: "",
-            prgColumn: "",
-            prgComment: "",
-
-        }
-
         // invalid(無法解析) => return []
         if (typeof data == 'undefined') {
 
@@ -112,6 +104,15 @@ class ProgramlistLoader {
         // assign the programlist to the formatted json with null
         const result = data.map((program) => {
 
+            let jsonFormat = {
+
+                prgID: "",
+                prgName: "",
+                PlayTime: "",
+                prgColumn: "",
+                prgComment: "",
+    
+            }
             // deal with normal program assigment
             jsonFormat.prgID = program.prgID;
             jsonFormat.prgName = program.prgName;

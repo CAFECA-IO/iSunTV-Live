@@ -1,6 +1,8 @@
 import fs from 'fs';
 import xlsx from 'xlsx';
 import FileError from './FileError';
+import {errorCode}  from './ErrorCode';
+import {errorMessage}  from './ErrorMessage';
 
 class FileOperator{
 
@@ -22,15 +24,16 @@ class FileOperator{
                 // err handling (add try catch)
                 // 1. invalid path
                 // 2. Folder can't be read
+                console.log(path);
                 if (err) {
                 
                     if (err.code === 'ENOENT') {
                 
-                        reject(new FileError("08020001","invalid path"))
+                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
                 
                     } else {
                 
-                        reject(new FileError("08020002","Folder can't be read"))
+                        reject(new FileError(errorCode.folderNoReadError,errorMessage.folderNoReadError))
                 
                     }
                 }
@@ -93,17 +96,18 @@ class FileOperator{
             
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError("08020001","invalid path"))
+                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
             
                     } else {
             
-                        reject(new FileError("08020003","File can't be read"))
+                        reject(new FileError(errorCode.fileNotReadError,errorMessage.fileNotReadError))
             
                     }
                 }
             }
         });
     }   
+
 }
 
 export default FileOperator;

@@ -2,14 +2,14 @@ import { Injectable } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 
 @Injectable()
-export class SendMailService {
-
+class SendMailService {
 
   // include the formatter
-  constructor(){
-  }
+    constructor() {
+  
+    } 
 
-  async sendMail(body): Promise<any>{
+  async sendMail(body): Promise<any> {
         // create reusable transporter object using the default SMTP transport
         const transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
@@ -57,3 +57,5 @@ export class SendMailService {
     });
   }
 }
+
+export default SendMailService;

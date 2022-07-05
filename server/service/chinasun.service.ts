@@ -1,20 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
-// import { FormatterService } from './formatter.service';
 
-// add Programlist loader 
+
+/**
+ * handle the programlist service for chinasun controller
+ * @service ChinasunService
+ */
 @Injectable()
 class ChinasunService {
 
-    private static jsonFile: string = process.cwd()+'/playlist.json';
-    // json playlist
-    private static xlsFolder: string = process.cwd()+'/xls';
+    /** @param {string} xlsFolder default xls folder path*/
+    xlsFolder: string;
 
+    //the class constructor
+    /**
+     * set the default constructor without param
+     */
     constructor() {
 
     }
     
-    // loop until get the data
+    async initialize({XLSFOLDER_DIR}){
+        
+        this.xlsFolder = XLSFOLDER_DIR;
+        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        console.log(result);
+
+    }
+
+    //the function of getting current time 
+    /**
+     * return @param {string} result store the current yyyymmdd string
+     */
     getCurrentTime() {
 
         var currentTime = new Date();
@@ -34,32 +51,25 @@ class ChinasunService {
         
         var _day = currentTime.getDate().toString();
         var _year = currentTime.getFullYear().toString();
+        var result = _year+_month+_day;
 
-        return _year+_month+_day;
+        return result;
     
     }
 
+    //the function of getting updated data
+    /**
+     * return @param {string} result store the current yyyymmdd string
+     */
     async getUpdatedData() {    
-
-        const time = this.getCurrentTime();
-        const result = await ProgramlistLoader.getLatestProgramList(ChinasunService.xlsFolder);
+        
+        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        global.playlist = result;
         return result;
 
     }
-    
-        // let File = xlsx.readFile(file,{type:'binary',cellDates:true});
-        // let Content = xlsx.utils.sheet_to_json(File.Sheets[File.SheetNames[0]]);
-        // let jsonFile=process.cwd()+'/playlist.json';
-
-        // var data = fs.readFileSync(this.jsonFile,{encoding:'utf8', flag:'r'});
-        // var data_json = JSON.parse(data);
-        // if (typeof data_json != 'undefined'){
-        //     return this.formatterService.FormatData(true,"00000000","Return Programlist Data",data_json);
-        // }else{
-        //     return this.formatterService.FormatData(false,"04999999","Return Programlist Data",data_json);
-        // }
         
-    }
+}
 
 export default ChinasunService;
 
