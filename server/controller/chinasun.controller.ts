@@ -47,7 +47,6 @@ class ChinasunController {
         //get the latest data
         let data;
         let result;
-
         // get the uodated data and handle the error
         try{
             data = await this.chinasunService.getUpdatedData(); 

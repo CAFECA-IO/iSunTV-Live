@@ -1,4 +1,4 @@
-import { Controller, Post, Body } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import SendMailService from '../service/sendmail.service'; 
 
 @Controller('sendmail')
@@ -13,10 +13,10 @@ xlsFolder: string;
   
   }
   
-  @Post()
-  async sendMail(@Body() body):Promise<any> {
+  @Get()
+  async sendMail(){
 
-    return this.sendmailService.sendMail(body);
+    return await this.sendmailService.sendMail();
 
   }
 
