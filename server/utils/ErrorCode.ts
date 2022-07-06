@@ -1,4 +1,5 @@
-const errorCode = {
+const ERROR_CODE = {
+
     NO_ERROR_FOUND:"00000000",
     API_NOT_SUPPORT_ERROR:"08020001",
     INVALID_PATH_ERROR:"08020002",
@@ -8,4 +9,4 @@ const errorCode = {
 
 };
 
-export { errorCode };
+export { ERROR_CODE };

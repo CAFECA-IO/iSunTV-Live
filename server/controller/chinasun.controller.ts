@@ -2,7 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
-import { errorCode } from 'server/utils/ErrorCode';
+import { ERROR_CODE } from 'server/utils/ErrorCode';
 
 /**
  * handle the chinasun route
@@ -51,7 +51,7 @@ class ChinasunController {
         // get the uodated data and handle the error
         try{
             data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true,errorCode.NO_ERROR_FOUND,"programlist",data);
+            result = FormatterService.formatData(true,ERROR_CODE.NO_ERROR_FOUND,"programlist",data);
         }catch(e){
             result = FormatterService.formatData(true,e.code,e.message,data);
         }
