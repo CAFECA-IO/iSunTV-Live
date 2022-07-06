@@ -2,7 +2,6 @@ import { NestMiddleware } from "@nestjs/common";
 import { ServerResponse, IncomingMessage } from 'http';
 import FormatterService  from "server/utils/Formatter.service";
 import {errorCode} from '../utils/ErrorCode';
-import {errorMessage} from '../utils/ErrorMessage';
 
 /**
  * handle the request and response
@@ -38,7 +37,7 @@ class MiddlemainMiddleware implements NestMiddleware {
                 if(req.url.replace("/api/v1/i18n/","")!="ch" && req.url.replace("/api/v1/i18n/","")!="en") {
                     
                     res.writeHead(200, { 'content-type': 'application/json' });
-                    res.write(JSON.stringify(FormatterService.formatData(false,errorCode.API_NOT_SUPPORT_ERROR,errorMessage.apiNotSupportError,{})))
+                    res.write(JSON.stringify(FormatterService.formatData(false,errorCode.API_NOT_SUPPORT_ERROR,"api not support",{})))
                     res.end();
 
                 } else {
@@ -53,7 +52,7 @@ class MiddlemainMiddleware implements NestMiddleware {
                 if(req.url!="/api/v1/chinasun/programlist") {
                 
                     res.writeHead(200, { 'content-type': 'application/json' });
-                    res.write(JSON.stringify(FormatterService.formatData(false,errorCode.API_NOT_SUPPORT_ERROR,errorMessage.apiNotSupportError,{})))
+                    res.write(JSON.stringify(FormatterService.formatData(false,errorCode.API_NOT_SUPPORT_ERROR,"api not support",{})))
                     res.end();
             
                 } else {
@@ -75,7 +74,7 @@ class MiddlemainMiddleware implements NestMiddleware {
             } else {
                 // handle the path isn't i18n or chinasun
                 res.writeHead(200, { 'content-type': 'application/json' });
-                res.write(JSON.stringify(FormatterService.formatData(false,errorCode.API_NOT_SUPPORT_ERROR,errorMessage.apiNotSupportError,{})))
+                res.write(JSON.stringify(FormatterService.formatData(false,errorCode.API_NOT_SUPPORT_ERROR,"api not support",{})))
                 res.end();
             }
 

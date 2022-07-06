@@ -48,7 +48,7 @@ class ChinasunController {
         let data;
         let result;
 
-        // handle the error
+        // get the uodated data and handle the error
         try{
             data = await this.chinasunService.getUpdatedData(); 
             result = FormatterService.formatData(true,errorCode.NO_ERROR_FOUND,"programlist",data);
