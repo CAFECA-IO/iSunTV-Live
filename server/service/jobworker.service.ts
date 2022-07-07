@@ -22,17 +22,17 @@ class JobWorker {
     
     // }
 
-    pushQueue(config) {
+    pushQueue(config,comment) {
 
         this.jobQueue.push(function () {
             console.log("pushed");
-            return SendMail.sendMail(config);          
+            return SendMail.sendMail(config,comment);          
         
         });
     
     }
 
-    async workerOn() {
+    async workerOn(comment) {
 
         let q = this.jobQueue;
         let config = this.config;
@@ -47,7 +47,7 @@ class JobWorker {
             // do while loop until the 
             do {
 
-                result = await runQueue(q,config);
+                result = await runQueue(q, config, comment);
                 
                 // if result! = error, job worker is not the  
                 if (result != "error") {
@@ -72,29 +72,26 @@ class JobWorker {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    async runQueue(q,config) {
+    async runQueue(q, config, comment) {
 
         return new Promise<any>( async (resolve, reject) => {
             
             // start to run the queue
-            console.log("runQueue");
-            console.log(q);
             q.start((err)=> {
 
                 if (err) {
                     // call push job function
                     q.push(function () {
                         console.log("pushed");
-                        return SendMail.sendMail(config);          
+                        console.log("sentmail"+comment);
+                        return SendMail.sendMail(config, comment);          
                     });
 
-                    console.log(err);
                     // add job worker error
                     reject(err);        
                     
                 } else {
                     
-                    console.log(q.results);
                     resolve(q.results);
                 
                 }

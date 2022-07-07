@@ -13,7 +13,9 @@ class SendMail {
      * @param config options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async sendMail(config) {
+    static async sendMail(config, content) {
+
+        let comment = content;
         
         return new Promise<any>( async (resolve, reject) => {
 
@@ -30,14 +32,14 @@ class SendMail {
                 }
             
             });
-        
+            console.log("commenthere"+comment);
             let mailOptions = {
             
                 from    : "clemmy.liao@mermer.cc", // sender address
                 to      : "clemmy.liao@mermer.cc", // list of receivers
                 subject : '陽光衛視直播網站意見回覆', // Subject line
-                text    : 'Comments', // plaintext body
-                html    : '<b>Comments</b>', // html body
+                text    : comment, // plaintext body
+                html    : '<p>'+comment+'</p>', // html body
         
                 auth : {
                     user         : config.USER,

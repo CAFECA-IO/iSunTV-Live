@@ -21,12 +21,12 @@ class SendMailService {
 
     }
 
-    async sendMail() {
+    async sendMail(comment) {
         // initialize a queue
         // push job into queue
         let config = this.config;
-        this.jobWorker.pushQueue(config)
-        this.jobWorker.workerOn();
+        this.jobWorker.pushQueue(config, comment);
+        this.jobWorker.workerOn(comment);
         // // pass q to Job Worker
         return "sent ok";
 

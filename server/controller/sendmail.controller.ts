@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import SendMailService from '../service/sendmail.service'; 
 
@@ -26,17 +26,16 @@ sendmailService: SendMailService;
       CLIENT_SECRET: this.configService.get('CLIENT_SECRET')
 
     }
-    console.log("config");
-    console.log(CONFIG);
+    
     this.sendmailService.initialze(CONFIG);
 
   }
 
 
-  @Get()
-  async sendMail() {
+  @Post()
+  async sendMail(@Body('comment') comment: string) {
 
-    return await this.sendmailService.sendMail();
+    return await this.sendmailService.sendMail(comment);
 
   }
 
