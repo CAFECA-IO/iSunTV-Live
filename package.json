@@ -15,7 +15,6 @@
     "@types/nodemailer": "^6.4.4",
     "file-name": "^0.1.0",
     "fs": "^0.0.1-security",
-    "googleapis": "^39.2.0",
     "hound": "^1.0.5",
     "i18next": "^21.8.10",
     "i18next-express-middleware": "^2.0.0",
