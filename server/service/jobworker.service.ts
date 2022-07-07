@@ -2,13 +2,24 @@ import SendMail from '../utils/SendMail';
 
 class JobWorker {
 
+    /** @param {any} jobQueue default job queue*/
     jobQueue : any;
+    /** @param {any} config default email config*/
     config : any;
 
+    //the class constructor
+    /**
+     * set the default constructor without param
+     */
     constructor() {
 
     }
 
+    /**
+     * initialize the jobworker
+     * @param q means job queue
+     * @param config means email config
+     */
     initialize(q, config){
         
         this.jobQueue = q;
@@ -22,54 +33,83 @@ class JobWorker {
     
     // }
 
-    pushQueue(config,comment) {
+    /**
+     * push queue to the bottom
+     * @param config means email config
+     * @param comment means email comment
+     * @returns a promise resolved result when the function is ready to be called
+     */
+    pushQueue(config, comment) {
 
+        // push new job
         this.jobQueue.push(function () {
-            console.log("pushed");
-            return SendMail.sendMail(config,comment);          
         
-        });
-    
-    }
-
-    async workerOn(comment) {
-
-        let q = this.jobQueue;
-        let config = this.config;
-        let runQueue = this.runQueue;
-        // let getQueueStatus = this.getQueueStatus;
-
-        return new Promise<any>( async (resolve, reject) => {
-        
-            let result;
-            let stopFlag = 0;
-            
-            // do while loop until the 
-            do {
-
-                result = await runQueue(q, config, comment);
-                
-                // if result! = error, job worker is not the  
-                if (result != "error") {
-                    // add getQueueStatus(q).pending != 0 in the future
-                    stopFlag = 1;
-                
-                } else {
-
-                    resolve(result);
-                
-                }
-                
-
-            } while ( stopFlag == 0 );
+            return SendMail.sendMail(config, comment);          
         
         });
     
     }
 
     /**
+     * run queue loop
+     * @param q means queue
+     * @param config means email config
+     * @param config means email comment
+     * @returns a promise resolved result when the function is ready to be called
+     */
+    async runQueueLoop(q, config, comment) {
+
+        let runQueue = this.runQueue;
+        
+        return new Promise<any>( async (resolve, reject) => {
+
+            let result;
+            let stopFlag = 0;
+            
+            // do while loop until all jobs are completed.
+            do {
+    
+                result = await runQueue(q, config, comment);
+                
+                // print success if all jobs are complete
+                if (result != "error") {
+        
+                    stopFlag = 1;
+                    resolve(result);
+                
+                } else {
+                    // if meet error then run the next job
+                    stopFlag = 0;
+                
+                }
+                
+    
+            } while ( stopFlag == 0 );
+        })
+    }
+
+    /**
+     * wake up the worker to run jobQueue loop
+     * @param comment means email comment
+     */
+    workerOn(comment) {
+
+        let q = this.jobQueue;
+        let config = this.config;
+
+        // don't wait for runQueueLoop being completed
+        this.runQueueLoop(q, config, comment);
+        
+        // return worker ia awake immediately
+        return "worker is awake";
+    
+    }
+
+    /**
      * run queue
-     * @param path options to start the function with
+     * @param q means queue
+     * @param config means email config
+     * @param comment means email comment
      * @returns a promise resolved result when the function is ready to be called
      */
     async runQueue(q, config, comment) {
@@ -100,15 +140,7 @@ class JobWorker {
     
         })
 
-    }
-
-    /**
-     * original data resource is already formatted,
-     * so this function is used to deal with the undefined condition 
-     * get the programlist with given options
-     * @param data options to start the function with
-     * @returns formatted data without undefined
-     */   
+    }  
   
 
 }

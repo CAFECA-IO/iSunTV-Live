@@ -7,8 +7,9 @@ class SendMailController {
   
 sendmailService: SendMailService;
 
+
   constructor(private readonly configService: ConfigService) {
-    
+
       this.sendmailService = new SendMailService;
       this.initialize();
 

@@ -2,6 +2,10 @@ import * as nodemailer from 'nodemailer';
 
 class SendMail {
 
+    //the class constructor
+    /**
+     * set the default constructor without param
+     */
     constructor() {
 
     }
@@ -15,6 +19,7 @@ class SendMail {
 
         return new Promise<any>( async (resolve, reject) => {
 
+            // create gmail service
             const transporter = nodemailer.createTransport({
             
                 host: 'smtp.gmail.com',
@@ -29,6 +34,7 @@ class SendMail {
             
             });
 
+            // create email template
             let mailOptions = {
             
                 from    : "clemmy.liao@mermer.cc", // sender address
@@ -38,9 +44,11 @@ class SendMail {
                 html    : '<p>' + comment + '</p>', // html body
         
                 auth : {
+
                     user         : config.USER,
                     refreshToken: config.REFRESH_TOKEN,
                     accessToken:  config.ACCESS_TOKEN
+                
                 }
         
             };
@@ -49,9 +57,13 @@ class SendMail {
             transporter.sendMail(mailOptions, function (error, info) {
 
                 if (error) {
+
                     reject(error);
+                
                 } else {
+                
                     resolve(info.response);
+                
                 }
         
             });
