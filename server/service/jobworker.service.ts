@@ -1,10 +1,9 @@
-import { ERROR_CODE } from './ErrorCode';
-import SendMail from './SendMail';
+import SendMail from '../utils/SendMail';
 
 class JobWorker {
 
-    private static jobQueue = null;
-    private static config = null;
+    jobQueue : any;
+    config : any;
 
     constructor() {
 
@@ -12,77 +11,81 @@ class JobWorker {
 
     initialize(q, config){
         
-        JobWorker.jobQueue = q;
-        JobWorker.config = config;
+        this.jobQueue = q;
+        this.config = config;
 
     }
 
-    static getQueueStatus(q) {
+    // getQueueStatus(q) {
         
-        return q;
+    //     return q;
     
-    }
+    // }
 
-    static pushQueue(q, config) {
+    pushQueue(config) {
 
-        q.push(function () {
-
+        this.jobQueue.push(function () {
+            console.log("pushed");
             return SendMail.sendMail(config);          
         
         });
     
     }
 
-    static async workerOn() {
+    async workerOn() {
 
-        let q = JobWorker.jobQueue;
+        let q = this.jobQueue;
+        let config = this.config;
+        let runQueue = this.runQueue;
+        // let getQueueStatus = this.getQueueStatus;
 
         return new Promise<any>( async (resolve, reject) => {
         
             let result;
             let stopFlag = 0;
             
-            // do while loop means it will
+            // do while loop until the 
             do {
 
-                result = await JobWorker.runQueue();
+                result = await runQueue(q,config);
                 
                 // if result! = error, job worker is not the  
-                if (result != "error" || JobWorker.getQueueStatus(q).pending != 0) {
-                
+                if (result != "error") {
+                    // add getQueueStatus(q).pending != 0 in the future
                     stopFlag = 1;
                 
                 } else {
-                    
+
                     resolve(result);
+                
                 }
                 
-                console.log(JobWorker.getQueueStatus(q).pending);
-                console.log(result);
 
-                } while ( stopFlag == 0 );
+            } while ( stopFlag == 0 );
         
         });
     
     }
+
     /**
      * run queue
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async runQueue() {
-        
-        let q = JobWorker.jobQueue;
+    async runQueue(q,config) {
 
         return new Promise<any>( async (resolve, reject) => {
             
             // start to run the queue
+            console.log("runQueue");
+            console.log(q);
             q.start((err)=> {
 
                 if (err) {
                     // call push job function
                     q.push(function () {
-                        return SendMail.sendMail(JobWorker.config);                        
+                        console.log("pushed");
+                        return SendMail.sendMail(config);          
                     });
 
                     console.log(err);

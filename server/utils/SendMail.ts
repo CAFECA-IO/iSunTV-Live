@@ -25,8 +25,8 @@ class SendMail {
                 // put config in here (later)
                 auth: {
                 type: "OAuth2",
-                clientId: config.clientId,
-                clientSecret: config.clientSecret,
+                clientId: config.CLIENT_ID,
+                clientSecret: config.CLIENT_SECRET,
                 }
             
             });
@@ -40,9 +40,9 @@ class SendMail {
                 html    : '<b>Comments</b>', // html body
         
                 auth : {
-                    user         : config.user,
-                    refreshToken: config.refreshToken,
-                    accessToken:  config.accessToken
+                    user         : config.USER,
+                    refreshToken: config.REFRESH_TOKEN,
+                    accessToken:  config.ACCESS_TOKEN
                 }
         
             };

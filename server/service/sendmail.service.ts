@@ -1,26 +1,35 @@
 import { Injectable } from '@nestjs/common';
-import SendMail from 'server/utils/SendMail';
 import queue from 'queue';
-import JobWorker from 'server/utils/JobWorker';
+import JobWorker from './jobworker.service';
 
 @Injectable()
 class SendMailService {
+    
+    config: any;
+    jobWorker: any;
 
     constructor() {
-  
+        this.jobWorker = new JobWorker();
     } 
+
+    // sendmail service initialize the job queue
+    initialze(config) {
+
+        this.config = config;
+        let jobQueue = queue({ results: [] });
+        this.jobWorker.initialize(jobQueue, this.config);
+
+    }
 
     async sendMail() {
         // initialize a queue
-        var q = queue({ results: [] })
         // push job into queue
-        
-        q.push(function () {
-            return SendMail.sendMail({ user:"", clientID:"", clientSecret:"", refreshToken:"", accessToken:"" });
-          })
-        // pass q to Job Worker
-        const result = await JobWorker.runQueue(q);
+        let config = this.config;
+        this.jobWorker.pushQueue(config)
+        this.jobWorker.workerOn();
+        // // pass q to Job Worker
         return "sent ok";
+
   }
 }
 
