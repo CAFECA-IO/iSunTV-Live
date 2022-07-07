@@ -20,7 +20,7 @@ class SendMailService {
           })
         // pass q to Job Worker
         const result = await JobWorker.runQueue(q);
-        return result;
+        return "sent ok";
   }
 }
 

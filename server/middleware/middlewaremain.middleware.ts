@@ -77,10 +77,10 @@ class MiddlemainMiddleware implements NestMiddleware {
                     
                     next();
                 
-                } catch (e){
+                } catch (e) {
                     // hadle the error code and message then format them
                     res.writeHead(200, { 'content-type': 'application/json' });
-                    res.write(JSON.stringify(FormatterService.formatData(false,e.code,e.message,{})))
+                    res.write(JSON.stringify(FormatterService.formatData(false, e.code, e.message, {})))
                     res.end();                        
                 
                 }  

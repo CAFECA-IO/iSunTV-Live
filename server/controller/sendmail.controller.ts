@@ -14,7 +14,7 @@ xlsFolder: string;
   }
   
   @Get()
-  async sendMail(){
+  async sendMail() {
 
     return await this.sendmailService.sendMail();
 
