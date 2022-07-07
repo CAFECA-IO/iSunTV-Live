@@ -27,6 +27,8 @@ class SendMailService {
 
         this.config = config;
         // initialize the jobQueue
+        this.jobWorker = new JobWorker();
+        
         let jobQueue = queue({ results: [] });
         // initialize the jobWorker
         this.jobWorker.initialize(jobQueue, this.config);
