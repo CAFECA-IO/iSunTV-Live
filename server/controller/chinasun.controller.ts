@@ -33,7 +33,7 @@ class ChinasunController {
     initialize() {
         // 先執行config
         const XLSFOLDER_DIR = process.cwd() + this.configService.get('XLSFOLDER_DIR');
-        const config = {XLSFOLDER_DIR};
+        const config = { XLSFOLDER_DIR };
         this.chinasunService.initialize(config);
     
     }
@@ -51,9 +51,9 @@ class ChinasunController {
         // get the uodated data and handle the error
         try{
             data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true,ERROR_CODE.NO_ERROR_FOUND,"programlist",data);
+            result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
         }catch(e){
-            result = FormatterService.formatData(true,e.code,e.message,data);
+            result = FormatterService.formatData(true, e.code, e.message, data);
         }
         
         return result;
