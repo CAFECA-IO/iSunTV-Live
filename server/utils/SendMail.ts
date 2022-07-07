@@ -1,6 +1,4 @@
-import { ConfigModule } from '@nestjs/config';
 import * as nodemailer from 'nodemailer';
-import { ERROR_CODE } from './ErrorCode';
 
 class SendMail {
 
@@ -13,10 +11,8 @@ class SendMail {
      * @param config options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async sendMail(config, content) {
+    static async sendMail(config, comment) {
 
-        let comment = content;
-        
         return new Promise<any>( async (resolve, reject) => {
 
             const transporter = nodemailer.createTransport({
@@ -32,14 +28,14 @@ class SendMail {
                 }
             
             });
-            console.log("commenthere"+comment);
+
             let mailOptions = {
             
                 from    : "clemmy.liao@mermer.cc", // sender address
                 to      : "clemmy.liao@mermer.cc", // list of receivers
                 subject : '陽光衛視直播網站意見回覆', // Subject line
                 text    : comment, // plaintext body
-                html    : '<p>'+comment+'</p>', // html body
+                html    : '<p>' + comment + '</p>', // html body
         
                 auth : {
                     user         : config.USER,
@@ -54,9 +50,9 @@ class SendMail {
 
                 if (error) {
                     reject(error);
+                } else {
+                    resolve(info.response);
                 }
-        
-                resolve(info.response);
         
             });
         
