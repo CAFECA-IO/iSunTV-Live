@@ -4,10 +4,15 @@ import SendMailService from '../service/sendmail.service';
 
 @Controller('sendmail')
 class SendMailController {
-  
-sendmailService: SendMailService;
 
+  /** @param {SendMailService} sendmailService handle the sendmail related service*/
+  sendmailService: SendMailService;
 
+  //the class constructor
+  /**
+   * set the default configservice and initialize the chinasun service
+   * @param configService options to let user use config in the controller
+   */
   constructor(private readonly configService: ConfigService) {
 
       this.sendmailService = new SendMailService;
@@ -16,6 +21,9 @@ sendmailService: SendMailService;
   }
 
   // initialize the email config and sendmail service
+  /**
+   * initialize the SendMailService with the email config
+   */
   initialize() {
   
     const CONFIG = {
@@ -32,7 +40,10 @@ sendmailService: SendMailService;
 
   }
 
-
+  // call the sendmail function in sendmail service
+  /**
+   * initialize the SendMailService with the email config
+   */
   @Post()
   async sendMail(@Body('comment') comment: string) {
 

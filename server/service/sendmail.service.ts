@@ -1,11 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import queue from 'queue';
 import JobWorker from './jobworker.service';
+import { ERROR_CODE } from '../utils/ErrorCode';
+import FormatterService from 'server/utils/Formatter.service';
 
 @Injectable()
 class SendMailService {
     
-    /** @param {any} jobQueue default job queue*/
+    /** @param {any} jobWorker default job worker*/
     jobWorker: any;
     /** @param {any} config default email config*/
     config: any;
@@ -25,12 +27,13 @@ class SendMailService {
      */
     initialze(config) {
 
-        this.config = config;
         // create job worker
         this.jobWorker = new JobWorker();
         // initialize the jobQueue
         let jobQueue = queue({ results: [] });
-        // initialize the jobWorker
+
+        this.config = config;
+        // initialize the jobWorker : put job queue and email config in the job worker
         this.jobWorker.initialize(jobQueue, this.config);
 
     }
@@ -45,10 +48,10 @@ class SendMailService {
         let config = this.config;
         // push job into queue
         this.jobWorker.pushQueue(config, comment);
-        // wake up the worker
+        // call the workerOn function in the Job Worker
         this.jobWorker.workerOn(comment);
-        // immediately return sent ok
-        return "sent ok";
+        // immediately return sent ok (won't wait for the response)
+        return FormatterService.formatData(true, ERROR_CODE.SUCCESS, "sent ok", {});
 
   }
 

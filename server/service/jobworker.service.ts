@@ -68,7 +68,7 @@ class JobWorker {
             
             // do while loop until all jobs are completed.
             do {
-    
+                // call run queue to call the sendmail job
                 result = await runQueue(q, config, comment);
                 
                 // print success if all jobs are complete
@@ -82,9 +82,9 @@ class JobWorker {
                     stopFlag = 0;
                 
                 }
-                
     
             } while ( stopFlag == 0 );
+        
         })
     }
 
