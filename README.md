@@ -19,8 +19,9 @@ CLIENT_ID = "test_client_id"
 1. 確保 localhost:3000 並未被佔有
 2. 執行以下的 command
 ```
-＃執行 api build:nest 並將其編譯到 dist 中
+＃執行 npm run build:nest 並將其編譯到 dist 中
 npm run build:nest
+
 ＃執行 npm run start 來執行 node server 
 npm run start
 ```
