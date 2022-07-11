@@ -2,8 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
-import { errorCode } from 'server/utils/ErrorCode';
-import { errorMessage } from 'server/utils/ErrorMessage';
+import { ERROR_CODE } from 'server/utils/ErrorCode';
 
 /**
  * handle the chinasun route
@@ -34,7 +33,7 @@ class ChinasunController {
     initialize() {
         // 先執行config
         const XLSFOLDER_DIR = process.cwd() + this.configService.get('XLSFOLDER_DIR');
-        const config = {XLSFOLDER_DIR};
+        const config = { XLSFOLDER_DIR };
         this.chinasunService.initialize(config);
     
     }
@@ -49,12 +48,12 @@ class ChinasunController {
         let data;
         let result;
 
-        // handle the error
+        // get the uodated data and handle the error
         try{
             data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true,errorCode.noErrorFound,"programlist",data);
+            result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
         }catch(e){
-            result = FormatterService.formatData(true,e.code,e.message,data);
+            result = FormatterService.formatData(true, e.code, e.message, data);
         }
         
         return result;

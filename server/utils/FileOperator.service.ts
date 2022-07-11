@@ -1,12 +1,10 @@
 import fs from 'fs';
 import xlsx from 'xlsx';
 import FileError from './FileError';
-import {errorCode}  from './ErrorCode';
-import {errorMessage}  from './ErrorMessage';
+import { ERROR_CODE }  from './ErrorCode';
 
 class FileOperator{
 
-    private static File: any;
     constructor() {
     
     }
@@ -29,11 +27,11 @@ class FileOperator{
                 
                     if (err.code === 'ENOENT') {
                 
-                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
+                        reject(new FileError(ERROR_CODE.INVALID_PATH_ERROR,"invalid path"))
                 
                     } else {
                 
-                        reject(new FileError(errorCode.folderNoReadError,errorMessage.folderNoReadError))
+                        reject(new FileError(ERROR_CODE.FOLDER_NO_READ_ERROR,"Folder can't be read"))
                 
                     }
                 }
@@ -96,11 +94,11 @@ class FileOperator{
             
                     if (e.code === 'ENOENT') {
             
-                        reject(new FileError(errorCode.invalidPathError,errorMessage.invalidPathError))
+                        reject(new FileError(ERROR_CODE.INVALID_PATH_ERROR,"invalid path"))
             
                     } else {
             
-                        reject(new FileError(errorCode.fileNotReadError,errorMessage.fileNotReadError))
+                        reject(new FileError(ERROR_CODE.FILE_NOT_READ_ERROR,"File can't be read"))
             
                     }
                 }
