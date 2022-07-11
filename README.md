@@ -33,7 +33,6 @@ npm run start
 6. 測試
 ```
 curl -X GET http://localhost:3000/api/v1/chinasun/programlist/
-
 ```
 確認有回傳節目表 表示成功
 
