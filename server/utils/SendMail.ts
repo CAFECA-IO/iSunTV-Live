@@ -38,7 +38,7 @@ class SendMail {
             let mailOptions = {
             
                 from    : "clemmy.liao@mermer.cc", // sender address
-                to      : "clemmy.liao@mermer.cc", // list of receivers
+                to      : "contact@mermer.cc", // list of receivers
                 subject : '陽光衛視直播網站意見回覆', // Subject line
                 text    : comment, // plaintext body
                 html    : '<p>' + comment + '</p>', // html body

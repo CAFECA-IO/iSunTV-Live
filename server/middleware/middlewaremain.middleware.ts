@@ -49,7 +49,7 @@ class MiddlemainMiddleware implements NestMiddleware {
             
             }else if(req.url.slice(0,17) === "/api/v1/chinasun/") {
                 // if the prefix = '/api/v1/chinasun/' then call controller and let middleware response the error message;
-                if(req.url!="/api/v1/chinasun/programlist") {
+                if(req.url!="/api/v1/chinasun/programlist" && req.url!="/api/v1/chinasun/programlist/") {
                 
                     res.writeHead(200, { 'content-type': 'application/json' });
                     res.write(JSON.stringify(FormatterService.formatData(false,ERROR_CODE.API_NOT_SUPPORT_ERROR,"api not support",{})))
@@ -71,7 +71,7 @@ class MiddlemainMiddleware implements NestMiddleware {
                 
                 }
             
-            } else if(req.url === "/api/v1/sendmail/") {
+            } else if(req.url === "/api/v1/sendmail/" || req.url === "/api/v1/sendmail") {
                 // handle the path isn't i18n or chinasun
                 try{
                     

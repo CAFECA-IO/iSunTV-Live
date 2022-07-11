@@ -3,12 +3,19 @@ import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import './i18n/i18n';
+import { I18nextProvider } from 'react-i18next';
+import { CookiesProvider } from 'react-cookie';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <I18nextProvider>
+    <CookiesProvider>
+        <React.StrictMode>
+          <App />
+        </React.StrictMode>
+    </CookiesProvider>
+  </I18nextProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
