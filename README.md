@@ -2,7 +2,7 @@
 Live Stream of iSunTV
 
 # Requirements
-1. 下載 node.js v14.15.1 版本 至本機端
+1. 下載 node.js v 14.15.1 版本 至本機端
 2. 執行 npm install 指令
 
 # Settings
