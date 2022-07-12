@@ -33,7 +33,7 @@ class ChinasunController {
     initialize() {
         // 先執行config
         const XLSFOLDER_DIR = process.cwd() + this.configService.get('XLSFOLDER_DIR');
-        const config = {XLSFOLDER_DIR};
+        const config = { XLSFOLDER_DIR };
         this.chinasunService.initialize(config);
     
     }
