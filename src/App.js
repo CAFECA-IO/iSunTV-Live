@@ -3,12 +3,12 @@ import './App.scss';
 import Routers from './components/Routers/Routers';
 
 function App() {
-  const linkStyle = {
-    textDecoration: "none",
-    color: 'white',
-    padding: '0 20px',
-    backgroundColor: "black"
-  };
+  // const linkStyle = {
+  //   textDecoration: "none",
+  //   color: 'white',
+  //   padding: '0 20px',
+  //   backgroundColor: "black"
+  // };
   return (
     <Routers></Routers>
   );
