@@ -1,0 +1,431 @@
+$transitionTime: .3s;
+$timeFunc: cubic-bezier(.77, 0, .175, 1);
+
+header
+{
+    position: fixed;
+    z-index: 3;
+    top: 0;
+
+    display: flex !important;
+
+    width: 100%;
+    height: 70px;
+
+    transition: height $transitionTime $timeFunc;
+
+    background-color: #262626;
+
+    a.logo
+    {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        width: 200px;
+
+        transition: width $transitionTime $transitionTime $timeFunc;
+
+        // background-color: #262626;
+
+         > img
+        {
+            &:last-child
+            {
+                margin-left: 15px;
+            }
+        }
+    }
+
+    div.slideNav
+    {
+        display: flex;
+        flex: 1;
+
+        transition: transform $transitionTime $transitionTime $timeFunc, opacity $transitionTime $transitionTime $timeFunc, background $transitionTime $transitionTime $timeFunc;
+        transform: translateX(0%);
+
+        opacity: 1;
+
+        nav
+        {
+            display: flex;
+            align-items: center;
+            flex: 7;
+            justify-content: flex-end;
+
+             > div
+            {
+                font-size: 14px;
+                font-weight: 300;
+
+                margin-right: 25px;
+
+                cursor: pointer;
+                text-align: center;
+
+                color: #fff;
+            }
+        }
+
+        div.contact
+        {
+            display: flex;
+            flex: 3;
+            flex-direction: column;
+
+            margin-right: 50px;
+
+             > div
+            {
+                display: flex;
+                align-items: flex-end;
+                flex: 1;
+                justify-content: flex-end;
+
+                 > span
+                {
+                    margin: 5px;
+
+                    cursor: pointer;
+                    text-align: center;
+
+                    &.client
+                    {
+                        width: 150px;
+                        padding: 10px;
+
+                        border: 1px solid black;
+                        border-radius: 5px;
+                    }
+                }
+            }
+        }
+
+        .language
+        {
+            transition: opacity $transitionTime $timeFunc;
+
+            opacity: 1;
+        }
+    }
+
+    div.hamburger
+    {
+        position: relative;
+        z-index: 1;
+        top: -100%;
+
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+
+        width: 60px;
+
+        cursor: pointer;
+        transition: transform $transitionTime $transitionTime $timeFunc;
+
+        // background-color: #262626;
+
+         > span
+        {
+            width: 40%;
+            height: 2px;
+            margin: 3px 0;
+
+            transition: margin $transitionTime, transform $transitionTime $timeFunc, opacity $transitionTime $timeFunc;
+            transform: translate(-100%, 0);
+
+            opacity: 0;
+            background-color: #ffb742;
+
+            @media (max-width: 768px)
+            {
+                transform: translate(0, 0);
+
+                opacity: 1;
+            }
+        }
+    }
+
+    .slideNav2
+    {
+        position: fixed;
+        top: 0;
+        right: -100%;
+
+        display: none;
+
+        width: 100%;
+        height: 100%;
+        padding-top: 100px;
+
+        transition: transform $transitionTime $timeFunc;
+        transform: translateX(-100%);
+
+        background-color: lightgray;
+
+         > div
+        {
+            padding: 15px;
+
+             > span
+            {
+                margin-right: 15px;
+            }
+        }
+
+        @media (max-width: 768px)
+        {
+            display: flex;
+            flex-direction: column;
+        }
+    }
+
+    &.folded
+    {
+        height: 60px;
+
+        transition: height .5s;
+
+        background-color: transparent;
+
+        @media (max-width: 480px)
+        {
+            z-index: 3;
+
+            background-color: #262626;
+        }
+
+        a.logo
+        {
+            @media (min-width: 480px)
+            {
+                width: 60px;
+
+                background-color: #262626;
+            }
+
+             > img
+            {
+                &:last-child
+                {
+                    @media (min-width: 480px)
+                    {
+                        display: none;
+                    }
+                }
+            }
+        }
+
+        div.slideNav
+        {
+            transform: translateX(0);
+
+            opacity: 0;
+
+            .language
+            {
+                opacity: 0;
+            }
+        }
+
+        div.hamburger
+        {
+            transition: transform $transitionTime $timeFunc;
+            transform: translateY(100%);
+
+             > span
+            {
+                transition: transform $transitionTime $timeFunc, opacity $transitionTime $transitionTime $timeFunc;
+                transform: translateX(0%);
+
+                opacity: 1;
+            }
+
+            &:hover
+            {
+                 > span
+                {
+                    &.ham1
+                    {
+                        transform: translateY(-5px);
+
+                        @media (max-width: 480px)
+                        {
+                            transform: translateY(0);
+                        }
+                    }
+                    &.ham3
+                    {
+                        transform: translateY(5px);
+
+                        @media (max-width: 480px)
+                        {
+                            transform: translateY(0);
+                        }
+                    }
+                }
+            }
+        }
+        .slideNav2
+        {
+            transform: translateX(0);
+        }
+    }
+
+    &.color
+    {
+        height: 60px;
+
+        @media (max-width: 480px)
+        {
+            z-index: 99;
+
+            height: 100%;
+
+            transition: height .5s;
+        }
+
+         > a.logo
+        {
+            @media (max-width: 480px)
+            {
+                display: none;
+            }
+        }
+
+        div.slideNav
+        {
+            transform: translateX(0%);
+
+            opacity: 1;
+            color: #fff;
+            background-color: #262626;
+
+             > nav
+            {
+                @media (max-width: 480px)
+                {
+                    display: flex;
+                    flex-direction: column;
+                }
+
+                 > div
+                {
+                    @media (max-width: 480px)
+                    {
+                        font-size: 20px;
+
+                        visibility: visible;
+                        flex: .7;
+
+                        margin: 0 auto;
+                        padding-left: 60px;
+                    }
+
+                    &:hover
+                    {
+                        // color: #ffb742;
+                        // transition: color $transitionTime;
+                    }
+
+                    &:first-child
+                    {
+                        @media (max-width: 480px)
+                        {
+                            margin-top: 100px;
+                        }
+                    }
+
+                    &:last-child
+                    {
+                        @media (max-width: 480px)
+                        {
+                            flex: 4;
+                        }
+                    }
+                }
+            }
+        }
+
+        div.hamburger
+        {
+            transform: translateY(100%);
+
+            @media (max-width: 480px)
+            {
+                top: -146%;
+            }
+
+             > span
+            {
+                opacity: 1;
+
+                &.ham1
+                {
+                    transform: translateY(8px) rotate(45deg);
+                }
+                &.ham2
+                {
+                    transform: rotate(45deg);
+                }
+                &.ham3
+                {
+                    transform: translateY(-8px) rotate(-45deg);
+                }
+            }
+        }
+
+        .slideNav2
+        {
+            transform: translateX(-100%);
+        }
+    }
+
+
+    @media (max-width: 1024px)
+    {
+        a.logo
+        {
+            // width: 60px;
+        }
+        div.slideNav
+        {
+            div.contact
+            {
+                margin-right: 0;
+            }
+        }
+    }
+
+    @media (max-width: 480px)
+    {
+        height: 60px;
+
+        a.logo
+        {
+            width: 160px;
+        }
+
+        div.slideNav
+        {
+            font-size: 10px;
+
+            visibility: hidden;
+        }
+
+        div.hamburger
+        {
+            transform: translateY(100%);
+
+            background-color: transparent;
+
+             > span
+            {
+                background-color: #ffb742;
+            }
+        }
+    }
+}

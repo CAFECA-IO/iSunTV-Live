@@ -1,0 +1,329 @@
+.c_chinaSuntv
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    width: 75%;
+    height: 300px;
+    margin-top: 70px;
+
+    color: #fff;
+
+    @media (max-width: 767px)
+    {
+        width: 100%;
+        margin-top: 60px;
+    }
+
+    .vjs-resize-manager
+    {
+        display: none;
+    }
+
+     > div.video
+    {
+        position: relative;
+
+        width: 100%;
+        margin: 0 auto;
+
+         > div.paddingBottom
+        {
+            width: 100%;
+            // padding-bottom: 76.25%;
+
+            @media (max-width: 480px)
+            {
+                // padding-bottom: 70.25%;
+            }
+
+            @media (min-width: 481px) and (max-width: 767px)
+            {
+                // padding-bottom: 75.25%;
+            }
+        }
+
+        div[id^='vjs_video']
+        {
+            position: absolute;
+
+            width: 100%;
+            height: 100%;
+
+            outline: none;
+
+            .vjs-text-track-display
+            {
+                 > div
+                {
+                     > div
+                    {
+                         > div
+                        {
+                            background-color: rgba(0, 0, 0, 0) !important;
+                            text-shadow: -1px 0 #000, 0 1px #000, 1px 0 #000, 0 -1px #000;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+     > div.nowPlaying
+    {
+        @media (max-width: 767px)
+        {
+            margin-left: 5%;
+        }
+
+         > div
+        {
+            &.in
+            {
+                animation-name: fadein;
+                animation-duration: 800ms;
+                animation-timing-function: linear;
+            }
+
+            &.out
+            {
+                visibility: hidden;
+
+                animation-name: fadeout;
+                animation-duration: 800ms;
+                animation-timing-function: linear;
+            }
+
+            &:first-child
+            {
+                font-size: 13px;
+
+                margin-top: 10px;
+                margin-bottom: 10px;
+                margin-left: 15px;
+
+                color: #ff0221;
+
+                &:before
+                {
+                    position: relative;
+                    top: 11px;
+                    right: 15px;
+
+                    display: block;
+
+                    width: 7px;
+                    height: 7px;
+
+                    content: '';
+
+                    border-radius: 50%;
+                    background-color: red;
+                }
+            }
+
+            &:last-child
+            {
+                font-size: 24px;
+
+                margin-bottom: 30px;
+            }
+        }
+    }
+
+     > div.preNext
+    {
+        width: 80%;
+        margin: 0 auto;
+
+        @media (max-width: 767px)
+        {
+            width: 95%;
+        }
+
+         > div
+        {
+            display: flex;
+            justify-content: center;
+
+            text-align: center;
+
+            &:nth-child(2)
+            {
+                display: flex;
+                align-items: center;
+
+                padding-top: 5%;
+                padding-bottom: 5%;
+
+                &:after
+                {
+                    position: absolute;
+
+                    display: block;
+
+                    width: 50%;
+
+                    content: '';
+
+                    border: 1px solid #9b9b9b;
+                    border-image-source: linear-gradient(to right, #000, #9b9b9b 10%, #9b9b9b 88%, #000);
+                    border-image-slice: 1;
+
+                    @media (max-width: 767px)
+                    {
+                        width: 90%;
+                    }
+                }
+
+                 > div
+                {
+                    flex: 1;
+
+                     > div
+                    {
+                        width: 10px;
+                        height: 10px;
+                        margin: 0 auto;
+
+                        border-radius: 50%;
+                        background-color: #9b9b9b;
+
+                        &.center
+                        {
+                            z-index: 1;
+
+                            width: 30px;
+                            height: 30px;
+
+                            background-color: #f5a623;
+
+                            &:before
+                            {
+                                position: relative;
+                                z-index: 2;
+                                top: 10px;
+                                left: 10px;
+
+                                display: block;
+
+                                width: 10px;
+                                height: 10px;
+
+                                content: '';
+
+                                border-radius: 50%;
+                                background-color: #f5a623;
+                            }
+
+                            &:after
+                            {
+                                position: relative;
+                                z-index: 1;
+                                bottom: 9px;
+                                left: 1px;
+
+                                display: block;
+
+                                width: 28px;
+                                height: 28px;
+
+                                content: '';
+
+                                border-radius: 50%;
+                                background-color: #000;
+                            }
+                        }
+                    }
+                }
+            }
+
+             > div
+            {
+                 > span
+                {
+                    &.in
+                    {
+                        animation-name: fadein;
+                        animation-duration: 800ms;
+                        animation-timing-function: linear;
+                    }
+
+                    &.out
+                    {
+                        visibility: hidden;
+
+                        animation-name: fadeout;
+                        animation-duration: 800ms;
+                        animation-timing-function: linear;
+                    }
+                }
+            }
+
+             > span
+            {
+                flex: 1;
+
+                &.in
+                {
+                    animation-name: fadein;
+                    animation-duration: 800ms;
+                    animation-timing-function: linear;
+                }
+
+                &.out
+                {
+                    visibility: hidden;
+
+                    animation-name: fadeout;
+                    animation-duration: 800ms;
+                    animation-timing-function: linear;
+                }
+            }
+        }
+
+         > div.programTag
+        {
+             > div
+            {
+                flex: 1;
+
+                 > span
+                {
+                    font-size: 13px;
+                    font-weight: 300;
+
+                    padding: 3px 15px;
+
+                    color: #000;
+                    border-radius: 15px;
+                    background-color: #cecece;
+                }
+            }
+
+             > div.center
+            {
+                 > span
+                {
+                    background-color: #f5a623;
+                }
+            }
+        }
+
+         > div.programName
+        {
+            font-size: 15px;
+            font-weight: 300;
+
+            margin-top: 18px;
+
+            color: #cecece;
+
+             > span.center
+            {
+                color: #f5a623;
+            }
+        }
+    }
+}

@@ -1,0 +1,219 @@
+.c_contact
+{
+    width: 100%;
+    margin-top: 40px;
+
+     > div.title
+    {
+        margin-bottom: 20px;
+
+         > div
+        {
+            font-family: Lato;
+            font-size: 20px;
+            font-weight: 300;
+
+            padding-left: 15px;
+
+            color: #ffb742;
+            border-left: 5px solid #ffb742;
+        }
+    }
+
+     > div.contact
+    {
+        color: #fff;
+        // background-image: linear-gradient(to left, rgba(0,0,0,0) 70%, black),url(/asset/img/pic-sec-02.jpg);
+        background-image: url(../../../public/asset/img/bg-contect@2x.png);
+        background-size: cover;
+
+         > div.message
+        {
+            font-weight: 300;
+
+            display: flex;
+
+            @media (max-width: 480px)
+            {
+                flex-direction: column;
+            }
+
+             > div.userInfo
+            {
+                flex: 1;
+
+                 > div
+                {
+                    padding: 100px 10% 0 30%;
+
+                    @media (min-width: 481px) and (max-width: 767px)
+                    {
+                        padding: 100px 5% 0 15%;
+                    }
+
+                    @media (max-width: 480px)
+                    {
+                        padding: 50px 30px 10px 30px;
+                    }
+
+                     > input
+                    {
+                        font-weight: 300;
+
+                        width: 100%;
+                        height: 37px;
+                        margin-top: 10px;
+                        margin-bottom: 10px;
+                        padding-left: 5px;
+
+                        letter-spacing: 2px;
+
+                        color: #fff;
+                        border: 1px solid #9b9b9b;
+                        border-radius: 5px;
+                        outline: none;
+                        background-color: rgba(0, 0, 0, .5);
+                    }
+                }
+            }
+
+             > div.userInfoRight
+            {
+                flex: 1;
+
+                margin-right: 10%;
+
+                @media (max-width: 480px)
+                {
+                    margin-right: 7%;
+                }
+
+                 > div.comment
+                {
+                    margin-left: 30px;
+                    padding-top: 100px;
+
+                    @media (max-width: 480px)
+                    {
+                        padding-top: 0;
+                    }
+
+                     > div
+                    {
+                        margin-bottom: 10px;
+                    }
+
+                     > textarea
+                    {
+                        font-weight: 300;
+
+                        width: 100%;
+                        height: 185px;
+                        padding-left: 5px;
+
+                        resize: none;
+                        letter-spacing: 2px;
+
+                        color: #fff;
+                        border: 1px solid #9b9b9b;
+                        border-radius: 5px;
+                        background-color: rgba(0, 0, 0, .5);
+                    }
+                }
+
+                 > div.submit
+                {
+                    margin-top: 40px;
+                    margin-bottom: 40px;
+
+                    text-align: right;
+
+                     > button
+                    {
+                        font-weight: 300;
+
+                        padding: 15px 30px;
+
+                        border: 1px solid #f5a623;
+                        border-radius: 10px;
+                        outline: none;
+                        background-color: transparent;
+
+                         > div
+                        {
+                            width: 100px;
+
+                            color: #f5a623;
+
+                            &.error
+                            {
+                                color: #ff0221;
+                            }
+                        };
+
+                        &:hover
+                        {
+                            cursor: pointer;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+     > div.location
+    {
+        display: flex;
+
+        padding: 3% 2% 6% 2%;
+
+        color: #fff;
+
+        @media (max-width: 480px)
+        {
+            flex-direction: column;
+        }
+
+         > div
+        {
+            flex: 1;
+
+            @media (max-width: 480px)
+            {
+                margin-top: 5%;
+                margin-bottom: 12%;
+            }
+
+             > div
+            {
+                font-family: NotoSansCJKtc;
+                font-weight: 300;
+
+                margin-left: 10%;
+
+                &:first-child
+                {
+                    font-size: 21px;
+                }
+
+                &:nth-child(2)
+                {
+                    font-size: 24px;
+                    line-height: 45px;
+                }
+
+                &:last-child
+                {
+                    margin-top: 25px;
+
+                     > div
+                    {
+                        line-height: 20px;
+
+                        margin-bottom: 10px;
+                    }
+                }
+            }
+        }
+    }
+}
