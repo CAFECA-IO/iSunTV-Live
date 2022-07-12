@@ -1,15 +1,16 @@
 import React from "react";
-import HomePage from "../../pages/HomePage/HomePage";
+import HOMEPAGE from "../../pages/HomePage/HomePage";
 import { BrowserRouter, Routes , Route, NavLink} from "react-router-dom";
 
-const Routers = (props) => {
+// routers return the BrowserRouter and pages(viewer)
+const ROUTERS = (props) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<HomePage/>}/> 
+        <Route path="/" element={<HOMEPAGE/>}/> 
       </Routes>
     </BrowserRouter>
   );
 };
 
-export default Routers; 
+export default ROUTERS; 

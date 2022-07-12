@@ -7,8 +7,11 @@ import './i18n/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { CookiesProvider } from 'react-cookie';
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+// create react root
+const ROOT = ReactDOM.createRoot(document.getElementById('root'));
+
+// initialize I18nProvider, CookieProvider, App
+ROOT.render(
   <I18nextProvider>
     <CookiesProvider>
         <React.StrictMode>
