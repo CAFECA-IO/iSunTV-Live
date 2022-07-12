@@ -1,7 +1,6 @@
 import React from "react";
-import './App.css';
-import './style.css';
-import Routers from './component/Routers';
+import './App.scss';
+import Routers from './components/Routers/Routers';
 
 function App() {
   const linkStyle = {
