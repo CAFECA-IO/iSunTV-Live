@@ -106,7 +106,7 @@ class Contact extends React.Component
         }
         else
         {
-            this.setState(update(this.state, {
+            this.setState( update(this.state, {
                 message: { $set: '欄位未完成' },
                 messageClass: { $set: 'error' }
             }), () => {

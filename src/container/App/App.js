@@ -1,6 +1,6 @@
 import React from "react";
 import './App.scss';
-import Routers from './components/Routers/Routers';
+import Routers from '../../components/Routers/Routers';
 
 // app create routers
 const APP = () => {
