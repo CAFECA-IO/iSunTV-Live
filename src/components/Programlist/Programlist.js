@@ -7,10 +7,10 @@ import './Programlist.scss';
 
 // change the programlist here
 // we need to change prop to our locql componentdatamount data first 
-class ProgramList extends React.Component
-{
-    constructor(props)
-    {
+class ProgramList extends React.Component {
+
+    constructor(props) {
+
         const day = new Date().getDay();
         super(props);
         this.state = {
@@ -29,15 +29,18 @@ class ProgramList extends React.Component
 
         this.day = new Date().toString().slice(0, 3);
         this.selectProgrmaList = this.selectProgrmaList.bind(this);
+    
     }
 
-    updateState(data){ 
+    updateState(data) {
+
         const WEEK = transferToWeek(data.payload) ;
         this.setState({data : data.payload, week: WEEK, weekInfo: transferToWeekInfo(data.payload, WEEK) }); 
+    
     }
 
-    componentDidMount()
-    {
+    componentDidMount() {
+
         // 需要共用state -> 移動到redux (需要fix這邊的問題)
         fetch('http://localhost:3000/api/v1/chinasun/programlist')
             .then(response => response.json())
@@ -49,8 +52,8 @@ class ProgramList extends React.Component
 
     }
 
-    selectProgrmaList(week)
-    {
+    selectProgrmaList(week) {
+
         this.day = week;
 
         let obj = {
@@ -68,10 +71,11 @@ class ProgramList extends React.Component
         this.setState(update(this.state, {
             tabs: { $set: obj }
         }));
+    
     }
 
-    renderTabs()
-    {
+    renderTabs() {
+
         const TABS = this.state.tabs;
         // week =  當周 weeklist
         const WEEK = this.state.week;
@@ -91,8 +95,8 @@ class ProgramList extends React.Component
         };
 
         // for RWD
-        switch (moment().format('dddd').slice(0, 3))
-        {
+        switch (moment().format('dddd').slice(0, 3)) {
+
             case 'Mon':
                 yesterday = -1;
                 today = 0;
@@ -113,30 +117,38 @@ class ProgramList extends React.Component
                 tomorrow = 3;
                 break;
             default:
+        
         }
 
-        if(!!WEEK){
+        if(!!WEEK) {
+
             let index = 0;
-            WEEK.forEach((date)=>
-            {
+            
+            WEEK.forEach((date)=> {
+
                 // 用 api 傳回的年份月份日期陣列，取得日期
                 // 用 moment 以日期取得星期幾
                 const WEEKDATE = moment(new Date(date)).format('dddd').slice(0, 3);
-    
                 const DAY = chineseWeek[WEEKDATE];
                 const DATE_NUM = date.slice(-2);
 
                 let now_tag = '';
-                
+
                 // if today , add now class name 
                 if (WEEKDATE === moment().format('dddd').slice(0, 3)) {
+
                     now_tag = 'now';
+                
                 }
 
                 if (index === 0){
+
                     if(WEEKDATE === 'Sun') {
+                    
                         // pass
+                    
                     } else {
+                    
                         const CONTENT = (
                             <div
                                 key={DATE_NUM}
@@ -147,8 +159,11 @@ class ProgramList extends React.Component
                             </div>
                         );
                         weekTabs.push(CONTENT);
+                    
                     }
+                
                 } else {
+
                     const CONTENT = (
                         <div
                             key={DATE_NUM}
@@ -159,24 +174,28 @@ class ProgramList extends React.Component
                         </div>
                     );
                     weekTabs.push(CONTENT);
+                
                 }
+                
                 index = index + 1;
+            
             });
+        
         }
 
         return (
             <div>
-                {weekTabs}
+                { weekTabs }
             </div>
         );
+    
     }
 
-    renderProgramList()
-    {
+    renderProgramList() {
+
         // need to organize the programInfo data structure
         const week = this.state.week;
         const weekInfo = this.state.weekInfo;
-        console.log(this.state);
         let programList = [];
 
         if (!!week) {
@@ -192,7 +211,7 @@ class ProgramList extends React.Component
             };
     
             let arr;
-            console.log(day);
+
             switch (this.day)
             {
                 case 'Mon':
@@ -217,54 +236,67 @@ class ProgramList extends React.Component
                     arr = weekInfo[day.Sun];
                     break;
                 default:
+            
             }
 
-            for (let item of arr)
-            {
+            for (let item of arr) {
+
                 const content = (
-                    <div key={transferToTime(item.PlayTime)} className = 'scroll'>
-                        <div>{transferToTime(item.PlayTime)}</div>
-                        <div><div>{item.prgColumn}</div></div>
-                        <div>{item.prgName}</div>
+                
+                    <div key = { transferToTime(item.PlayTime) } className = 'scroll'>
+                        <div>{ transferToTime(item.PlayTime) }</div>
+                        <div><div>{ item.prgColumn }</div></div>
+                        <div>{ item.prgName }</div>
                     </div>
+                
                 );
     
                 programList.push(content);
+            
             }
+        
         }
 
 
         return (
+        
             <div className="programList">
                 <div className="programContainer">
-                    {programList}
+                    { programList }
                 </div>
             </div>
+        
         );
       
     }
 
-    render()
-    {
+    render() {
+
         const year = new Date().getFullYear();
         const month = new Date().getMonth() + 1;
 
         return (
+        
             <div className="c_programList">
                 <div className="date">
-                    <div>{`${year}年${month}月`}</div>
+                    <div>{ `${year}年${month}月` }</div>
                 </div>
                 <div className="tabs">
-                    {this.renderTabs()}
+                    { this.renderTabs() }
                 </div>
-                {this.renderProgramList()}
+                { this.renderProgramList() }
             </div>
+        
         );
+    
     }
+
 }
 
 ProgramList.propTypes = {
+
     data: PropTypes.object.isRequired
+
 };
 
 export default ProgramList;

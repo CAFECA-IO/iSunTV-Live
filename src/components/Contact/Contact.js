@@ -3,11 +3,16 @@ import update from 'immutability-helper';
 import './Contact.scss';
 
 // edit here 聯繫我們
-class Contact extends React.Component
-{
-    constructor(props)
-    {
+class Contact extends React.Component {
+    
+    // A constructor is used to inherit the value (prop)  from upper class
+    /**
+     * @param props means value from the upper class
+     */  
+    constructor(props) {
+
         super(props);
+
         this.state = {
             input: {
                 name: '',
@@ -18,68 +23,110 @@ class Contact extends React.Component
             message: '送出',
             messageClass: ''
         };
+    
     }
+        
+    // A function is used to detect the onchange event of the name element
+    /**
+     * @param e means event
+     */  
+    nameChange(e) {
 
-    nameChange(e)
-    {
         this.setState(update(this.state, {
+
             input: {
                 name: { $set: e.target.value }
             }
+        
         }));
+    
     }
 
-    phoneChange(e)
-    {
+    // A function is used to detect the onchange event of the phone element
+    /**
+     * @param e means event
+     */  
+    phoneChange(e) {
+
         this.setState(update(this.state, {
+        
             input: {
+
                 phone: { $set: e.target.value }
+            
             }
+        
         }));
+    
     }
 
-    emailChange(e)
-    {
+    // A function is used to detect the onchange event of the email element
+    /**
+     * @param e means event
+     */  
+    emailChange(e) {
+
         this.setState(update(this.state, {
+        
             input: {
+
                 email: { $set: e.target.value }
+            
             }
+        
         }));
+    
     }
 
-    commentChange(e)
-    {
+    // A function is used to detect the onchange event of the email element
+    /**
+     * @param e means event
+     */  
+    commentChange(e) {
+
         this.setState(update(this.state, {
+        
             input: {
+        
                 comment: { $set: e.target.value }
+        
             }
+        
         }));
+    
     }
+    
+    // A function is used to submit the message (send email)
+    /**
+     * @param input means input information from the user
+     */  
+    submit(input) {
 
-    submit(input)
-    {
-        // fix the state problem (can't read state)
-        if (input.name !== '' && input.phone !== '' && input.email !== '' && input.comment !== '')
-        {
+        // if user didn't miss the required input content, send email req
+        if (input.name !== '' && input.phone !== '' && input.email !== '' && input.comment !== '') {
+
             // need to put this to sendmail api
-            const data = {
+            const DATA = {
+            
                 comment: `<h3>姓名：${input.name}</h3>
                           <h3>手機：${input.phone}</h3>
                           <h3>Email：${input.email}</h3>
                           <h3>意見：${input.comment}</h3>`
+            
             };
 
             // put send mail in redux
             fetch("http://localhost:3000/api/v1/sendmail", {
 
                 method: "POST", 
-                body: JSON.stringify(data),
+                body: JSON.stringify(DATA),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8'
                 }
             
             }).then(res => {
 
+                // set 送出成功 message to the button
                 this.setState(update(this.state, {
                     input: {
                         name: { $set: '' },
@@ -88,44 +135,54 @@ class Contact extends React.Component
                         comment: { $set: '' }
                     },
                     message: { $set: '送出成功' }
+
                 }), () => {
-                    
+                    // return the 送出 message to let user know it's time that the system can send the msg
                     setTimeout(() => {
                         this.setState(update(this.state, {
                             message: { $set: '送出' },
                         }));
                     }, 2500);
+
                 });
 
                 console.log("post send email request", res);
             
             });
 
-        }
-        else
-        {
-            console.log("欄位填寫未完成");
+        } else {
+
             this.setState( update(this.state, {
+
                 message: { $set: '欄位未完成' },
                 messageClass: { $set: 'error' }
+            
             }), () => {
+            
                 setTimeout(() => {
+            
                     this.setState(update(this.state, {
+                    
                         message: { $set: '送出' },
                         messageClass: { $set: '' }
+                    
                     }));
+            
                 }, 2500);
+            
             });
+        
         }
+    
     }
 
-    render()
-    {
 
-
+    render() {
+        // fix the coding style problem here
         const { message, messageClass } = this.state;
 
         return (
+
             <div className="c_contact">
                 <div className="title">
                     <div>聯繫我們</div>
@@ -183,8 +240,11 @@ class Contact extends React.Component
                     </div>
                 </div>
             </div>
+        
         );
+    
     }
+
 }
 
 export default Contact;

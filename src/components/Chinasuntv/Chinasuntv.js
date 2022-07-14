@@ -4,10 +4,15 @@ import Video from '../Video/Video';
 import { transferToTime } from '../../utils/TimeOperator';
 import './Chinasuntv.scss';
 
-class Chinasuntv extends React.Component
-{
-    constructor(props)
-    {
+class Chinasuntv extends React.Component {
+
+    // A constructor is used to inherit the value (prop)  from upper class
+    /**
+     * @param props means value from the upper class
+     * set fade in classname and data which is needed to be fetch to null
+     */  
+    constructor(props) {
+
         super(props);
         this.state = {
             fade: 'in',
@@ -18,64 +23,43 @@ class Chinasuntv extends React.Component
         
     }
 
-    transferToTime(datetime){
+    updateState(data) { 
 
-        let time = new Date(datetime);
-        let hour;
-        let min;
-
-        if(time.getHours() < 10){
-            hour = '0' + time.getHours();
-        } else {
-            hour = time.getHours();
-        }
-        
-        if(time.getMinutes() < 10){
-            min = '0' + time.getMinutes();
-        } else {
-            min = time.getMinutes();
-        }
-
-        return hour + ":" + min;
-    }
-
-    updateState(data){ 
         // Changing state 
         const playlist = data.payload;
-        const now = Date.now();
         let playlist_array = [];
         // get the closest time
         var closet_time = playlist.map(d => Math.abs(new Date() - new Date(d.PlayTime).getTime()));
         var idx = closet_time.indexOf(Math.min(...closet_time));
 
-        // if index outof range
+        // update the data as the normalized data
         if ( ( idx + 1 ) > ( playlist.length - 1 )){
 
-            playlist_array.push( { pre: playlist[idx-2].prgName , time: transferToTime( playlist[idx - 2].PlayTime ) , tag: playlist[idx - 2].prgColumn } );
-            playlist_array.push( { now: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn } );
-            playlist_array.push( { next: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn } );
+            playlist_array.push({ pre: playlist[idx-2].prgName , time: transferToTime( playlist[idx - 2].PlayTime ) , tag: playlist[idx - 2].prgColumn });
+            playlist_array.push({ now: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn });
+            playlist_array.push({ next: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn });
         
         } else {
         
-            playlist_array.push( { pre: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn  } );
-            playlist_array.push( { now: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn } );
-            playlist_array.push( { next: playlist[idx+1].prgName , time: transferToTime( playlist[idx + 1].PlayTime) , tag: playlist[idx + 1].prgColumn  } );            
+            playlist_array.push({ pre: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn });
+            playlist_array.push({ now: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn });
+            playlist_array.push({ next: playlist[idx+1].prgName , time: transferToTime( playlist[idx + 1].PlayTime) , tag: playlist[idx + 1].prgColumn });            
         
         }
 
-        this.setState({data : playlist_array}); 
+        // set the normalized data to state: data
+        this.setState({ data : playlist_array }); 
+    
     }
     
-    componentDidMount()
-    {
-
+    componentDidMount() {
+        // fetch the content from programlist api
         fetch('http://localhost:3000/api/v1/chinasun/programlist')
             .then(response => response.json())
             .then(data => this.updateState(data));
     }
 
-    render()
-    {
+    render() {
         // get time now and put the data in the list 
         const FADE  = this.state.fade;
         const DATA = this.state.data;
@@ -95,6 +79,7 @@ class Chinasuntv extends React.Component
           };
 
         return (
+
             <div className="c_chinaSuntv">
                 <Video {...PLAY_DETAILS} />
                 <div className="paddingBottom" />
@@ -126,8 +111,11 @@ class Chinasuntv extends React.Component
                     </div>
                 </div>
             </div>
+
         );
+    
     }
+
 }
 
 Chinasuntv.propTypes = {

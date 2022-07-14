@@ -1,17 +1,24 @@
 import React from 'react';
 import './About.scss';
 
-class About extends React.Component
-{
-    constructor(props)
-    {
+class About extends React.Component {
+
+    // A constructor is used to inherit the value (prop)  from upper class
+    /**
+     * @param props means value from the upper class
+     */  
+    constructor(props) {
+
         super(props);
         this.state = {};
+    
     }
 
-    render()
-    {
+    // show the text in about component
+    render() {
+
         return (
+
             <div className="c_about">
                 <div>
                     <div className="title">關於我們</div>
@@ -66,8 +73,11 @@ class About extends React.Component
 
                 </section>
             </div>
+        
         );
+   
     }
+
 }
 
 export default About;

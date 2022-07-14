@@ -1,10 +1,11 @@
 import { React } from "react";
 import './Footer.scss';
 
-// because I only need to return the pure text based html, so I use function component here
+// use function component to pass the footer text
 const FOOTER = (props) => {    
 
     return (
+
         <footer>
             <div>
                 <div>
@@ -13,7 +14,8 @@ const FOOTER = (props) => {
                 </div>
             </div>
         </footer>
-    )
+    
+    );
 
 }
 

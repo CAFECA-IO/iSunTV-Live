@@ -22,10 +22,13 @@ const Video = (props) => {
   }, []);
 
   return (
+
     <div data-vjs-player>
       <video ref={videoNode} className="video-js vjs-default-skin vjs-big-play-centered" ></video>
     </div>
+  
   );
-};
+
+}
 
 export default Video;
