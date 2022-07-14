@@ -1,61 +1,60 @@
 import { Injectable } from '@nestjs/common';
-import * as nodemailer from 'nodemailer';
+import queue from 'queue';
+import JobWorker from './jobworker.service';
+import { ERROR_CODE } from '../utils/ErrorCode';
+import FormatterService from 'server/utils/Formatter.service';
 
 @Injectable()
 class SendMailService {
+    
+    /** @param {any} jobWorker default job worker*/
+    jobWorker: any;
+    /** @param {any} config default email config*/
+    config: any;
 
-  // include the formatter
+    //the class constructor
+    /**
+     * set the default constructor without param
+     */
     constructor() {
-  
+
     } 
 
-  async sendMail(body): Promise<any> {
-        // create reusable transporter object using the default SMTP transport
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 465,
-            secure: true, // true for 465, false for other ports
-            auth: {
-                user: 'cs@isuntv.com', // generated ethereal user
-                pass: 'gktkrgxfnvbyazta' // generated ethereal password
-            }
-        });
+    // sendmail service initialize the job queue and job worker
+    /**
+     * initialize the SendMailService
+     * @param config means email config
+     */
+    initialze(config) {
 
-        // setup email data with unicode symbols
-        const mailOptions = {
-            to: 'chuicl@isuntv.com', // list of receivers
-            subject: '陽光衛視直播網站意見回覆', // Subject line
-            html: body.comment // html body
-        };
+        // create job worker
+        this.jobWorker = new JobWorker();
+        // initialize the jobQueue
+        let jobQueue = queue({ results: [] });
 
-        let message;
-        let resultCode;
-        let send_status;
+        this.config = config;
+        // initialize the jobWorker : put job queue and email config in the job worker
+        this.jobWorker.initialize(jobQueue, this.config);
 
-        // send mail with defined transport object
-        return new Promise((resolve, reject) => {
-        transporter.sendMail(mailOptions, (error) => {
-            if (error)
-            {
-                resolve({
-                    message : 'send failed',
-                    resultCode : "04999999",
-                    send_status : false
-                }); 
-            }
-            else
-            {
-                resolve({
-                    message : 'sent successfully',
-                    resultCode : "00000000",
-                    send_status : true
-                }); 
+    }
 
-            }
+    // sendmail function push the first job to the job queue and wake up the worker to work
+    /**
+     * initialize the SendMailService
+     * @param config means email config
+     */
+    async sendMail(comment) {
 
-        });
-    });
+        let config = this.config;
+        // push job into queue
+        this.jobWorker.pushQueue(config, comment);
+        // call the workerOn function in the Job Worker
+        this.jobWorker.workerOn(comment);
+        // immediately return sent ok (won't wait for the response)
+        return FormatterService.formatData(true, ERROR_CODE.SUCCESS, "sent ok", {});
+
   }
+
 }
 
 export default SendMailService;

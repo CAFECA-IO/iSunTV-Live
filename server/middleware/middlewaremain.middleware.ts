@@ -30,9 +30,9 @@ class MiddlemainMiddleware implements NestMiddleware {
         
         // didn't use query
 
-        if(req.url.slice(0,4) == "/api") {
+        if(req.url.slice(0,4) === "/api") {
             // if api is '/api/v1/i18n/'.. then return i18n realted response
-            if(req.url.slice(0,13)=='/api/v1/i18n/') {
+            if(req.url.slice(0,13) === "/api/v1/i18n/") {
             
                 if(req.url.replace("/api/v1/i18n/","")!="ch" && req.url.replace("/api/v1/i18n/","")!="en") {
                     
@@ -47,7 +47,7 @@ class MiddlemainMiddleware implements NestMiddleware {
                     res.end();
                 }             
             
-            }else if(req.url.slice(0,17) == '/api/v1/chinasun/') {
+            }else if(req.url.slice(0,17) === "/api/v1/chinasun/") {
                 // if the prefix = '/api/v1/chinasun/' then call controller and let middleware response the error message;
                 if(req.url!="/api/v1/chinasun/programlist") {
                 
@@ -71,11 +71,21 @@ class MiddlemainMiddleware implements NestMiddleware {
                 
                 }
             
-            } else {
+            } else if(req.url === "/api/v1/sendmail/") {
                 // handle the path isn't i18n or chinasun
-                res.writeHead(200, { 'content-type': 'application/json' });
-                res.write(JSON.stringify(FormatterService.formatData(false,ERROR_CODE.API_NOT_SUPPORT_ERROR,"api not support",{})))
-                res.end();
+                try{
+                    
+                    next();
+                
+                } catch (e) {
+                    // hadle the error code and message then format them
+                    res.writeHead(200, { 'content-type': 'application/json' });
+                    res.write(JSON.stringify(FormatterService.formatData(false, e.code, e.message, {})))
+                    res.end();                        
+                
+                }  
+            } else {
+
             }
 
         } else {

@@ -47,12 +47,11 @@ class ChinasunController {
         //get the latest data
         let data;
         let result;
-
         // get the uodated data and handle the error
-        try{
+        try {
             data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
-        }catch(e){
+            result = FormatterService.formatData(true,ERROR_CODE.SUCCESS, "programlist", data);
+        } catch(e) {
             result = FormatterService.formatData(true, e.code, e.message, data);
         }
         
