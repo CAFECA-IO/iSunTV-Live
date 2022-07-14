@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import equal from 'deep-equal';
+import { transferToTime, transferToWeek, transferToWeekInfo } from '../../utils/TimeOperator';
 import update from 'immutability-helper';
 import moment from 'moment';
 import './Programlist.scss';
@@ -31,92 +31,9 @@ class ProgramList extends React.Component
         this.selectProgrmaList = this.selectProgrmaList.bind(this);
     }
 
-    // transferToTime(datetime){
-
-    //     let time = new Date(datetime);
-    //     let hour;
-    //     let min;
-
-    //     if(time.getHours() < 10){
-    //         hour = '0' + time.getHours();
-    //     } else {
-    //         hour = time.getHours();
-    //     }
-        
-    //     if(time.getMinutes() < 10){
-    //         min = '0' + time.getMinutes();
-    //     } else {
-    //         min = time.getMinutes();
-    //     }
-
-    //     return hour + ":" + min;
-    // }
-
     updateState(data){ 
-        const WEEK = this.transferToWeek(data.payload) ;
-        this.setState({data : data.payload, week: WEEK, weekInfo: this.transferToWeekInfo(data.payload, WEEK) }); 
-    }
-
-    // add time to week list
-    transferToWeek(data){
-
-        const weekSet = new Set();
-        
-        data.forEach((item, index)=>
-        {
-            console.log("index"+index);
-            let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
-            weekSet.add(datetime);
-    
-        });
-        
-        return [...weekSet];
-    
-    }
-
-    transferToWeekInfo(data, week) {
-        
-        let allWeekInfo = {};
-
-        week.forEach((weekday)=> {
-
-            let oneWeekInfo = [];
-            
-            data.forEach((item)=>
-            {
-                let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
-                if (datetime === weekday) {
-                    oneWeekInfo.push(item);
-                }
-            });
-            allWeekInfo[weekday] = oneWeekInfo;
-            console.log(allWeekInfo[weekday]);
-        });
-        
-        return allWeekInfo;
-    
-    }
-
-    transferToTime(datetime){
-
-        //  沒有處理到不同的時區換算的問題
-        let time = new Date(datetime);
-        let hour;
-        let min;
-
-        if(time.getHours() < 10){
-            hour = '0' + time.getHours();
-        } else {
-            hour = time.getHours();
-        }
-        
-        if(time.getMinutes() < 10){
-            min = '0' + time.getMinutes();
-        } else {
-            min = time.getMinutes();
-        }
-
-        return hour + ":" + min;
+        const WEEK = transferToWeek(data.payload) ;
+        this.setState({data : data.payload, week: WEEK, weekInfo: transferToWeekInfo(data.payload, WEEK) }); 
     }
 
     componentDidMount()
@@ -131,50 +48,6 @@ class ProgramList extends React.Component
         // }, 500);
 
     }
-
-    // componentWillReceiveProps(nextProps)
-    // {
-    //     const scroll = document.querySelector('.scroll');
-
-    //     if (scroll !== null && !equal(nextProps, this.props))
-    //     {
-    //         let obj = {
-    //             Mon: '',
-    //             Tue: '',
-    //             Wed: '',
-    //             Thu: '',
-    //             Fri: '',
-    //             Sat: '',
-    //             Sun: ''
-    //         };
-    //         const day = new Date().toString().slice(0, 3);
-
-    //         obj[day] += 'active';
-    //         this.day = day;
-    //         this.setState(update(this.state, {
-    //             tabs: { $set: obj }
-    //         }));
-
-    //         scroll.parentNode.scrollTop = scroll.offsetTop - scroll.parentNode.offsetTop;
-    //     }
-    // }
-
-    // componentDidUpdate()
-    // {
-    //     const now  =  this.transferToTime(Date.now());
-    //     const scroll = document.querySelector('.scroll');
-    //     const nowTime = moment().format('HH:mm:ss');
-    //     // didn't get any data
-    //     const hour = now.splice(0,2);
-
-    //     if (scroll !== null)
-    //     {
-    //         if (nowTime === hour)
-    //         {
-    //             scroll.parentNode.scrollTop = scroll.offsetTop - scroll.parentNode.offsetTop;
-    //         }
-    //     }
-    // }
 
     selectProgrmaList(week)
     {
@@ -253,6 +126,13 @@ class ProgramList extends React.Component
                 const DAY = chineseWeek[WEEKDATE];
                 const DATE_NUM = date.slice(-2);
 
+                let now_tag = '';
+                
+                // if today , add now class name 
+                if (WEEKDATE === moment().format('dddd').slice(0, 3)) {
+                    now_tag = 'now';
+                }
+
                 if (index === 0){
                     if(WEEKDATE === 'Sun') {
                         // pass
@@ -260,7 +140,7 @@ class ProgramList extends React.Component
                         const CONTENT = (
                             <div
                                 key={DATE_NUM}
-                                className={`${TABS[WEEKDATE]}${TODAYDAY === Number(index) + today || TODAYDAY === Number(index) + yesterday || TODAYDAY === Number(index) + tomorrow ? '' : ' hidden'}`}
+                                className={`${now_tag} ${TABS[WEEKDATE]}${TODAYDAY === Number(index) + today || TODAYDAY === Number(index) + yesterday || TODAYDAY === Number(index) + tomorrow ? '' : ' hidden'}`}
                                 onClick={() => this.selectProgrmaList(WEEKDATE)}
                             >
                                 <div>{DATE_NUM}<span>{DAY}</span></div>
@@ -272,7 +152,7 @@ class ProgramList extends React.Component
                     const CONTENT = (
                         <div
                             key={DATE_NUM}
-                            className={`${TABS[WEEKDATE]}${TODAYDAY === Number(index) + today || TODAYDAY === Number(index) + yesterday || TODAYDAY === Number(index) + tomorrow ? '' : ' hidden'}`}
+                            className={`${now_tag} ${TABS[WEEKDATE]}${TODAYDAY === Number(index) + today || TODAYDAY === Number(index) + yesterday || TODAYDAY === Number(index) + tomorrow ? '' : ' hidden'}`}
                             onClick={() => this.selectProgrmaList(WEEKDATE)}
                         >
                             <div>{DATE_NUM}<span>{DAY}</span></div>
@@ -338,12 +218,12 @@ class ProgramList extends React.Component
                     break;
                 default:
             }
-            console.log(arr);
+
             for (let item of arr)
             {
                 const content = (
-                    <div key={this.transferToTime(item.PlayTime)} className = 'scroll'>
-                        <div>{this.transferToTime(item.PlayTime)}</div>
+                    <div key={transferToTime(item.PlayTime)} className = 'scroll'>
+                        <div>{transferToTime(item.PlayTime)}</div>
                         <div><div>{item.prgColumn}</div></div>
                         <div>{item.prgName}</div>
                     </div>

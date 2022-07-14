@@ -29,7 +29,7 @@ class SendMailController {
     const CONFIG = {
       
       USER: "clemmy.liao@mermer.cc",
-      REFERSH_TOKEN: this.configService.get('REFRESH_TOKEN'),
+      REFRESH_TOKEN: this.configService.get('REFRESH_TOKEN'),
       ACCESS_TOKEN: this.configService.get('ACCESS_TOKEN'),
       CLIENT_ID: this.configService.get('CLIENT_ID'),
       CLIENT_SECRET: this.configService.get('CLIENT_SECRET')

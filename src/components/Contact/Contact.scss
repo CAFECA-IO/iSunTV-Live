@@ -23,7 +23,6 @@
      > div.contact
     {
         color: #fff;
-        // background-image: linear-gradient(to left, rgba(0,0,0,0) 70%, black),url(/asset/img/pic-sec-02.jpg);
         background-image: url(../../../public/asset/img/bg-contect@2x.png);
         background-size: cover;
 
@@ -153,7 +152,8 @@
                         };
 
                         &:hover
-                        {
+                        {   
+                            background-color: #836028;
                             cursor: pointer;
                         }
                     }

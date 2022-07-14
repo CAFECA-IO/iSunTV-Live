@@ -52,7 +52,7 @@ class SendMail {
                 }
         
             };
-        
+
             // send mail with defined transport object
             transporter.sendMail(mailOptions, function (error, info) {
 

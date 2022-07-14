@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Video from '../Video/Video';
+import { transferToTime } from '../../utils/TimeOperator';
 import './Chinasuntv.scss';
 
 class Chinasuntv extends React.Component
@@ -50,23 +51,24 @@ class Chinasuntv extends React.Component
         // if index outof range
         if ( ( idx + 1 ) > ( playlist.length - 1 )){
 
-            playlist_array.push( { pre: playlist[idx-2].prgName , time: this.transferToTime( playlist[idx - 2].PlayTime ) , tag: playlist[idx - 2].prgColumn } );
-            playlist_array.push( { now: playlist[idx-1].prgName , time: this.transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn } );
-            playlist_array.push( { next: playlist[idx].prgName , time: this.transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn } );
+            playlist_array.push( { pre: playlist[idx-2].prgName , time: transferToTime( playlist[idx - 2].PlayTime ) , tag: playlist[idx - 2].prgColumn } );
+            playlist_array.push( { now: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn } );
+            playlist_array.push( { next: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn } );
         
         } else {
         
-            playlist_array.push( { pre: playlist[idx-1].prgName , time: this.transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn  } );
-            playlist_array.push( { now: playlist[idx].prgName , time: this.transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn } );
-            playlist_array.push( { next: playlist[idx+1].prgName , time: this.transferToTime( playlist[idx + 1].PlayTime) , tag: playlist[idx + 1].prgColumn  } );            
+            playlist_array.push( { pre: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn  } );
+            playlist_array.push( { now: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn } );
+            playlist_array.push( { next: playlist[idx+1].prgName , time: transferToTime( playlist[idx + 1].PlayTime) , tag: playlist[idx + 1].prgColumn  } );            
         
         }
 
         this.setState({data : playlist_array}); 
     }
     
-    componentDidMount(){
-        // put this into redux
+    componentDidMount()
+    {
+
         fetch('http://localhost:3000/api/v1/chinasun/programlist')
             .then(response => response.json())
             .then(data => this.updateState(data));
@@ -74,13 +76,6 @@ class Chinasuntv extends React.Component
 
     render()
     {
-        // render() 在每次 props 或是 state 被改變時，都會被執行一次。
-        // const { preNowNext } = this.props.data;
-        // const emptyObj = Object.keys(preNowNext).length;
-
-        // get the data from the programlist
-        // need to get the data from now
-
         // get time now and put the data in the list 
         const FADE  = this.state.fade;
         const DATA = this.state.data;

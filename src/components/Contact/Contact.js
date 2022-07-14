@@ -56,56 +56,51 @@ class Contact extends React.Component
         }));
     }
 
-    submit()
+    submit(input)
     {
-        if (this.name.value !== '' && this.phone.value !== '' && this.email.value !== '' && this.comment.value !== '')
+        // fix the state problem (can't read state)
+        if (input.name !== '' && input.phone !== '' && input.email !== '' && input.comment !== '')
         {
+            // need to put this to sendmail api
             const data = {
-                comment: `<h3>姓名：${this.name.value}</h3>
-                          <h3>手機：${this.phone.value}</h3>
-                          <h3>Email：${this.email.value}</h3>
-                          <h3>意見：${this.comment.value}</h3>`
+                comment: `<h3>姓名：${input.name}</h3>
+                          <h3>手機：${input.phone}</h3>
+                          <h3>Email：${input.email}</h3>
+                          <h3>意見：${input.comment}</h3>`
             };
 
-            console.log(data.comment);
+            // put send mail in redux
+            fetch("http://localhost:3000/api/v1/sendmail", {
 
-            // chinaSuntvAction.sendMail(data, (err, res) => {
-            //     if (err)
-            //     {
-            //         if (res.message === 'send failed')
-            //         {
-            //             this.setState(update(this.state, {
-            //                 message: { $set: '送出失敗' },
-            //                 messageClass: { $set: 'error' }
-            //             }), () => {
-            //                 setTimeout(() => {
-            //                     this.setState(update(this.state, {
-            //                         message: { $set: '送出' },
-            //                         messageClass: { $set: '' }
-            //                     }));
-            //                 }, 2500);
-            //             });
-            //         }
-            //     }
-            //     else
-            //     {
-            //         this.setState(update(this.state, {
-            //             input: {
-            //                 name: { $set: '' },
-            //                 phone: { $set: '' },
-            //                 email: { $set: '' },
-            //                 comment: { $set: '' }
-            //             },
-            //             message: { $set: '送出成功' }
-            //         }), () => {
-            //             setTimeout(() => {
-            //                 this.setState(update(this.state, {
-            //                     message: { $set: '送出' },
-            //                 }));
-            //             }, 2500);
-            //         });
-            //     }
-            // });
+                method: "POST", 
+                body: JSON.stringify(data),
+                headers: {
+                    'Content-type': 'application/json; charset=UTF-8'
+                }
+            
+            }).then(res => {
+
+                this.setState(update(this.state, {
+                    input: {
+                        name: { $set: '' },
+                        phone: { $set: '' },
+                        email: { $set: '' },
+                        comment: { $set: '' }
+                    },
+                    message: { $set: '送出成功' }
+                }), () => {
+                    
+                    setTimeout(() => {
+                        this.setState(update(this.state, {
+                            message: { $set: '送出' },
+                        }));
+                    }, 2500);
+                });
+
+                console.log("post send email request", res);
+            
+            });
+
         }
         else
         {
@@ -153,7 +148,7 @@ class Contact extends React.Component
                                 <textarea value = { this.state.input.comment } onChange = {(e) => { this.commentChange(e); }} ref={(input) => { this.comment = input; } } />
                             </div>
                             <div className="submit">
-                                <button><div className={messageClass}>{message}</div></button>
+                                <button onClick = { () => { this.submit(this.state.input) } }><div className={messageClass}>{message}</div></button>
                         </div>
                     </div>
                 </div>

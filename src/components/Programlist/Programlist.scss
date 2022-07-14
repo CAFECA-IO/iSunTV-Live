@@ -33,9 +33,16 @@
         {
             transition: color .5s;
 
-            color: #ffb742;
-            border-bottom: 1.5px solid #ffb742;
+            color: #f4cc8b;
+            border-bottom: 1.5px solid #f4cc8b;
         }
+        .now
+        {
+            transition: color .5s;
+
+            color: #ffb742;    
+        }
+
 
          > div
         {

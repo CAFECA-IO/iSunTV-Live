@@ -24,6 +24,7 @@
     "immutability-helper": "^3.1.1",
     "jwplayer": "^1.0.3",
     "moment": "^2.29.4",
+    "momnet": "^2.29.1",
     "nest": "^0.1.6",
     "nestjs-i18n": "^9.1.3",
     "node-tika": "^0.0.1",

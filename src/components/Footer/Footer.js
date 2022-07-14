@@ -1,6 +1,7 @@
 import { React } from "react";
 import './Footer.scss';
 
+// because I only need to return the pure text based html, so I use function component here
 const FOOTER = (props) => {    
 
     return (
