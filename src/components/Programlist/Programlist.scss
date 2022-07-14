@@ -2,7 +2,6 @@
 {
     width: 100%;
     margin-top: 40px;
-    height: 400px;
 
     color: white;
     
@@ -81,7 +80,6 @@
      > div.programList
     {
         position: relative;
-
         display: flex;
         flex-direction: column;
 
@@ -93,7 +91,6 @@
          > div.programContainer
         {
             overflow: scroll;
-
             height: 100%;
 
             &:after
@@ -109,7 +106,7 @@
 
                 content: '';
 
-                background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 55%, rgba(0, 0, 0, .9) 100%);
+                background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, rgba(0, 0, 0, 0) 30%, rgba(0, 0, 0, .9) 90%);
             }
 
              > div

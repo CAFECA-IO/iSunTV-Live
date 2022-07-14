@@ -6,7 +6,6 @@ body
 {
     font-family: 'Noto Sans TC', 'Lato', PingFangTC, Microsoft JhengHei, sans-serif;
     background-color: $bgcolor;
-    
     *
     {
         box-sizing: border-box;
@@ -108,3 +107,6 @@ body
     border-left: 1px solid #4a4a4a;
     border-right: 1px solid #4a4a4a;
 }
+::-webkit-scrollbar {
+    display: none;
+  }

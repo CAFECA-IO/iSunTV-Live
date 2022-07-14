@@ -88,7 +88,7 @@ class Chinasuntv extends React.Component
         const PLAY_DETAILS = {
             fill: true,
             fluid: true,
-            autoplay: true,
+            autoplay: false,
             controls: true,
             preload: "metadata",
             sources: [

@@ -2,6 +2,7 @@ import React from 'react';
 import update from 'immutability-helper';
 import './Contact.scss';
 
+// edit here 聯繫我們
 class Contact extends React.Component
 {
     constructor(props)
@@ -66,6 +67,8 @@ class Contact extends React.Component
                           <h3>意見：${this.comment.value}</h3>`
             };
 
+            console.log(data.comment);
+
             // chinaSuntvAction.sendMail(data, (err, res) => {
             //     if (err)
             //     {
@@ -106,6 +109,7 @@ class Contact extends React.Component
         }
         else
         {
+            console.log("欄位填寫未完成");
             this.setState( update(this.state, {
                 message: { $set: '欄位未完成' },
                 messageClass: { $set: 'error' }
@@ -122,9 +126,7 @@ class Contact extends React.Component
 
     render()
     {
-        const {
-            name, phone, email, comment
-        } = this.state.input;
+
 
         const { message, messageClass } = this.state;
 
@@ -138,17 +140,17 @@ class Contact extends React.Component
                         <div className="userInfo">
                             <div>
                                 <div>姓名</div>
-                                <input value={name} ref={(input) => { this.name = input; } } />
+                                <input value = { this.state.input.name } onChange = {(e) => { this.nameChange(e); }} />
                                 <div>電話</div>
-                                <input value={phone} ref={(input) => { this.phone = input; } } />
+                                <input type = "tel" value = { this.state.input.phone } onChange = {(e) => { this.phoneChange(e); }}/>
                                 <div>電子郵件</div>
-                                <input value={email} ref={(input) => { this.email = input; } } />
+                                <input type = "email" value = { this.state.input.email } onChange = {(e) => { this.emailChange(e); }} />
                             </div>
                         </div>
                         <div className="userInfoRight">
                             <div className="comment">
                                 <div>意見</div>
-                                <textarea value={comment} ref={(input) => { this.comment = input; } } />
+                                <textarea value = { this.state.input.comment } onChange = {(e) => { this.commentChange(e); }} ref={(input) => { this.comment = input; } } />
                             </div>
                             <div className="submit">
                                 <button><div className={messageClass}>{message}</div></button>

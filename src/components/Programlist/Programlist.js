@@ -65,7 +65,7 @@ class ProgramList extends React.Component
         data.forEach((item, index)=>
         {
             console.log("index"+index);
-            let datetime = new Date(item.PlayTime).toISOString().split('T')[0];
+            let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
             weekSet.add(datetime);
     
         });
@@ -84,7 +84,7 @@ class ProgramList extends React.Component
             
             data.forEach((item)=>
             {
-                let datetime = new Date(item.PlayTime).toISOString().split('T')[0];
+                let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
                 if (datetime === weekday) {
                     oneWeekInfo.push(item);
                 }
