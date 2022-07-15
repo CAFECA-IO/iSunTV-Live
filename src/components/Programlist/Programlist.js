@@ -1,3 +1,4 @@
+/* eslint-disable no-extra-boolean-cast */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { transferToTime, transferToWeek, transferToWeekInfo } from '../../utils/TimeOperator';
@@ -6,7 +7,7 @@ import moment from 'moment';
 import './Programlist.scss';
 
 // change the programlist here
-// we need to change prop to our locql componentdatamount data first 
+// we need to change prop to our upper class's (APP) componentdatamount data first 
 class ProgramList extends React.Component {
 
     constructor(props) {
@@ -41,7 +42,7 @@ class ProgramList extends React.Component {
     }
 
     componentDidMount() {
-
+        
         // fetch the url 
         fetch('http://localhost:3000/api/v1/chinasun/programlist')
             .then(response => response.json())
@@ -75,12 +76,34 @@ class ProgramList extends React.Component {
     
     }
 
+    getThisWeekDay() {
+
+        const CURRENT_WEEKDAYS = [];
+        // get monday in this week
+        const TODAY = new Date();
+
+        // push dates in this week
+        for ( let i = 0; i < 7 ; i++ ) {
+
+            let day = TODAY.getDate() - (TODAY.getDay() + 1 - i);
+            let normalizedDay = moment(new Date(day)).format('YYYY-MM-DD');
+            CURRENT_WEEKDAYS.push(normalizedDay);
+        
+        }
+        
+        return CURRENT_WEEKDAYS;
+    
+    }
+    
     renderTabs() {
 
+        console.log("tabs");
+        console.log(this.getThisWeekDay());
         const TABS = this.state.tabs;
         // week =  當周 weeklist
         const WEEK = this.state.week;
-        const TODAYDAY = new Date().getDay(); //    今天星期幾？
+
+        const TODAYDAY = new Date().getDay(); // 今天星期幾？
         let weekTabs = [];
         let today;
         let yesterday;
@@ -167,11 +190,11 @@ class ProgramList extends React.Component {
 
                     const CONTENT = (
                         <div
-                            key={DATE_NUM}
+                            key = { DATE_NUM }
                             className={`${now_tag} ${TABS[WEEKDATE]}${TODAYDAY === Number(index) + today || TODAYDAY === Number(index) + yesterday || TODAYDAY === Number(index) + tomorrow ? '' : ' hidden'}`}
                             onClick={() => this.selectProgrmaList(WEEKDATE)}
                         >
-                            <div>{DATE_NUM}<span>{DAY}</span></div>
+                            <div>{ DATE_NUM }<span>{ DAY }</span></div>
                         </div>
                     );
                     weekTabs.push(CONTENT);
@@ -276,6 +299,7 @@ class ProgramList extends React.Component {
         const year = new Date().getFullYear();
         const month = new Date().getMonth() + 1;
 
+        // get month then use the month to get the programlist 
         return (
         
             <div className="c_programList">

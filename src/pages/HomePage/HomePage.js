@@ -20,13 +20,13 @@ class HomePage extends React.Component {
         
   }
 
-  componentDidMount() {
+  // componentDidMount() {
 
-    fetch('http://localhost:3000/api/v1/chinasun/programlist')
-      .then(response => response.json())
-      .then(data => {this.updateState(data)});
+  //   fetch('http://localhost:3000/api/v1/chinasun/programlist')
+  //     .then(response => response.json())
+  //     .then(data => {this.updateState(data)});
   
-  }
+  // }
 
   render() {
     // put header , chinasuntv, programlist, about, contact, footer in the homepage
@@ -35,8 +35,8 @@ class HomePage extends React.Component {
       <Fragment>
         <Header></Header>
         <div className = "container">
-          <Chinasuntv></Chinasuntv>
-          <ProgramList></ProgramList>
+          <Chinasuntv data = ""></Chinasuntv>
+          <ProgramList data = ""></ProgramList>
           <About></About>
           <Contact></Contact>
           <FOOTER></FOOTER>
