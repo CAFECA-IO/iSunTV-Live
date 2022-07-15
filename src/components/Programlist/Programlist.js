@@ -185,10 +185,8 @@ class ProgramList extends React.Component {
         const WEEK_INFO = this.state.weekInfo;
         let programList = [];
 
+        // if week info contains things
         if (WEEK_INFO !== null) {
-
-            console.log("week");
-            console.log(WEEK);
 
             let day = {
                 Mon: WEEK[0],
@@ -203,7 +201,7 @@ class ProgramList extends React.Component {
 
             let arr;
 
-
+            // if data == data in this week
             if (typeof(WEEK_INFO[day.Mon]) !== 'undefined') {
 
                 // if we get weekInfo this week, we set the action of changing info which could be triggered by the user's selection
