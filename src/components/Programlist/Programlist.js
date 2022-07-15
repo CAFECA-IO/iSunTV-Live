@@ -13,6 +13,7 @@ class ProgramList extends React.Component {
 
         const day = new Date().getDay();
         super(props);
+        
         this.state = {
             tabs: {
                 Mon: day === 1 ? 'active' : '',
@@ -41,7 +42,7 @@ class ProgramList extends React.Component {
 
     componentDidMount() {
 
-        // 需要共用state -> 移動到redux (需要fix這邊的問題)
+        // fetch the url 
         fetch('http://localhost:3000/api/v1/chinasun/programlist')
             .then(response => response.json())
             .then(data => {this.updateState(data)});

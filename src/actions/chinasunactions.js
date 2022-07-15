@@ -20,9 +20,11 @@ export function fetchProgramlist() {
 
 // send the email with email config
 export function sendEmail(conig) {
+
     return {
       type: SEND_EMAIL,
       payload 
     }
+
 }
   

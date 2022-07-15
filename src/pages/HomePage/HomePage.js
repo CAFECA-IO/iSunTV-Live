@@ -20,6 +20,14 @@ class HomePage extends React.Component {
         
   }
 
+  componentDidMount() {
+
+    fetch('http://localhost:3000/api/v1/chinasun/programlist')
+      .then(response => response.json())
+      .then(data => {this.updateState(data)});
+  
+  }
+
   render() {
     // put header , chinasuntv, programlist, about, contact, footer in the homepage
     return (
