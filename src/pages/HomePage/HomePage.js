@@ -20,14 +20,6 @@ class HomePage extends React.Component {
         
   }
 
-  // componentDidMount() {
-
-  //   fetch('http://localhost:3000/api/v1/chinasun/programlist')
-  //     .then(response => response.json())
-  //     .then(data => {this.updateState(data)});
-  
-  // }
-
   render() {
     // put header , chinasuntv, programlist, about, contact, footer in the homepage
     return (
@@ -35,8 +27,8 @@ class HomePage extends React.Component {
       <Fragment>
         <Header></Header>
         <div className = "container">
-          <Chinasuntv data = ""></Chinasuntv>
-          <ProgramList data = ""></ProgramList>
+          <Chinasuntv></Chinasuntv>
+          <ProgramList></ProgramList>
           <About></About>
           <Contact></Contact>
           <FOOTER></FOOTER>

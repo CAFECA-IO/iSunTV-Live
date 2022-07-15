@@ -37,7 +37,8 @@ class ProgramList extends React.Component {
     updateState(data) {
 
         const WEEK = transferToWeek(data.payload) ;
-        this.setState({data : data.payload, week: WEEK, weekInfo: transferToWeekInfo(data.payload, WEEK) }); 
+        // 
+        this.setState({data : data.payload, weekInfo: transferToWeekInfo(data.payload, WEEK) }); 
     
     }
 
@@ -46,7 +47,7 @@ class ProgramList extends React.Component {
         // fetch the url 
         fetch('http://localhost:3000/api/v1/chinasun/programlist')
             .then(response => response.json())
-            .then(data => {this.updateState(data)});
+            .then(data => { this.updateState(data) });
         // setTimeout(() => {
         //     const scroll = document.querySelector('.scroll');
         //     scroll.parentNode.scrollTop = scroll.offsetTop - scroll.parentNode.offsetTop;
@@ -80,13 +81,15 @@ class ProgramList extends React.Component {
 
         const CURRENT_WEEKDAYS = [];
         // get monday in this week
-        const TODAY = new Date();
+        const TODAY = new Date(Date.now());
 
         // push dates in this week
         for ( let i = 0; i < 7 ; i++ ) {
 
-            let day = TODAY.getDate() - (TODAY.getDay() + 1 - i);
-            let normalizedDay = moment(new Date(day)).format('YYYY-MM-DD');
+            let day = TODAY.getDate() - TODAY.getDay() + 1 + i;
+
+            let normalizedDay  = new Date(TODAY.setDate(day));
+            normalizedDay = moment(new Date(normalizedDay)).format('YYYY-MM-DD');
             CURRENT_WEEKDAYS.push(normalizedDay);
         
         }
@@ -97,11 +100,9 @@ class ProgramList extends React.Component {
     
     renderTabs() {
 
-        console.log("tabs");
-        console.log(this.getThisWeekDay());
         const TABS = this.state.tabs;
         // week =  當周 weeklist
-        const WEEK = this.state.week;
+        const WEEK = this.getThisWeekDay();
 
         const TODAYDAY = new Date().getDay(); // 今天星期幾？
         let weekTabs = [];
@@ -218,7 +219,7 @@ class ProgramList extends React.Component {
     renderProgramList() {
 
         // need to organize the programInfo data structure
-        const week = this.state.week;
+        const week = this.getThisWeekDay();
         const weekInfo = this.state.weekInfo;
         let programList = [];
 
@@ -233,39 +234,82 @@ class ProgramList extends React.Component {
                 Sat: week[5],
                 Sun: week[6]
             };
-    
-            let arr;
+            console.log(weekInfo);
 
-            switch (this.day)
-            {
-                case 'Mon':
-                    arr = weekInfo[day.Mon];
-                    break;
-                case 'Tue':
-                    arr = weekInfo[day.Tue];
-                    break;
-                case 'Wed':
-                    arr = weekInfo[day.Wed];
-                    break;
-                case 'Thu':
-                    arr = weekInfo[day.Thu];
-                    break;
-                case 'Fri':
-                    arr = weekInfo[day.Fri];
-                    break;
-                case 'Sat':
-                    arr = weekInfo[day.Sat];
-                    break;
-                case 'Sun':
-                    arr = weekInfo[day.Sun];
-                    break;
-                default:
+            let arr;
+            if (typeof(weekInfo) == 'undefined') {
+
+                arr = [];
+            
+            } else {
+
+                switch (this.day) {
+
+                    case 'Mon':
+                        if(typeof(weekInfo[day.Mon]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Mon];
+                            break;
+                        }
+                    case 'Tue':
+                        if(typeof(weekInfo[day.Tue]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Tue];
+                            break;
+                        }
+                    case 'Wed':
+                        if(typeof(weekInfo[day.Wed]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Wed];
+                            break;
+                        }
+                    case 'Thu':
+                        if(typeof(weekInfo[day.Thu]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Thu];
+                            break;
+                        }
+                    case 'Fri':
+                        if(typeof(weekInfo[day.Fri]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Fri];
+                            break;
+                        }
+                    case 'Sat':
+                        if(typeof(weekInfo[day.Sat]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Sat];
+                            break;
+                        }
+                    case 'Sun':
+                        if(typeof(weekInfo[day.Sun]) == 'undefined') {
+                            arr = [];
+                            break;
+                        } else {
+                            arr = weekInfo[day.Sun];
+                            break;
+                        }
+                    default:
+                
+                }
             
             }
 
             for (let item of arr) {
 
-                const content = (
+                const CONTENT = (
                 
                     <div key = { transferToTime(item.PlayTime) } className = 'scroll'>
                         <div>{ transferToTime(item.PlayTime) }</div>
@@ -275,9 +319,24 @@ class ProgramList extends React.Component {
                 
                 );
     
-                programList.push(content);
+                programList.push(CONTENT);
             
             }
+
+            if (programList.length === 0) {
+
+                const CONTENT_NULL = (
+                
+                    <div className = 'no_content'>
+                        目前無資料
+                    </div>
+                
+                );
+    
+                programList.push(CONTENT_NULL);                
+            }
+            
+            console.log(programList);
         
         }
 
