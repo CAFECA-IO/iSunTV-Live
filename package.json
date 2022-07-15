@@ -1,6 +1,6 @@
 {
-  "name": "client",
-  "version": "0.1.0",
+  "name": "isuntv-live",
+  "version": "0.8.0",
   "private": true,
   "dependencies": {
     "@nestjs/cli": "^8.2.6",
