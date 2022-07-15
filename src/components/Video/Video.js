@@ -4,27 +4,35 @@ import "video.js/dist/video-js.css";
 
 const Video = (props) => {
   
-  const videoNode = useRef(null);
-  const [player, setPlayer] = useState(null);
+  const VIDEO_NODE = useRef(null);
+  const [ PLAYER, SET_PLAYER ] = useState(null);
 
+  // useEffect is used to set the video and it's default param
   useEffect(() => {
 
-    if (videoNode.current) {
-      const _player = videojs(videoNode.current, props);
-      setPlayer(_player);
+    if (VIDEO_NODE.current) {
+
+      const VIDEO_PLAYER = videojs(VIDEO_NODE.current, props);
+      SET_PLAYER(VIDEO_PLAYER);
+      
       return () => {
-        if (player !== null) {
-          player.dispose();
+      
+        if (PLAYER !== null) {
+          PLAYER.dispose();
+      
         }
-      };
+      
+      }
+    
     }
     
   }, []);
 
+  // return the video element
   return (
 
     <div data-vjs-player>
-      <video ref={videoNode} className="video-js vjs-default-skin vjs-big-play-centered" ></video>
+      <video ref={VIDEO_NODE} className="video-js vjs-default-skin vjs-big-play-centered" ></video>
     </div>
   
   );

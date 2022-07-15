@@ -5,6 +5,10 @@ import "./Header.scss";
 
 class Header extends React.Component {
 
+    // A constructor is used to inherit the value (prop) from upper class
+    /**
+     * @param props means value from the upper class
+     */  
     constructor(props) {
 
         super(props);
@@ -14,11 +18,14 @@ class Header extends React.Component {
             }
         };
         
+        // bind the togglemenu with it's corresponding function
         this.toggleMenu = this.toggleMenu.bind(this);
+        // bind the scroll with it's corresponding function
         this.scroll = this.scroll.bind(this);
     
     }
 
+    // componentDidMount is used to register the scroll event
     componentDidMount() {
 
         const { body } = document;
@@ -47,6 +54,7 @@ class Header extends React.Component {
     
     }
 
+    // A function is used to set header's class to empty
     headerOriginal() {
 
         this.setState(update(this.state, {
@@ -57,6 +65,7 @@ class Header extends React.Component {
     
     }
 
+    // A function is used to set header's class to folded
     headerFolded() {
 
         this.setState(update(this.state, {
@@ -67,6 +76,7 @@ class Header extends React.Component {
     
     }
 
+    // A function is used to set toggleMenu's class to folded
     toggleMenu() {
 
         const header = this.state.classes.header.indexOf('color') === -1 ? 'color' : 'folded';
@@ -80,6 +90,7 @@ class Header extends React.Component {
     
     }
 
+    // A function is used to set scroll's class to smooth
     scroll(section) {
 
         const scrollTo = document.querySelector(section);
@@ -93,6 +104,10 @@ class Header extends React.Component {
     
     }
 
+    // A function render the header element
+    /**
+     * show the header block and it's info
+     */  
     render() {
 
         const { header } = this.state.classes;

@@ -2,10 +2,9 @@ import React from 'react';
 import update from 'immutability-helper';
 import './Contact.scss';
 
-// edit here 聯繫我們
 class Contact extends React.Component {
     
-    // A constructor is used to inherit the value (prop)  from upper class
+    // A constructor is used to inherit the value (prop) from upper class
     /**
      * @param props means value from the upper class
      */  
@@ -177,9 +176,14 @@ class Contact extends React.Component {
     }
 
 
+    // A function render the contact element
+    /**
+     * show the contact block and it's info
+     */  
     render() {
-        // fix the coding style problem here
-        const { message, messageClass } = this.state;
+
+        const MESSAGE = this.state.message;
+        const MESSAGE_CLASS = this.state.messageClass;
 
         return (
 
@@ -205,7 +209,7 @@ class Contact extends React.Component {
                                 <textarea value = { this.state.input.comment } onChange = {(e) => { this.commentChange(e); }} ref={(input) => { this.comment = input; } } />
                             </div>
                             <div className="submit">
-                                <button onClick = { () => { this.submit(this.state.input) } }><div className={messageClass}>{message}</div></button>
+                                <button onClick = { () => { this.submit(this.state.input) } }><div className={MESSAGE_CLASS}>{MESSAGE}</div></button>
                         </div>
                     </div>
                 </div>

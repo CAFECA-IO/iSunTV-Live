@@ -1,5 +1,3 @@
-import fetch from 'isomorphic-fetch'
-
 export const FETCH_PROGRAMLIST = 'FETCH_PROGRAMLIST'
 export const SEND_EMAIL = 'SEND_EMAIL'
 

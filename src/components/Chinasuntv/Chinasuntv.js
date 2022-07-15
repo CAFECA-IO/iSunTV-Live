@@ -24,6 +24,11 @@ class Chinasuntv extends React.Component {
         
     }
 
+    // A function
+    /**
+     * inherit the value (prop)  from upper class 
+     * @param props means props from the upper class
+     */  
     updateState(data) { 
 
         // Changing state 
@@ -120,7 +125,9 @@ class Chinasuntv extends React.Component {
 }
 
 Chinasuntv.propTypes = {
+
     data: PropTypes.object.isRequired
+
 };
 
 export default Chinasuntv;
