@@ -43,7 +43,7 @@ class JobWorker {
 
         // push new job
         this.jobQueue.push(function () {
-        
+            console.log("comment: " + comment);
             return SendMail.sendMail(config, comment);          
         
         });
@@ -122,8 +122,6 @@ class JobWorker {
                 if (err) {
                     // call push job function
                     q.push(function () {
-                        console.log("pushed");
-                        console.log("sentmail"+comment);
                         return SendMail.sendMail(config, comment);          
                     });
 

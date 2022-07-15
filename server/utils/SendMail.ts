@@ -1,3 +1,5 @@
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable @typescript-eslint/no-empty-function */
 import * as nodemailer from 'nodemailer';
 
 class SendMail {
@@ -7,7 +9,7 @@ class SendMail {
      * set the default constructor without param
      */
     constructor() {
-
+        
     }
 
     /**
@@ -35,10 +37,10 @@ class SendMail {
             });
 
             // create email template
-            let mailOptions = {
+            const MAIL_OPTIONS = {
             
                 from    : "clemmy.liao@mermer.cc", // sender address
-                to      : "clemmy.liao@mermer.cc", // list of receivers
+                to      : "contact@mermer.cc", // list of receivers
                 subject : '陽光衛視直播網站意見回覆', // Subject line
                 text    : comment, // plaintext body
                 html    : '<p>' + comment + '</p>', // html body
@@ -52,9 +54,9 @@ class SendMail {
                 }
         
             };
-        
+
             // send mail with defined transport object
-            transporter.sendMail(mailOptions, function (error, info) {
+            transporter.sendMail(MAIL_OPTIONS, function (error, info) {
 
                 if (error) {
 
