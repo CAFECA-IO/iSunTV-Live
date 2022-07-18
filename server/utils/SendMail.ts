@@ -23,35 +23,24 @@ class SendMail {
 
             // create gmail service
             const transporter = nodemailer.createTransport({
-            
+                service: 'Gmail',
                 host: 'smtp.gmail.com',
                 port: 465,
-                secure: true,
-                // put config in here (later)
-                auth: {
-                type: "OAuth2",
-                clientId: config.CLIENT_ID,
-                clientSecret: config.CLIENT_SECRET,
-                }
+                auth: { // 要用來發信的帳號及密碼，後面可以改用 dotenv 來傳入，進而保護自己的帳密
+                  user: config.GOOGLE_CLIENT_ID,
+                  pass: config.GOOGLE_CLIENT_PASSWORD
+                }           
             
             });
 
             // create email template
             const MAIL_OPTIONS = {
             
-                from    : "clemmy.liao@mermer.cc", // sender address
+                from    : config.GOOGLE_CLIENT_ID, // sender address
                 to      : "contact@mermer.cc", // list of receivers
                 subject : '陽光衛視直播網站意見回覆', // Subject line
                 text    : comment, // plaintext body
                 html    : '<p>' + comment + '</p>', // html body
-        
-                auth : {
-
-                    user         : config.USER,
-                    refreshToken: config.REFRESH_TOKEN,
-                    accessToken:  config.ACCESS_TOKEN
-                
-                }
         
             };
 

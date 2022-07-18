@@ -28,11 +28,8 @@ class SendMailController {
   
     const CONFIG = {
       
-      USER: "clemmy.liao@mermer.cc",
-      REFRESH_TOKEN: this.configService.get('REFRESH_TOKEN'),
-      ACCESS_TOKEN: this.configService.get('ACCESS_TOKEN'),
-      CLIENT_ID: this.configService.get('CLIENT_ID'),
-      CLIENT_SECRET: this.configService.get('CLIENT_SECRET')
+      GOOGLE_CLIENT_ID: this.configService.get('GOOGLE_CLIENT_ID'),
+      GOOGLE_CLIENT_PASSWORD: this.configService.get('GOOGLE_CLIENT_PASSWORD')
 
     }
     
