@@ -54,11 +54,11 @@ class ChinasunController {
             // check data in this week or not
             if (data.length !== 0) {
 
-                result = FormatterService.formatData(true,ERROR_CODE.SUCCESS, "programlist", data);
+                result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
             
             } else {
             
-                result = FormatterService.formatData(false,ERROR_CODE.NO_NEW_DATA_ERROR, "no data of current week", data);
+                result = FormatterService.formatData(false, ERROR_CODE.NO_NEW_DATA_ERROR, "no data of current week", data);
             }
 
         } catch (e) {
