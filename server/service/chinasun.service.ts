@@ -34,13 +34,13 @@ class ChinasunService {
         // register the watcher
         const watcher = hound.watch(process.cwd() + this.configService.get('XLSFOLDER_DIR'));
 
-        watcher.on('create', (file, stats) => {
+        watcher.on('create', async (file, stats) => {
 
             result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);    
         
         });
 
-        watcher.on('change', (file, stats) => {
+        watcher.on('change', async (file, stats) => {
 
             result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);   
         
@@ -124,7 +124,7 @@ class ChinasunService {
 
         // need to be continued
 
-        return result;
+        return this.programList;
 
     }
         
