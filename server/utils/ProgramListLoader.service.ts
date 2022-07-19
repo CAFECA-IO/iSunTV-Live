@@ -114,8 +114,10 @@ class ProgramlistLoader {
 
             try {
                 console.log(path+NORMALIZED_MONDAY_DATE+"chinasuntv.xls");
-                const RESULT = await this.getProgramList(path+NORMALIZED_MONDAY_DATE+"chinasuntv.xls");
-                resolve(RESULT);
+                let result = await this.getProgramList(path+NORMALIZED_MONDAY_DATE+"chinasuntv.xls");
+                result["timestamp"] = timestamp;
+                result["list"] = this.formatProgramList(result);
+                resolve(result);
                 console.log("dates here");
 
             } catch(e) {

@@ -23,7 +23,6 @@ class ChinasunService {
 
     } 
     
-    
     async initialize({XLSFOLDER_DIR}){
         
         this.xlsFolder = XLSFOLDER_DIR;
@@ -94,7 +93,16 @@ class ChinasunService {
         
         } 
         // timestamp now
+        const NOW_DATE = new Date(Date.now());
+        // console.log(timestamp);
+        // console.log(CERTAIN_DATE);
+        const DIFF_TO_MONDAY = NOW_DATE.getDate() - NOW_DATE.getDay() + 1 ;
+        const CURRENT_MONDAY_DATE = new Date(NOW_DATE.setDate(DIFF_TO_MONDAY));
+        // normalize monday date
+        const NORMALIZED_MONDAY_DATE = moment(new Date(CURRENT_MONDAY_DATE)).format('YYYY-MM-DD');
+        const UNIX_TIMESTAMP_MONDAY_DATE = Math.floor(new Date(NORMALIZED_MONDAY_DATE).getTime()/1000);
 
+        // no data now
         return this.programList;
 
     }
@@ -120,11 +128,8 @@ class ChinasunService {
         
             const result = await ProgramlistLoader.getProgramListWithTimestamp(this.xlsFolder, timestamp);
             this.programList[result["timestamp"]] = result["list"];
+            return this.programList[MONDAY_UNIX_TIME];
         }
-
-        // need to be continued
-
-        return this.programList;
 
     }
         
