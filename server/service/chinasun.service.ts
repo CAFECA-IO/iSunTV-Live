@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
 import moment from 'moment';
-import { ConfigService } from '@nestjs/config';
 import * as hound from 'hound';
 
 /**
@@ -19,29 +18,30 @@ class ChinasunService {
     /**
      * set the default constructor without param
      */
-    constructor(private configService: ConfigService) {
+    constructor() {
 
-    } 
+    }
     
     async initialize({XLSFOLDER_DIR}){
         
         this.xlsFolder = XLSFOLDER_DIR;
         let result = {};
+
         result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
         // result.timstamp
         // result.list
         // register the watcher
-        const watcher = hound.watch(process.cwd() + this.configService.get('XLSFOLDER_DIR'));
+        const watcher = hound.watch(process.cwd() + this.xlsFolder);
 
-        watcher.on('create', async (file, stats) => {
+        watcher.on('create', async () => {
 
-            result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);    
+            this.getLatestProgramList();
         
         });
 
-        watcher.on('change', async (file, stats) => {
+        watcher.on('change', async () => {
 
-            result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);   
+            this.getLatestProgramList();
         
         })
         // only one timestamp
@@ -49,33 +49,10 @@ class ChinasunService {
 
     }
 
-    //the function of getting current time 
-    /**
-     * return @param {string} result store the current yyyymmdd string
-     */
-    getCurrentTime() {
-
-        var currentTime = new Date();
-        var month = (currentTime.getMonth() + 1);
-        var _month;
-
-        // normalize the month
-        if (month < 10) {
-
-            _month = '0'+month.toString();
-        
-        } else {
-        
-            _month = month.toString();
-        
-        }
-        
-        var _day = currentTime.getDate().toString();
-        var _year = currentTime.getFullYear().toString();
-        var result = _year + _month + _day;
-
-        return result;
-    
+    async getLatestProgramList() {
+        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        this.programList[result["timestamp"]] = result["list"];
+        return true;
     }
 
     //the function of getting updated data
@@ -84,25 +61,18 @@ class ChinasunService {
      */
     async getProgramlist() {    
 
-        // if no data now, store the latest data we have
-        if (Object.keys(this.programList).length === 0) {
-            // but getLatestProgramList use for loop
-            const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
-            this.programList[result["timestamp"]] = result["list"];
-        
-        } 
         // timestamp now
-        const NOW_DATE = new Date(Date.now());
+        const currentDate = new Date();
         // console.log(timestamp);
         // console.log(CERTAIN_DATE);
-        const DIFF_TO_MONDAY = NOW_DATE.getDate() - NOW_DATE.getDay() + 1 ;
-        const CURRENT_MONDAY_DATE = new Date(NOW_DATE.setDate(DIFF_TO_MONDAY));
+        const dateOfThisMonday = currentDate.getDate() - currentDate.getDay() + 1 ;
+        const thisMonday = new Date(currentDate.setDate(dateOfThisMonday));
         // normalize monday date
-        const NORMALIZED_MONDAY_DATE = moment(new Date(CURRENT_MONDAY_DATE)).format('YYYY-MM-DD');
-        const UNIX_TIMESTAMP_MONDAY_DATE = Math.floor(new Date(NORMALIZED_MONDAY_DATE).getTime()/1000);
+        const normalizedMondayDate = moment(new Date(thisMonday)).format('YYYY-MM-DD');
+        const unitimestampOfThisMonday = Math.floor(new Date(normalizedMondayDate).getTime()/1000);
 
         // no data now
-        return this.programList;
+        return this.getProgramlistWithTimestamp(unitimestampOfThisMonday);
 
     }
 
@@ -126,8 +96,9 @@ class ChinasunService {
         } else {
         
             const result = await ProgramlistLoader.getProgramListWithTimestamp(this.xlsFolder, timestamp);
+            // ++ todo: check result
             this.programList[result["timestamp"]] = result["list"];
-            return this.programList[MONDAY_UNIX_TIME];
+            return this.programList[MONDAY_UNIX_TIME] || [];
         }
 
     }
