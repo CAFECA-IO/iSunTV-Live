@@ -17,23 +17,27 @@ async function bootstrap() {
 
   const configService = app.get(ConfigService);
   const HTTPS_ENABLE = configService.get('HTTPS_ENABLE');
+  const HTTP_ENABLE = configService.get('HTTP_ENABLE');
+  const HTTP_PORT = configService.get('HTTP_PORT');
+  const HTTPS_PORT = configService.get('HTTPS_PORT');
 
   if (HTTPS_ENABLE == "true") {
-
-    http.createServer(SERVER).listen(3000);
   
     pem.createCertificate({ days: 1, selfSigned: true }, function (err, keys) {
       if (err) {
         throw err
       }
-      https.createServer({ key: keys.serviceKey, cert: keys.certificate }, SERVER).listen(443);
+      https.createServer({ key: keys.serviceKey, cert: keys.certificate }, SERVER).listen(parseInt(HTTPS_PORT));
     })
 
-  } else {
+  } 
+  
+  if (HTTP_ENABLE == "true") {
 
-    http.createServer(SERVER).listen(3000);
+    http.createServer(SERVER).listen(parseInt(HTTP_PORT));
 
   }
+
 
 }
 
