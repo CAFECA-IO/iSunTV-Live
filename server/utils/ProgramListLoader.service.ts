@@ -55,28 +55,7 @@ class ProgramlistLoader {
         });
     
     }
-    static getCurrent(){
-        // // check the program is in this week 
-        // const PROGRAM_DATE = moment(new Date(EXCELJSON[0].PlayTime)).format("YYYY-MM-DD");
-        // const USER_DATE = new Date(timestamp);
-        // const DIFF_TO_MONDAY = USER_DATE.getDate() - USER_DATE.getDay() + 1 ;
-        // const CURRENT_MONDAY_DATE = new Date(USER_DATE.setDate(DIFF_TO_MONDAY));
-        // // normalize the day to weekday needed to be pushed to weeklist
-        // const NORMALIZED_MONDAY_DATE = moment(new Date(CURRENT_MONDAY_DATE)).format('YYYY-MM-DD');
-
-        // let result;
-
-        // // if the first date != date of monday this week => return null data
-        // if (NORMALIZED_MONDAY_DATE !== PROGRAM_DATE) {
-
-        //     result = this.formatProgramList(null);
-        
-        // } else {
-        
-        //     result = this.formatProgramList(EXCELJSON);
-        
-        // }
-    }       
+     
     /**
      * get the programlist with given options
      * @param path options to start the function with
@@ -87,34 +66,19 @@ class ProgramlistLoader {
         // Error:
         // 1. invalid path
         // 2. File can't be read
-        return new Promise<any[]>( async (resolve, reject) => {
+        return new Promise<any>( async (resolve, reject) => {
             // 
             try {
 
                 // deal with the files and transfer the excel to json
                 const FILE = await FileOperator.readFile(path);
                 const EXCELJSON = await FileOperator.excelToJson(FILE);
-                
-                // // check the program is in this week 
-                // const PROGRAM_DATE = moment(new Date(EXCELJSON[0].PlayTime)).format("YYYY-MM-DD");
-                // const USER_DATE = new Date(timestamp);
-                // const DIFF_TO_MONDAY = USER_DATE.getDate() - USER_DATE.getDay() + 1 ;
-                // const CURRENT_MONDAY_DATE = new Date(USER_DATE.setDate(DIFF_TO_MONDAY));
-                // // normalize the day to weekday needed to be pushed to weeklist
-                // const NORMALIZED_MONDAY_DATE = moment(new Date(CURRENT_MONDAY_DATE)).format('YYYY-MM-DD');
 
-                // let result;
-
-                // if the first date != date of monday this week => return null data
-                // if (NORMALIZED_MONDAY_DATE !== PROGRAM_DATE) {
-
-                //     result = this.formatProgramList(null);
-                
-                // } else {
-                
-                let result = this.formatProgramList(EXCELJSON);
-                
-                // }
+                let result = {};
+                const PROGRAM_DATE = moment(new Date(EXCELJSON[0].PlayTime)).format("YYYY-MM-DD");
+                const TIME_INDEX = Math.floor(new Date(PROGRAM_DATE).getTime()/1000);
+                result["timestamp"] = TIME_INDEX;
+                result["list"] = this.formatProgramList(EXCELJSON);
                 
                 resolve(result);
     
@@ -131,15 +95,15 @@ class ProgramlistLoader {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-     static async getCertainProgramList(path, timestamp) {
+     static async getProgramListWithTimestamp(path, timestamp) {
         // readfile -> transfer excel to json -> format the result and return it
         // Error:
         // 1. invalid path
         // 2. File can't be read
         // unix time -> current date
         const CERTAIN_DATE = new Date(parseInt(timestamp)*1000);
-        console.log(timestamp);
-        console.log(CERTAIN_DATE);
+        // console.log(timestamp);
+        // console.log(CERTAIN_DATE);
         const DIFF_TO_MONDAY = CERTAIN_DATE.getDate() - CERTAIN_DATE.getDay() + 1 ;
         const CURRENT_MONDAY_DATE = new Date(CERTAIN_DATE.setDate(DIFF_TO_MONDAY));
         // normalize monday date

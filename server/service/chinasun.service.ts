@@ -1,6 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
-
+import moment from 'moment';
+import { ConfigService } from '@nestjs/config';
+import * as hound from 'hound';
 
 /**
  * handle the programlist service for chinasun controller
@@ -11,19 +13,40 @@ class ChinasunService {
 
     /** @param {string} xlsFolder default xls folder path*/
     xlsFolder: string;
-
+    // add json param
+    programList = {};
     //the class constructor
     /**
      * set the default constructor without param
      */
-    constructor() {
+    constructor(private configService: ConfigService) {
 
-    }
+    } 
+    
     
     async initialize({XLSFOLDER_DIR}){
         
         this.xlsFolder = XLSFOLDER_DIR;
-        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        let result = {};
+        result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+        // result.timstamp
+        // result.list
+        // register the watcher
+        const watcher = hound.watch(process.cwd() + this.configService.get('XLSFOLDER_DIR'));
+
+        watcher.on('create', (file, stats) => {
+
+            result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);    
+        
+        });
+
+        watcher.on('change', (file, stats) => {
+
+            result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);   
+        
+        })
+        // only one timestamp
+        this.programList[result["timestamp"]] = result["list"];
         console.log(result);
 
     }
@@ -61,11 +84,18 @@ class ChinasunService {
     /**
      * return @param {string} result store the current yyyymmdd string
      */
-    async getUpdatedData() {    
+    async getProgramlist() {    
+
+        // if no data now, store the latest data we have
+        if (Object.keys(this.programList).length === 0) {
+            // but getLatestProgramList use for loop
+            const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
+            this.programList[result["timestamp"]] = result["list"];
         
-        const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
-        global.playlist = result;
-        return result;
+        } 
+        // timestamp now
+
+        return this.programList;
 
     }
 
@@ -73,10 +103,27 @@ class ChinasunService {
     /**
      * return @param {string} result store the current yyyymmdd string
      */
-     async getCertainData(timestamp) {    
+     async getProgramlistWithTimestamp(timestamp) {   
+
+        const CERTAIN_DATE = new Date(parseInt(timestamp)*1000);
+        const DIFF_TO_MONDAY = CERTAIN_DATE.getDate() - CERTAIN_DATE.getDay() + 1 ;
+        const CURRENT_MONDAY_DATE = new Date(CERTAIN_DATE.setDate(DIFF_TO_MONDAY));
+        // normalize monday date
+        const NORMALIZED_MONDAY_DATE = moment(new Date(CURRENT_MONDAY_DATE)).format('YYYYMMDD');
+        const MONDAY_UNIX_TIME = Math.floor((new Date(NORMALIZED_MONDAY_DATE).getTime())/1000)
+        // if programlist contains key named timestamp
+        if(Object.prototype.hasOwnProperty.call(this.programList, MONDAY_UNIX_TIME)) {
+
+            return this.programList[MONDAY_UNIX_TIME];
         
-        const result = await ProgramlistLoader.getCertainProgramList(this.xlsFolder, timestamp);
-        global.playlist = result;
+        } else {
+        
+            const result = await ProgramlistLoader.getProgramListWithTimestamp(this.xlsFolder, timestamp);
+            this.programList[result["timestamp"]] = result["list"];
+        }
+
+        // need to be continued
+
         return result;
 
     }

@@ -19,9 +19,9 @@ class ChinasunController {
      * set the default configservice and initialize the chinasun service
      * @param configService options to let user use config in the controller
      */
-    constructor(private readonly configService: ConfigService) {
+    constructor(private configService: ConfigService) {
     
-        this.chinasunService = new ChinasunService();
+        this.chinasunService = new ChinasunService(configService);
         this.initialize();
     
     }
@@ -37,6 +37,11 @@ class ChinasunController {
         this.chinasunService.initialize(config);
     
     }
+    
+    scanProgramlist() {
+        // update the latest programlist
+        this.chinasunService.getProgramlist();
+    }
 
     /**
      * handle the chinasun/updated_files route
@@ -44,23 +49,35 @@ class ChinasunController {
      */
     //get programlist and  programlist?timestamp=
     @Get('programlist')
-    async getUpdated_details(@Query() query) {
+    // apigetprogramlist
+    async apiGetProgramlist(@Query() query) {
         //get the latest data
         let data;
         let result;
         console.log("query");
         console.log(query);
+
         if(typeof query.timestamp !== "undefined") {
             // if user get timestamp without value
             if (query.timestamp === "") {
+                
+                try {
 
-                result = FormatterService.formatData(false, ERROR_CODE.WRONG_QUERY_ERROR, "wrong query param", {});
-            
+                    data = await this.chinasunService.getProgramlist(); 
+        
+                    // check data in this week or not
+                    result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+        
+                } catch (e) {
+                    
+                    result = FormatterService.formatData(true, e.code, e.message, data);
+                }
+                            
             } else {
 
                 try {
 
-                    data = await this.chinasunService.getCertainData(query.timestamp); 
+                    data = await this.chinasunService.getProgramlistWithTimestamp(query.timestamp); 
         
                     // check data in this week or not
                     result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
@@ -74,11 +91,11 @@ class ChinasunController {
             console.log("time");
             console.log(query.timestamp);
         
-        } else if (Object.keys(query).length === 0){
+        } else {
 
             try {
 
-                data = await this.chinasunService.getUpdatedData(); 
+                data = await this.chinasunService.getProgramlist(); 
     
                 // check data in this week or not
                 result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
@@ -88,11 +105,7 @@ class ChinasunController {
                 result = FormatterService.formatData(true, e.code, e.message, data);
             }
         
-        } else {
-
-            result = FormatterService.formatData(false, ERROR_CODE.WRONG_QUERY_ERROR, "wrong query param", {});
-        
-        }
+        } 
 
         // get the updated data and handle the error
         
