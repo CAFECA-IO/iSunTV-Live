@@ -1,6 +1,7 @@
 import FileOperator from './FileOperator.service';
 import FileError from './FileError';
 import { ERROR_CODE } from './ErrorCode';
+import moment from 'moment';
 
 class ProgramlistLoader {
 
@@ -68,11 +69,32 @@ class ProgramlistLoader {
         return new Promise<any[]>( async (resolve, reject) => {
             // 
             try {
-                console.log(path);
-                const file = await FileOperator.readFile(path);//  add wait
-                const excelJson = await FileOperator.excelToJson(file);
-                const result = this.formatProgramList(excelJson);
-                console.log(path);
+
+                // deal with the files and transfer the excel to json
+                const FILE = await FileOperator.readFile(path);
+                const EXCELJSON = await FileOperator.excelToJson(FILE);
+                
+                // check the program is in this week 
+                const PROGRAM_DATE = moment(new Date(EXCELJSON[0].PlayTime)).format("YYYY-MM-DD");
+                const TODAY = new Date(Date.now());
+                const DIFF_TO_MONDAY = TODAY.getDate() - TODAY.getDay() + 1 ;
+                const CURRENT_MONDAY_DATE = new Date(TODAY.setDate(DIFF_TO_MONDAY));
+                // normalize the day to weekday needed to be pushed to weeklist
+                const NORMALIZED_MONDAY_DATE = moment(new Date(CURRENT_MONDAY_DATE)).format('YYYY-MM-DD');
+
+                let result;
+
+                // if the first date != date of monday this week => return null data
+                if (NORMALIZED_MONDAY_DATE !== PROGRAM_DATE) {
+
+                    result = this.formatProgramList(null);
+                
+                } else {
+                
+                    result = this.formatProgramList(EXCELJSON);
+                
+                }
+                
                 resolve(result);
     
             } catch(e) {
@@ -94,7 +116,7 @@ class ProgramlistLoader {
     static formatProgramList(data) {
 
         // invalid(無法解析) => return []
-        if (typeof data == 'undefined') {
+        if (typeof data == 'undefined' || data === null) {
 
             return [];
     

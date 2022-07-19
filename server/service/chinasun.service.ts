@@ -51,7 +51,7 @@ class ChinasunService {
         
         var _day = currentTime.getDate().toString();
         var _year = currentTime.getFullYear().toString();
-        var result = _year+_month+_day;
+        var result = _year + _month + _day;
 
         return result;
     

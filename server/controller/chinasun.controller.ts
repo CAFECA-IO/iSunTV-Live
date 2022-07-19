@@ -33,7 +33,7 @@ class ChinasunController {
     initialize() {
         // 先執行config
         const XLSFOLDER_DIR = process.cwd() + this.configService.get('XLSFOLDER_DIR');
-        const config = {XLSFOLDER_DIR};
+        const config = { XLSFOLDER_DIR };
         this.chinasunService.initialize(config);
     
     }
@@ -47,11 +47,22 @@ class ChinasunController {
         //get the latest data
         let data;
         let result;
-        // get the uodated data and handle the error
+        // get the updated data and handle the error
         try {
             data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true,ERROR_CODE.SUCCESS, "programlist", data);
-        } catch(e) {
+
+            // check data in this week or not
+            if (data.length !== 0) {
+
+                result = FormatterService.formatData(true,ERROR_CODE.SUCCESS, "programlist", data);
+            
+            } else {
+            
+                result = FormatterService.formatData(false,ERROR_CODE.NO_NEW_DATA_ERROR, "no data of current week", data);
+            }
+
+        } catch (e) {
+            
             result = FormatterService.formatData(true, e.code, e.message, data);
         }
         
