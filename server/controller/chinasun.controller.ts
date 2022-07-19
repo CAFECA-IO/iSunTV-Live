@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
@@ -42,29 +42,59 @@ class ChinasunController {
      * handle the chinasun/updated_files route
      * @controller ChinasunController
      */
+    //get programlist and  programlist?timestamp=
     @Get('programlist')
-    async getUpdated_details() {
+    async getUpdated_details(@Query() query) {
         //get the latest data
         let data;
         let result;
-        // get the updated data and handle the error
-        try {
-            data = await this.chinasunService.getUpdatedData(); 
+        console.log("query");
+        console.log(query);
+        if(typeof query.timestamp !== "undefined") {
+            // if user get timestamp without value
+            if (query.timestamp === "") {
 
-            // check data in this week or not
-            if (data.length !== 0) {
-
-                result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+                result = FormatterService.formatData(false, ERROR_CODE.WRONG_QUERY_ERROR, "wrong query param", {});
             
             } else {
-            
-                result = FormatterService.formatData(false, ERROR_CODE.NO_NEW_DATA_ERROR, "no data of current week", data);
-            }
 
-        } catch (e) {
-            
-            result = FormatterService.formatData(true, e.code, e.message, data);
+                try {
+
+                    data = await this.chinasunService.getCertainData(query.timestamp); 
+        
+                    // check data in this week or not
+                    result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+        
+                } catch (e) {
+                    
+                    result = FormatterService.formatData(true, e.code, e.message, data);
+                }
+
+            }
+            console.log("time");
+            console.log(query.timestamp);
+        
+        } else if (Object.keys(query).length === 0){
+
+            try {
+
+                data = await this.chinasunService.getUpdatedData(); 
+    
+                // check data in this week or not
+                result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+    
+            } catch (e) {
+                
+                result = FormatterService.formatData(true, e.code, e.message, data);
+            }
+        
+        } else {
+
+            result = FormatterService.formatData(false, ERROR_CODE.WRONG_QUERY_ERROR, "wrong query param", {});
+        
         }
+
+        // get the updated data and handle the error
         
         return result;
     }

@@ -68,6 +68,18 @@ class ChinasunService {
         return result;
 
     }
+
+    //the function of getting updated data
+    /**
+     * return @param {string} result store the current yyyymmdd string
+     */
+     async getCertainData(timestamp) {    
+        
+        const result = await ProgramlistLoader.getCertainProgramList(this.xlsFolder, timestamp);
+        global.playlist = result;
+        return result;
+
+    }
         
 }
 
