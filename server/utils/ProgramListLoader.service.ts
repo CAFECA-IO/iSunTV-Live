@@ -19,7 +19,7 @@ class ProgramlistLoader {
         let fileList = await FileOperator.getFileList(path);      
         let fileIndex;
         fileIndex = fileList.length - 1;    
-        console.log(fileIndex);
+
         return new Promise(async (resolve, reject) => {
             // do while loop until programlist can be read or no file can be read        
             do {
@@ -73,7 +73,6 @@ class ProgramlistLoader {
                 // deal with the files and transfer the excel to json
                 const FILE = await FileOperator.readFile(path);
                 const EXCELJSON = await FileOperator.excelToJson(FILE);
-
                 let result = {};
                 const PROGRAM_DATE = moment(new Date(EXCELJSON[0].PlayTime)).format("YYYY-MM-DD");
                 const TIME_INDEX = Math.floor(new Date(PROGRAM_DATE).getTime()/1000);
@@ -113,17 +112,15 @@ class ProgramlistLoader {
             // do while loop until programlist can be read or no file can be read        
 
             try {
-                console.log(path+NORMALIZED_MONDAY_DATE+"chinasuntv.xls");
+
                 let result = await this.getProgramList(path+NORMALIZED_MONDAY_DATE+"chinasuntv.xls");
                 result["timestamp"] = timestamp;
                 result["list"] = this.formatProgramList(result);
                 resolve(result);
-                console.log("dates here");
 
             } catch(e) {
                 // throw invalid path error
                 reject(new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR,"no file can be read"))   
-                console.log("no file can be read");
 
             }                    
         

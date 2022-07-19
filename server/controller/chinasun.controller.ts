@@ -54,8 +54,6 @@ class ChinasunController {
         //get the latest data
         let data;
         let result;
-        console.log("query");
-        console.log(query);
 
         if(typeof query.timestamp !== "undefined") {
             // if user get timestamp without value
@@ -88,8 +86,6 @@ class ChinasunController {
                 }
 
             }
-            console.log("time");
-            console.log(query.timestamp);
         
         } else {
 

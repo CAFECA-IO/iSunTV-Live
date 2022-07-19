@@ -46,7 +46,6 @@ class ChinasunService {
         })
         // only one timestamp
         this.programList[result["timestamp"]] = result["list"];
-        console.log(result);
 
     }
 
