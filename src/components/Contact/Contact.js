@@ -144,8 +144,6 @@ class Contact extends React.Component {
                     }, 2500);
 
                 });
-
-                console.log("post send email request", res);
             
             });
 

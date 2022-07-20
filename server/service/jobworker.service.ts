@@ -12,7 +12,7 @@ class JobWorker {
      * set the default constructor without param
      */
     constructor() {
-
+        // nothing to do
     }
 
     /**
@@ -43,7 +43,7 @@ class JobWorker {
 
         // push new job
         this.jobQueue.push(function () {
-            console.log("comment: " + comment);
+
             return SendMail.sendMail(config, comment);          
         
         });
@@ -59,33 +59,30 @@ class JobWorker {
      */
     async runQueueLoop(q, config, comment) {
 
-        let runQueue = this.runQueue;
-        
-        return new Promise<any>( async (resolve, reject) => {
+        const runQueue = this.runQueue;
 
-            let result;
-            let stopFlag = 0;
+        let result;
+        let stopFlag = 0;
+        
+        // do while loop until all jobs are completed.
+        do {
+            // call run queue to call the sendmail job
+            result = await runQueue(q, config, comment);
             
-            // do while loop until all jobs are completed.
-            do {
-                // call run queue to call the sendmail job
-                result = await runQueue(q, config, comment);
-                
-                // print success if all jobs are complete
-                if (result != "error") {
-        
-                    stopFlag = 1;
-                    resolve(result);
-                
-                } else {
-                    // if meet error then run the next job
-                    stopFlag = 0;
-                
-                }
+            // print success if all jobs are complete
+            if (result != "error") {
     
-            } while ( stopFlag == 0 );
-        
-        })
+                stopFlag = 1;
+                return result;
+            
+            } else {
+                // if meet error then run the next job
+                stopFlag = 0;
+            
+            }
+
+        } while ( stopFlag == 0 );
+
     }
 
     /**
@@ -94,8 +91,8 @@ class JobWorker {
      */
     workerOn(comment) {
 
-        let q = this.jobQueue;
-        let config = this.config;
+        const q = this.jobQueue;
+        const config = this.config;
 
         // don't wait for runQueueLoop being completed
         this.runQueueLoop(q, config, comment);
@@ -114,7 +111,7 @@ class JobWorker {
      */
     async runQueue(q, config, comment) {
 
-        return new Promise<any>( async (resolve, reject) => {
+        return new Promise<any>((resolve, reject) => {
             
             // start to run the queue
             q.start((err)=> {

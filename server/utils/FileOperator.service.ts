@@ -6,7 +6,7 @@ import { ERROR_CODE }  from './ErrorCode';
 class FileOperator{
 
     constructor() {
-    
+        // nothing to do
     }
 
     /**
@@ -22,7 +22,7 @@ class FileOperator{
                 // err handling (add try catch)
                 // 1. invalid path
                 // 2. Folder can't be read
-                console.log(path);
+
                 if (err) {
                 
                     if (err.code === 'ENOENT') {
@@ -65,8 +65,7 @@ class FileOperator{
      */
     static excelToJson(sheetBuffer) {
         // transfer excel to json
-        let result;
-        result = xlsx.utils.sheet_to_json(sheetBuffer.Sheets[sheetBuffer.SheetNames[0]]);
+        const result = xlsx.utils.sheet_to_json(sheetBuffer.Sheets[sheetBuffer.SheetNames[0]]);
         return result;
 
     }
@@ -77,33 +76,31 @@ class FileOperator{
      * @returns a promise resolved result when the function is ready to be called
      */
     static async readFile(path) {
+        let file;
+        try {
+            file = xlsx.readFile(path, { type:'binary', cellDates:true } )
+        } catch(e) {
+            // Error:
+            // 1. invalid path
+            // 2. File can't be read
+            // return custom error code , message
+            if (e) {
+                let error;
+                if (e.code === 'ENOENT') {
+        
+                    error = new FileError(ERROR_CODE.INVALID_PATH_ERROR,"invalid path");
+                    throw error;
+        
+                } else {
+        
+                    error = new FileError(ERROR_CODE.FILE_NOT_READ_ERROR,"File can't be read");
+                    throw error;
 
-        return new Promise((resolve, reject) => {
-            
-            try {
-                let File;
-                File = xlsx.readFile(path, { type:'binary', cellDates:true } )
-                resolve(File);
-            
-            } catch(e) {
-                // Error:
-                // 1. invalid path
-                // 2. File can't be read
-                // return custom error code , message
-                if (e) {
-            
-                    if (e.code === 'ENOENT') {
-            
-                        reject(new FileError(ERROR_CODE.INVALID_PATH_ERROR,"invalid path"))
-            
-                    } else {
-            
-                        reject(new FileError(ERROR_CODE.FILE_NOT_READ_ERROR,"File can't be read"))
-            
-                    }
                 }
             }
-        });
+        }
+
+        return file;
     }   
 
 }

@@ -37,7 +37,7 @@ class AppModule implements NestModule {
    * set the default constructor without param
    */
   constructor() {
-  
+    // nothing to do
   }
 
   //the function of getting current time 

@@ -21,7 +21,7 @@ class ChinasunController {
      */
     constructor(private configService: ConfigService) {
     
-        this.chinasunService = new ChinasunService(configService);
+        this.chinasunService = new ChinasunService();
         this.initialize();
     
     }
@@ -36,11 +36,6 @@ class ChinasunController {
         const config = { XLSFOLDER_DIR };
         this.chinasunService.initialize(config);
     
-    }
-    
-    scanProgramlist() {
-        // update the latest programlist
-        this.chinasunService.getProgramlist();
     }
 
     /**
@@ -58,37 +53,27 @@ class ChinasunController {
         if(typeof query.timestamp !== "undefined") {
             // if user get timestamp without value
             if (query.timestamp === "") {
-                
                 try {
-
                     data = await this.chinasunService.getProgramlist(); 
-        
                     // check data in this week or not
                     result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
-        
                 } catch (e) {
                     
                     result = FormatterService.formatData(true, e.code, e.message, data);
-                }
-                            
+                }     
             } else {
-
                 try {
-
                     data = await this.chinasunService.getProgramlistWithTimestamp(query.timestamp); 
         
                     // check data in this week or not
                     result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
-        
                 } catch (e) {
-                    
                     result = FormatterService.formatData(true, e.code, e.message, data);
                 }
 
             }
         
         } else {
-
             try {
 
                 data = await this.chinasunService.getProgramlist(); 

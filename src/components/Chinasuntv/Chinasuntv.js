@@ -60,7 +60,7 @@ class Chinasuntv extends React.Component {
     
     componentDidMount() {
         // fetch the content from programlist api
-        fetch('http://localhost:3000/api/v1/chinasun/programlist')
+        fetch('/api/v1/chinasun/programlist')
             .then(response => response.json())
             .then(data => this.updateState(data));
     }

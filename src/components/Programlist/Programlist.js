@@ -49,7 +49,7 @@ class ProgramList extends React.Component {
     componentDidMount() {
         
         // fetch the programlist from api 
-        fetch('http://localhost:3000/api/v1/chinasun/programlist')
+        fetch('/api/v1/chinasun/programlist')
             .then(response => response.json())
             .then(data => { this.updateState(data) });
 
@@ -135,7 +135,6 @@ class ProgramList extends React.Component {
             let index = 0;
             
             WEEK.forEach((date)=> {
-                console.log(date);
                 // get the weekdate in this week
                 const WEEKDATE = moment(new Date(date)).format('dddd').slice(0, 3);
                 const DAY = chineseWeek[WEEKDATE];
