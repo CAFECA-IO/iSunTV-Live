@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Query } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import FormatterService from 'server/utils/Formatter.service';
 import ChinasunService from '../service/chinasun.service'; 
@@ -19,7 +19,7 @@ class ChinasunController {
      * set the default configservice and initialize the chinasun service
      * @param configService options to let user use config in the controller
      */
-    constructor(private readonly configService: ConfigService) {
+    constructor(private configService: ConfigService) {
     
         this.chinasunService = new ChinasunService();
         this.initialize();
@@ -42,18 +42,53 @@ class ChinasunController {
      * handle the chinasun/updated_files route
      * @controller ChinasunController
      */
+    //get programlist and  programlist?timestamp=
     @Get('programlist')
-    async getUpdated_details() {
+    // apigetprogramlist
+    async apiGetProgramlist(@Query() query) {
         //get the latest data
         let data;
         let result;
-        // get the uodated data and handle the error
-        try {
-            data = await this.chinasunService.getUpdatedData(); 
-            result = FormatterService.formatData(true,ERROR_CODE.SUCCESS, "programlist", data);
-        } catch(e) {
-            result = FormatterService.formatData(true, e.code, e.message, data);
-        }
+
+        if(typeof query.timestamp !== "undefined") {
+            // if user get timestamp without value
+            if (query.timestamp === "") {
+                try {
+                    data = await this.chinasunService.getProgramlist(); 
+                    // check data in this week or not
+                    result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+                } catch (e) {
+                    
+                    result = FormatterService.formatData(true, e.code, e.message, data);
+                }     
+            } else {
+                try {
+                    data = await this.chinasunService.getProgramlistWithTimestamp(query.timestamp); 
+        
+                    // check data in this week or not
+                    result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+                } catch (e) {
+                    result = FormatterService.formatData(true, e.code, e.message, data);
+                }
+
+            }
+        
+        } else {
+            try {
+
+                data = await this.chinasunService.getProgramlist(); 
+    
+                // check data in this week or not
+                result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+    
+            } catch (e) {
+                
+                result = FormatterService.formatData(true, e.code, e.message, data);
+            }
+        
+        } 
+
+        // get the updated data and handle the error
         
         return result;
     }

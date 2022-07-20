@@ -29,7 +29,7 @@ class MiddlemainMiddleware implements NestMiddleware {
     use(req: IncomingMessage, res: ServerResponse, next:any ) {
         
         // didn't use query
-
+        // Filter
         if(req.url.slice(0,4) === "/api") {
             // if api is '/api/v1/i18n/'.. then return i18n realted response
             if(req.url.slice(0,13) === "/api/v1/i18n/") {
@@ -47,15 +47,8 @@ class MiddlemainMiddleware implements NestMiddleware {
                     res.end();
                 }             
             
-            }else if(req.url.slice(0,17) === "/api/v1/chinasun/") {
+            } else if(req.url.slice(0,28) === "/api/v1/chinasun/programlist") {
                 // if the prefix = '/api/v1/chinasun/' then call controller and let middleware response the error message;
-                if(req.url!="/api/v1/chinasun/programlist" && req.url!="/api/v1/chinasun/programlist/") {
-                
-                    res.writeHead(200, { 'content-type': 'application/json' });
-                    res.write(JSON.stringify(FormatterService.formatData(false,ERROR_CODE.API_NOT_SUPPORT_ERROR,"api not support",{})))
-                    res.end();
-            
-                } else {
 
                     try{
                     
@@ -68,8 +61,6 @@ class MiddlemainMiddleware implements NestMiddleware {
                         res.end();                        
                     
                     }          
-                
-                }
             
             } else if(req.url === "/api/v1/sendmail/" || req.url === "/api/v1/sendmail") {
                 // handle the path isn't i18n or chinasun
