@@ -1,4 +1,4 @@
-const REPORT_WEB_VITALS = onPerfEntry => {
+const reportWebVitals = onPerfEntry => {
 
   if (onPerfEntry && onPerfEntry instanceof Function) {
   
@@ -16,4 +16,4 @@ const REPORT_WEB_VITALS = onPerfEntry => {
 
 };
 
-export default REPORT_WEB_VITALS;
+export default reportWebVitals;

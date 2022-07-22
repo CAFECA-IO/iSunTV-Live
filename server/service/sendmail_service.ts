@@ -1,23 +1,37 @@
 import { Injectable } from '@nestjs/common';
 import queue from 'queue';
-import JobWorker from './jobworker.service';
-import { ERROR_CODE } from '../constant/ErrorCode';
-import FormatterService from 'server/utils/Formatter.service';
+import JobWorker from './jobworker_service';
+import { ERROR_CODE } from '../constant/error_code';
+import FormatterService from 'server/utils/formatter_service';
+
+// type definitaion
+type apiResponse= { 
+    powerby: string;
+    success: boolean;
+    code: string;
+    message: string;
+    payload: object;
+};
+
+type emailConfig = {
+    googleClientID: string; 
+    googleClientPassword: string; 
+};
 
 @Injectable()
 class SendMailService {
     
     /** @param {any} jobWorker default job worker*/
-    jobWorker: any;
+    jobWorker: JobWorker;
     /** @param {any} config default email config*/
-    config: any;
+    config: emailConfig;
 
     //the class constructor
     /**
      * set the default constructor without param
      */
     constructor() {
-
+        // nothing to do
     } 
 
     // sendmail service initialize the job queue and job worker
@@ -25,12 +39,12 @@ class SendMailService {
      * initialize the SendMailService
      * @param config means email config
      */
-    initialze(config) {
+    initialze(config: emailConfig) {
 
         // create job worker
         this.jobWorker = new JobWorker();
         // initialize the jobQueue
-        let jobQueue = queue({ results: [] });
+        const jobQueue = queue({ results: [] });
 
         this.config = config;
         // initialize the jobWorker : put job queue and email config in the job worker
@@ -43,9 +57,9 @@ class SendMailService {
      * initialize the SendMailService
      * @param config means email config
      */
-    async sendMail(comment) {
+    async sendMail(comment: string): Promise<apiResponse> {
 
-        let config = this.config;
+        const config = this.config;
         // push job into queue
         this.jobWorker.pushQueue(config, comment);
         // call the workerOn function in the Job Worker

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { transferToTime, transferToWeek, transferToWeekInfo, getThisWeekDay } from '../../utils/TimeOperator';
 import update from 'immutability-helper';
 import moment from 'moment';
-import './Programlist.scss';
+import './programlist.scss';
 
 // change the programlist here
 // we need to change prop to our upper class's (APP) componentdatamount data first 

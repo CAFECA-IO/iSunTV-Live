@@ -41,16 +41,16 @@ function transferToTime(datetime) {
  */
 function transferToWeek(data) {
 
-        const WEEK_SET = new Set();
+        const weekSet = new Set();
         
         data.forEach((item, index) => {
 
             let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
-            WEEK_SET.add(datetime);
+            weekSet.add(datetime);
     
         });
         
-        return [...WEEK_SET];
+        return [...weekSet];
     
 }
 
@@ -90,24 +90,24 @@ function transferToWeekInfo(data, week) {
  */  
 function getThisWeekDay() {
 
-    const CURRENT_WEEKDAYS = [];
+    const currentWeekdays = [];
     // get monday in this week
-    const TODAY = new Date(Date.now());
+    const today = new Date(Date.now());
 
     // push dates in this week
     for ( let i = 0; i < 7 ; i++ ) {
 
         // get the diff of day between day of today and monday
-        let day = TODAY.getDate() - TODAY.getDay() + 1 + i;
-        let normalizedDay  = new Date(TODAY.setDate(day));
+        let day = today.getDate() - today.getDay() + 1 + i;
+        let normalizedDay  = new Date(today.setDate(day));
         // normalize the day to weekday needed to be pushed to weeklist
         normalizedDay = moment(new Date(normalizedDay)).format('YYYY-MM-DD');
         // push day of this week to CURRENT_WEEKDAYS list 
-        CURRENT_WEEKDAYS.push(normalizedDay);
+        currentWeekdays.push(normalizedDay);
     
     }
     
-    return CURRENT_WEEKDAYS;
+    return currentWeekdays;
     
 }
 

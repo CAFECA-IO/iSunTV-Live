@@ -1,5 +1,5 @@
-export const FETCH_PROGRAMLIST = 'FETCH_PROGRAMLIST'
-export const SEND_EMAIL = 'SEND_EMAIL'
+export const fetchProgramlist = 'FETCH_PROGRAMLIST'
+export const sendEmail = 'SEND_EMAIL'
 
 
 // fetch the programlist

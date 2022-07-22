@@ -1,7 +1,7 @@
 import { NestMiddleware } from "@nestjs/common";
 import { ServerResponse, IncomingMessage } from 'http';
-import FormatterService  from "server/utils/Formatter.service";
-import { ERROR_CODE } from '../utils/ErrorCode';
+import FormatterService  from "server/utils/formatter_service";
+import { ERROR_CODE } from '../constant/error_code';
 
 /**
  * handle the request and response
@@ -26,7 +26,7 @@ class MiddlemainMiddleware implements NestMiddleware {
      * @param {ServerResponse} res store the server reponse
      * @param {ServerResponse} next is the function that make the route direct to controller 
      */    
-    use(req: IncomingMessage, res: ServerResponse, next:any ) {
+    use(req: IncomingMessage, res: ServerResponse, next: any ) {
         
         // didn't use query
         // Filter

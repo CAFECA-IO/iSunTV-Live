@@ -10,8 +10,8 @@ class AppService {
 
   constructor() {
 
-    this.xlsFolder=process.cwd()+'/xls';
-    this.Content=null;
+    this.xlsFolder = process.cwd() + '/xls';
+    this.Content = null;
   
   }
 }

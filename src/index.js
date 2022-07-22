@@ -1,17 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
-import App from './container/App/App';
+import App from './container/app/app';
 import REPORT_WEB_VITALS from './utils/reportWebVitals';
 import './i18n/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { CookiesProvider } from 'react-cookie';
 
 // create react root
-const ROOT = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // initialize I18nProvider, CookieProvider, App
-ROOT.render(
+root.render(
   <I18nextProvider>
     <CookiesProvider>
         <React.StrictMode>

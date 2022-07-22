@@ -1,7 +1,20 @@
-import FileOperator from './FileOperator.service';
-import FileError from './FileError';
-import { ERROR_CODE } from './ErrorCode';
+import FileOperator from './file_operator_service';
+import FileError from './file_error';
+import { ERROR_CODE } from '../constant/error_code';
 import Common from './common';
+
+type programList = {
+    timestamp: string;
+    list: object[];
+};
+
+type original_progrmalist = {
+    prgID : string;
+    prgName : string;
+    PlayTime : string;
+    prgColumn : string;
+    prgComment : string;
+};
 
 class ProgramlistLoader {
 
@@ -14,17 +27,17 @@ class ProgramlistLoader {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async getLatestProgramList(path) {
+    static async getLatestProgramList(path: string): Promise<programList> {
         
         const fileList = await FileOperator.getFileList(path);
         let result;
         let fileIndex;
         fileIndex = fileList.length - 1;    
-     
+
         do {
     
             try {
-                result = await this.getProgramList(path+fileList[fileIndex].name);
+                result = await this.getProgramList(path + fileList[fileIndex].name);
                 fileIndex = fileIndex - 1;
                 break;
         
@@ -46,6 +59,7 @@ class ProgramlistLoader {
             }
             
         } while (fileIndex >= 0);
+
         return result;
     }
      
@@ -54,21 +68,25 @@ class ProgramlistLoader {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async getProgramList(path) {
+    static async getProgramList(path: string): Promise<programList>{
+        // define the result of the program
+        const result = {
+            timestamp: null,
+            list: []         
+        };
         // readfile -> transfer excel to json -> format the result and return it
         // Error:
         // 1. invalid path
         // 2. File can't be read
-        const result = {};
         const file = await FileOperator.readFile(path);
         const exceljson = await FileOperator.excelToJson(file);
-        const program:any = exceljson[0];
+        const program: any = exceljson[0];
         const programTimestamp = new Date(program.playTime).getTime();
         const programMonday = Common.getCurrentMonday(programTimestamp);
         const timeIndex = new Date(programMonday).getTime() / 1000;
+        
         result["timestamp"] = timeIndex;
         result["list"] = this.formatProgramList(exceljson);
-        console.log(timeIndex, programTimestamp, programMonday)
         return result;
     }
     /**
@@ -76,7 +94,7 @@ class ProgramlistLoader {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-     static async getProgramListWithTimestamp(path, timestamp) {
+     static async getProgramListWithTimestamp(path: string, timestamp: number): Promise<object[]> {
         // readfile -> transfer excel to json -> format the result and return it
         // Error:
         // 1. invalid path
@@ -84,28 +102,23 @@ class ProgramlistLoader {
         // unix time -> current date
         let result;
         const unixtimestamp = timestamp * 1000;
-        const CERTAIN_DATE = new Date(unixtimestamp);
-        console.log(timestamp);
-        console.log(CERTAIN_DATE);
-
-        const CURRENT_MONDAY_DATE = Common.getCurrentMonday(CERTAIN_DATE);
+        const currentMondayDate = Common.getCurrentMonday(unixtimestamp);
         // normalize monday date
-        const NORMALIZED_MONDAY_DATE = Common.getFormatedDate(new Date(CURRENT_MONDAY_DATE), 'YYYYMMDD');
-        console.log(NORMALIZED_MONDAY_DATE);
+        const normalizedMondayDate = Common.getFormatedDate(new Date(currentMondayDate), 'YYYYMMDD');
 
         try {
 
-            result = await this.getProgramList(path+NORMALIZED_MONDAY_DATE+"chinasuntv.xls");
-            result["timestamp"] = timestamp;
-            result["list"] = this.formatProgramList(result);
-
+            const filePath = path + normalizedMondayDate + "chinasuntv.xls";
+            result = await this.getProgramList(filePath);
+            
         } catch(e) {
             // throw invalid path error
-            const error = new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR,"no file can be read");
+            const error = new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR, "no file can be read");
             throw error;
         }
-        return result;               
+        return result["list"];               
     }
+
     /**
      * original data resource is already formatted,
      * so this function is used to deal with the undefined condition 
@@ -113,15 +126,12 @@ class ProgramlistLoader {
      * @param data options to start the function with
      * @returns formatted data without undefined
      */   
-    static formatProgramList(data) {
+    static formatProgramList(data: any): original_progrmalist[]|[] {
 
         // invalid(無法解析) => return []
         if (typeof data == 'undefined' || data === null) {
-
             return [];
-    
         }
-
         // assign the programlist to the formatted json with null
         const result = data.map((program) => {
 

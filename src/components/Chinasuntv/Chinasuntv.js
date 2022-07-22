@@ -1,9 +1,9 @@
 /* eslint-disable no-extra-boolean-cast */
 import React from 'react';
 import PropTypes from 'prop-types';
-import Video from '../Video/Video';
+import Video from '../video/video';
 import { transferToTime } from '../../utils/TimeOperator';
-import './Chinasuntv.scss';
+import './chinasuntv.scss';
 
 class Chinasuntv extends React.Component {
 
