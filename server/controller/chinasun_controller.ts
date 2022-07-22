@@ -61,6 +61,7 @@ class ChinasunController {
         if(typeof query.timestamp !== "undefined") {
             // if user get timestamp without value
             if (query.timestamp === "") {
+                
                 try {
                     data = await this.chinasunService.getProgramlist(); 
                     // check data in this week or not

@@ -40,18 +40,22 @@ class Common {
     }
 
     // ++ ToDo: complete formater
-    // data = { Y: '56789', M: '2', D: '3'};
+    // data = { a: '56789', b: '2', c: '3' , d: '0044'};
     // format = 'YYYYMMDD'
     // 補0 , 切割
     // result = '56780230044'
-    static dataFormater(data: dateJson, format: string): string {
+    static dataFormater(data: object, format: string): string {
         // set values here
         // if user input two numbers-> return 20xx
+        // input buffer and meet the format
+        // key 不一定相
+        // check if the string can be transfered to
         const formatData = {
             Y: data.Y,
             M: data.M,
             D: data.D            
         };
+
 
         let result;
 

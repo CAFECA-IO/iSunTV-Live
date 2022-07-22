@@ -28,6 +28,8 @@ class ChinasunService {
         
         this.xlsFolder = XLSFOLDER_DIR;
         await this.getLatestProgramList();
+
+        // set the watcher here, if the watcher start, call getLatestProgramList() to store the result 
         const watcher = hound.watch(this.xlsFolder);
 
         watcher.on('create', async () => {
@@ -46,9 +48,11 @@ class ChinasunService {
     }
 
     async getLatestProgramList(): Promise<boolean> {
+
         const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
         this.programList[result["timestamp"]] = result["list"];
         return true;
+    
     }
 
     //the function of getting updated data
@@ -62,7 +66,6 @@ class ChinasunService {
         return this.getProgramlistWithTimestamp(now);
 
     }
-    // return 
 
     //the function of getting updated data
     /**
@@ -71,17 +74,17 @@ class ChinasunService {
      async getProgramlistWithTimestamp(timestamp: number): Promise<object[]> {   
 
         let result;
+        // unitimetstamp
         const unixtimestamp = timestamp * 1000;
         const thisMonday = Common.getCurrentMonday(unixtimestamp);
-        // get not local monday;
-
         const index = Math.floor(thisMonday.getTime() / 1000);
 
         // if programlist contains key named timestamp
         if(this.programList[index] == undefined) {
+
             result = await ProgramlistLoader.getProgramListWithTimestamp(this.xlsFolder, index);
-            // ++ todo: check result
             this.programList[result["timestamp"]] = result["list"];
+
             return result || [];
         }
         else {
