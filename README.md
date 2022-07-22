@@ -51,10 +51,10 @@ npm run start
 
 # Folder structure
 ## Frontend
-- Frontend: src/
-- 編譯後的 Frontend: build/
-- 靜態檔案存放: public/
+- src/ : Frontend
+- build/ : 編譯後的 Frontend
+- public/ : 靜態檔案存放
 ## Backend
-- Backend: server/
-- 編譯後的 Backend: dist/
-- 節目表檔案： xls/
+- server/ : Backend
+-  dist/ : 編譯後的 Backend
+-  xls/ : 節目表檔案 
