@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import queue from 'queue';
 import JobWorker from './jobworker.service';
-import { ERROR_CODE } from '../utils/ErrorCode';
+import { ERROR_CODE } from '../constant/ErrorCode';
 import FormatterService from 'server/utils/Formatter.service';
 
 @Injectable()
