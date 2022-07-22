@@ -18,7 +18,7 @@ class MiddlemainMiddleware implements NestMiddleware {
      * set the default constructor without param
      */
     constructor() {
-    
+        // nothing to do
     }
     // a function is executed for handling request and response
     /**
@@ -75,9 +75,7 @@ class MiddlemainMiddleware implements NestMiddleware {
                     res.end();                        
                 
                 }  
-            } else {
-
-            }
+            } 
 
         } else {
             // 前端 path 但目前尚未設定要使用哪幾個 path
