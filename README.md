@@ -48,3 +48,11 @@ npm run start
 ```
 3. 進入 [http://localhost:3000/api/v1](http://localhost:3000/api/v1) 即進入 api
 4. 使用 api 的規則請詳閱 wiki
+
+# Folder structure
+- Frontend: src/
+- 編譯後的 Frontend: build/
+- 靜態檔案存放: public/
+- Backend: server/
+- 編譯後的 Backend: dist/
+- 節目表檔案： xls/
