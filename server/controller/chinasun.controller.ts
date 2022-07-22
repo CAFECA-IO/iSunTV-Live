@@ -21,7 +21,7 @@ class ChinasunController {
      */
     constructor(private configService: ConfigService) {
     
-        this.chinasunService = new ChinasunService(configService);
+        this.chinasunService = new ChinasunService();
         this.initialize();
     
     }
