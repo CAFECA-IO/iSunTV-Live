@@ -85,10 +85,12 @@ class ProgramlistLoader {
         const programMonday = Common.getCurrentMonday(programTimestamp);
         const timeIndex = new Date(programMonday).getTime();
 
+        // return the foramted programlist 
         result["timestamp"] = timeIndex;
         result["list"] = this.formatProgramList(exceljson);
         return result;
     }
+
     /**
      * get the programlist with given options
      * @param path options to start the function with
@@ -108,10 +110,8 @@ class ProgramlistLoader {
         // 2. File can't be read
         // unix time -> current date
         try {
-
             const filePath = path + normalizedMondayDate + "chinasuntv.xls";
             result = await this.getProgramListFromFile(filePath);
-
         } catch(e) {
             // throw invalid path error
             const error = new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR, "no file can be read");
