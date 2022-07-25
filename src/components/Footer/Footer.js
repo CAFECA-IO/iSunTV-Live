@@ -1,5 +1,5 @@
 import { React } from "react";
-import './Footer.scss';
+import './footer.scss';
 
 // use function component to pass the footer text
 const FOOTER = (props) => {    

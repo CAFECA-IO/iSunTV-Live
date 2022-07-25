@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unescaped-entities */
 import React from 'react';
-import './About.scss';
+import './about.scss';
 
 class About extends React.Component {
 

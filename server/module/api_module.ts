@@ -1,16 +1,15 @@
-import { Module, OnModuleInit } from '@nestjs/common';
+import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { ConfigService } from '@nestjs/config';
-import ChinasunController from '../controller/chinasun.controller'
-import ChinasunService from '../service/chinasun.service';
-import SendMailController from '../controller/sendmail.controller';
-import SendMailService from '../service/sendmail.service';
+import ChinasunController from '../controller/chinasun_controller'
+import ChinasunService from '../service/chinasun_service';
+import SendMailController from '../controller/sendmail_controller';
+import SendMailService from '../service/sendmail_service';
 import {
     AcceptLanguageResolver,
     I18nModule,
     QueryResolver,
   } from 'nestjs-i18n';
-import AppService from 'server/app.service';
+import AppService from 'server/app_service';
 
 // import ConfigModule, I18nModule, Controllers
 @Module({
@@ -43,17 +42,10 @@ import AppService from 'server/app.service';
  * handle all api
  * @module ApiModule
  */
-class ApiModule implements OnModuleInit {
+class ApiModule {
 
-      constructor(private readonly configService: ConfigService) {
-
-      }
-      // a function is executed after all controllers are imported 
-      /**
-       * return @param {string} result store the current yyyymmdd string
-       */
-      onModuleInit() {
-      
+      constructor() {
+        // nothing to do 
       }
 
 }

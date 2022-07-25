@@ -1,7 +1,7 @@
 import React from 'react';
 import update from 'immutability-helper';
 import { addEventListener } from '../../utils/event';
-import "./Header.scss";
+import "./header.scss";
 
 class Header extends React.Component {
 

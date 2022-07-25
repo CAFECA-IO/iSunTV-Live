@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
-import './Contact.scss';
+import './contact.scss';
 
 class Contact extends React.Component {
     
@@ -115,7 +115,7 @@ class Contact extends React.Component {
             };
 
             // put send mail in redux
-            fetch("http://localhost:3000/api/v1/sendmail", {
+            fetch("/api/v1/sendmail", {
 
                 method: "POST", 
                 body: JSON.stringify(DATA),
