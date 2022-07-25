@@ -1,16 +1,19 @@
 import DateError from "./date_error";
 import { ERROR_CODE } from "server/constant/error_code";
+
 class Common {
 
-    // type input getCurrentMonday
-    // type output getCurrentMonday
-    // 加上 變數type註解
+    /**
+     * get the data of the certain week 
+     * @param unixtimestamp options to start the function with
+     * @returns monday date
+     */
     static getCurrentMonday(unixtimestamp: number): Date {
         
         const normalizedTime = new Date(Math.floor(unixtimestamp));
         const normalizedUnixtimestamp = normalizedTime.getTime();
         const offset = normalizedTime.getTimezoneOffset();
-
+        // set the interval and minus the offset to get the local time
         const interval = 24 * 60 * 60 * 1000;
         const timestamp = normalizedUnixtimestamp > 0 ? Math.floor(normalizedUnixtimestamp) - (offset * 60 * 1000): new Date().getTime();
         const currentDayBeforeMonday = (new Date(timestamp).getDay() - 1) * interval;
@@ -19,10 +22,15 @@ class Common {
 
         return result;
 
-
     }
 
     // ++ ToDo: complete exception handler
+    /**
+     * get the data of the certain week 
+     * @param date options to start the function with
+     * @param format means the format that user want to format the date
+     * @returns formatted date
+     */
     static async getFormatedDate(date: Date, format = "YYYYMMDD"): Promise<string> {
 
         // if date can't be the transfer to date
@@ -39,7 +47,7 @@ class Common {
             return result;
         } catch (e) {
             // catch the error (for example: RangeError: invalid date)
-            throw new DateError(ERROR_CODE.INVALID_DATE_ERROR, "invalid date")
+            throw new DateError(ERROR_CODE.INVALID_DATE_ERROR, "invalid date");
         }
 
     }
@@ -50,13 +58,19 @@ class Common {
     // result = '56780230044'
     // 補0 , 切割
     // result = '56780230044'
+    /**
+     * format the data with certain format
+     * @param data 
+     * @param format means the format that user want to format the date
+     * @returns formatted date
+     */
     static dataFormater(data: object, format: string): string {
 
         let result = "";
-        do{
+        do {
             const firstChar = format.charAt(0);
             // if the length of string mapped by format key in data object !== 0 
-            if(data[firstChar].length !== 0){
+            if(data[firstChar].length !== 0) {
                 // add char in data to result
                 result = result + data[firstChar][0];
                 // pop the element in data object (because it's added in result now)
@@ -64,7 +78,7 @@ class Common {
                 // pop the format element (because we met the requirement before)
                 format = format.substring(1);
             // check firstChar == "/" or "-" which is not in data object
-            } else if(firstChar === "/" || firstChar === "-"){
+            } else if(firstChar === "/" || firstChar === "-") {
                 // check not number result = result + firstChar;
                 result = result + firstChar;
                 format = format.substring(1);
@@ -73,11 +87,8 @@ class Common {
                 result = result + "0"
                 format = format.substring(1)
             }
-
         } while (format.length > 0)
-
         return result;
-
     }
 }
 
