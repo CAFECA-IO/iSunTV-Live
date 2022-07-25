@@ -23,7 +23,7 @@ class ProgramlistLoader {
     }
 
     /**
-     * get the latest programlist with given options
+     * get the latest programlist with given options, this is used for initialization
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
@@ -37,7 +37,7 @@ class ProgramlistLoader {
         do {
     
             try {
-                result = await this.getProgramList(path + fileList[fileIndex].name);
+                result = await this.getProgramListFromFile(path + fileList[fileIndex].name);
                 fileIndex = fileIndex - 1;
                 break;
         
@@ -68,7 +68,7 @@ class ProgramlistLoader {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async getProgramList(path: string): Promise<programList>{
+    static async getProgramListFromFile(path: string): Promise<programList>{
         // define the result of the program
         const result = {
             timestamp: null,
@@ -110,7 +110,7 @@ class ProgramlistLoader {
         try {
 
             const filePath = path + normalizedMondayDate + "chinasuntv.xls";
-            result = await this.getProgramList(filePath);
+            result = await this.getProgramListFromFile(filePath);
 
         } catch(e) {
             // throw invalid path error

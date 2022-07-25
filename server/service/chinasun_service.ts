@@ -83,6 +83,7 @@ class ChinasunService {
             // set list in programlist
             result = await ProgramlistLoader.getProgramListWithUnixTimestamp(this.xlsFolder, unixtimestamp);
             this.programList[result["timestamp"]] = result["list"];
+            // return pure result list
             return this.programList[result["timestamp"]] || [];
         }
         else {
