@@ -1,9 +1,3 @@
-// define the type of the date ibj
-type dateJson = {
-    Y: string;
-    M: string;
-    D: string;
-}
 
 class Common {
 
@@ -35,68 +29,40 @@ class Common {
             M: elements[1],
             D: elements[2]
         };
+        // if date can't be the 
         const result = this.dataFormater(data, format);
         return result;
     }
 
     // ++ ToDo: complete formater
-    // data = { a: '56789', b: '2', c: '3' , d: '0044'};
-    // format = 'YYYYMMDD'
+    // data = { a: '56789', b: '2', c: '3', D: '44' };
+    // format = 'aaaabbcDDDD'
+    // result = '56780230044'
     // 補0 , 切割
     // result = '56780230044'
     static dataFormater(data: object, format: string): string {
-        // set values here
-        // if user input two numbers-> return 20xx
-        // input buffer and meet the format
-        // key 不一定相
-        // check if the string can be transfered to
-        const formatData = {
-            Y: data.Y,
-            M: data.M,
-            D: data.D            
-        };
 
-
-        let result;
-
-        // if Y.length < 4 ,add 0 to end of the string
-        if(data.Y.length < 4) {
-
-            for (let i = data.Y.length ; i < 4; i++) {
-                formatData.Y = formatData.Y + "0";
+        let result = "";
+        do{
+            const firstChar = format.charAt(0);
+            if(data[format.charAt(0)].length !== 0){
+                // add char in data to formated_data
+                result = result + data[format.charAt(0)][0];
+                // pop the element in data
+                data[format.charAt(0)] = data[format.charAt(0)].substring(1);
+                //  pop the format element
+                format = format.substring(1);
+            } else if(firstChar==="/"||firstChar==="-"){
+                // check not number result=result + format.charAt(0);
+                result = result + format.charAt(0);
+                format = format.substring(1);
+            } else {
+                // if no data 補 0
+                result = result + "0"
+                format = format.substring(1)
             }
 
-        }
-        // if M.length < 2 ,add 0 to front of the string
-        if(data.M.length < 2) {
-            formatData.M = '0' + formatData.M;
-        } 
-        // if D.length < 2 ,add 0 to front of the string
-        if(data.D.length < 2) {
-            formatData.D = '0' + formatData.D;
-        }
-
-        // deal with different format
-        switch (format) {
-
-            case 'YYYYMMDD':
-                result = formatData.Y + formatData.M + formatData.D;                 
-                break;
-            
-            case 'YYYY-MM-DD':
-                result = formatData.Y + "-" + formatData.M + "-" + formatData.D;    
-                break;
-            
-            case 'YYYY/MM/DD':
-                result = formatData.Y + "/" + formatData.M + "/" + formatData.D;    
-                break;
-            
-            default:
-                // return YYYYMMDD
-                result = formatData.Y + formatData.M + formatData.D;    
-                break;
-        
-        }
+        } while (format.length > 0)
 
         return result;
 
