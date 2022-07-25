@@ -50,16 +50,17 @@ class Common {
         let result = "";
         do{
             const firstChar = format.charAt(0);
+            // if the length of string mapped by format key in data object !== 0 
             if(data[firstChar].length !== 0){
                 // add char in data to result
                 result = result + data[firstChar][0];
-                // pop the element in data
+                // pop the element in data object (because it's added in result now)
                 data[firstChar] = data[firstChar].substring(1);
-                //  pop the format element
+                // pop the format element (because we met the requirement before)
                 format = format.substring(1);
             // check firstChar == "/" or "-" which is not in data object
             } else if(firstChar === "/"||firstChar === "-"){
-                // check not number result=result + firstChar;
+                // check not number result = result + firstChar;
                 result = result + firstChar;
                 format = format.substring(1);
             } else {
