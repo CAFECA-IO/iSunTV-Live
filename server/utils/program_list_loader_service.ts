@@ -81,10 +81,10 @@ class ProgramlistLoader {
         const file = await FileOperator.readFile(path);
         const exceljson = await FileOperator.excelToJson(file);
         const program: any = exceljson[0];
-        const programTimestamp = new Date(program.playTime).getTime();
+        const programTimestamp = new Date(program["PlayTime"]).getTime();
         const programMonday = Common.getCurrentMonday(programTimestamp);
-        const timeIndex = new Date(programMonday).getTime() / 1000;
-        
+        const timeIndex = new Date(programMonday).getTime();
+
         result["timestamp"] = timeIndex;
         result["list"] = this.formatProgramList(exceljson);
         return result;
@@ -94,29 +94,30 @@ class ProgramlistLoader {
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-     static async getProgramListWithTimestamp(path: string, timestamp: number): Promise<object[]> {
+     static async getProgramListWithUnixTimestamp(path: string, unixtimestamp: number): Promise<object[]> {
+
+        let result;
+        // change the unixtimestamp to monday date
+        const currentMondayDate = Common.getCurrentMonday(unixtimestamp);
+        // normalize monday date to local monday and ge the normalized monday date 'YYYYMMDD'
+        const normalizedMondayDate = await Common.getFormatedDate(new Date(currentMondayDate.getTime()), 'YYYYMMDD');
+    
         // readfile -> transfer excel to json -> format the result and return it
         // Error:
         // 1. invalid path
         // 2. File can't be read
         // unix time -> current date
-        let result;
-        const unixtimestamp = timestamp * 1000;
-        const currentMondayDate = Common.getCurrentMonday(unixtimestamp);
-        // normalize monday date
-        const normalizedMondayDate = Common.getFormatedDate(new Date(currentMondayDate), 'YYYYMMDD');
-
         try {
 
             const filePath = path + normalizedMondayDate + "chinasuntv.xls";
             result = await this.getProgramList(filePath);
-            
+
         } catch(e) {
             // throw invalid path error
             const error = new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR, "no file can be read");
             throw error;
         }
-        return result["list"];               
+        return result;               
     }
 
     /**

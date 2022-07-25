@@ -12,6 +12,8 @@ type apiResponse = {
     message: string;
     payload: object;
 };
+
+// need to user Filter here
 /**
  * handle the chinasun route
  * @controller ChinasunController
@@ -58,37 +60,8 @@ class ChinasunController {
         let data;
         let result;
 
-        if(typeof query.timestamp !== "undefined") {
+        if(isNaN(parseInt(query.timestamp))) {
             // if user get timestamp without value
-            if (query.timestamp === "") {
-                
-                try {
-                    data = await this.chinasunService.getProgramlist(); 
-                    // check data in this week or not
-                    result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
-                } catch (e) {
-                    
-                    result = FormatterService.formatData(true, e.code, e.message, data);
-                }     
-
-            } else {
-
-                try {
-
-                    data = await this.chinasunService.getProgramlistWithTimestamp(query.timestamp); 
-
-                    // check data in this week or not
-                    result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
-                
-                } catch (e) {
-                
-                    result = FormatterService.formatData(true, e.code, e.message, data);
-                
-                }
-
-            }
-        
-        } else {
             try {
 
                 data = await this.chinasunService.getProgramlist(); 
@@ -101,9 +74,22 @@ class ChinasunController {
                 result = FormatterService.formatData(true, e.code, e.message, data);
             }
         
-        } 
+        } else {
+            // if user get timestamp with value
+            try {
 
-        // get the updated data and handle the error
+                data = await this.chinasunService.getProgramlistWithUnixTimestamp(query.timestamp); 
+
+                // check data in this week or not
+                result = FormatterService.formatData(true, ERROR_CODE.SUCCESS, "programlist", data);
+            
+            } catch (e) {
+            
+                result = FormatterService.formatData(true, e.code, e.message, data);
+            
+            }
+        
+        } 
         
         return result;
     }

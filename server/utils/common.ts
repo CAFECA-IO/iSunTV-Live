@@ -6,18 +6,18 @@ class Common {
     // type output getCurrentMonday
     // 加上 變數type註解
     static getCurrentMonday(unixtimestamp: number): Date {
-
         const interval = 24 * 60 * 60 * 1000;
-        const timestamp = unixtimestamp > 0 ? unixtimestamp: new Date().getTime();
+        const timestamp = unixtimestamp > 0 ? Math.floor(unixtimestamp): new Date().getTime();
         const currentDayBeforeMonday = (new Date(timestamp).getDay() - 1) * interval;
         const currentMondayTimestamp = timestamp - (timestamp % interval) - currentDayBeforeMonday;        
         const result = new Date(currentMondayTimestamp);
         return result;
-    
+
+
     }
 
     // ++ ToDo: complete exception handler
-    static getFormatedDate(date: Date, format = "YYYYMMDD"): string {
+    static async getFormatedDate(date: Date, format = "YYYYMMDD"): Promise<string> {
 
         // if date can't be the transfer to date
         try {

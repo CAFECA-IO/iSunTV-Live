@@ -61,9 +61,9 @@ class ChinasunService {
      */
     async getProgramlist(): Promise<object[]> {    
 
-        // timestamp now
-        const now = Math.floor(new Date().getTime() / 1000);
-        return this.getProgramlistWithTimestamp(now);
+        // use now timestamp to get now programlist
+        const now = new Date().getTime();
+        return this.getProgramlistWithUnixTimestamp(now);
 
     }
 
@@ -71,24 +71,23 @@ class ChinasunService {
     /**
      * return @param {string} result store the current yyyymmdd string
      */
-     async getProgramlistWithTimestamp(timestamp: number): Promise<object[]> {   
+     async getProgramlistWithUnixTimestamp(unixtimestamp: number): Promise<object[]> {   
 
         let result;
-        // unitimetstamp
-        const unixtimestamp = timestamp * 1000;
+        // get unixtimestamp of thisMonday to set the key
         const thisMonday = Common.getCurrentMonday(unixtimestamp);
-        const index = Math.floor(thisMonday.getTime() / 1000);
 
-        // if programlist contains key named timestamp
-        if(this.programList[index] == undefined) {
-
-            result = await ProgramlistLoader.getProgramListWithTimestamp(this.xlsFolder, index);
+        // if no this timestamp as key be stored in the parameter (this.programlist)
+        if(this.programList[thisMonday.getTime()] == undefined) {
+            // load the data and get the programlist
+            // set list in programlist
+            result = await ProgramlistLoader.getProgramListWithUnixTimestamp(this.xlsFolder, thisMonday.getTime());
             this.programList[result["timestamp"]] = result["list"];
-
-            return result || [];
+            return this.programList[result["timestamp"]] || [];
         }
         else {
-            return this.programList[index];
+            // is programlist is stored in the app, then resturn parameter (this.programlist) first
+            return this.programList[thisMonday.getTime()];
         }
     }
         
