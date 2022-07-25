@@ -43,6 +43,7 @@ class Common {
                 M: elements[1],
                 D: elements[2]
             };
+
             const result = this.dataFormater(data, format);
             return result;
         } catch (e) {
@@ -54,8 +55,8 @@ class Common {
 
     // ++ ToDo: complete formater
     // data = { a: '56789', b: '2', c: '3', D: '44' };
-    // format = 'aaaabbcDDDD'
-    // result = '56780230044'
+    // format = 'aaaabbcDDDDa'
+    // result = '678902300449' 不會互相干擾
     // 補0 , 切割
     // result = '56780230044'
     /**
@@ -67,28 +68,57 @@ class Common {
     static dataFormater(data: object, format: string): string {
 
         let result = "";
-        do {
-            const firstChar = format.charAt(0);
-            // if the length of string mapped by format key in data object !== 0 
-            if(data[firstChar].length !== 0) {
-                // add char in data to result
-                result = result + data[firstChar][0];
-                // pop the element in data object (because it's added in result now)
-                data[firstChar] = data[firstChar].substring(1);
-                // pop the format element (because we met the requirement before)
-                format = format.substring(1);
-            // check firstChar == "/" or "-" which is not in data object
-            } else if(firstChar === "/" || firstChar === "-") {
-                // check not number result = result + firstChar;
-                result = result + firstChar;
-                format = format.substring(1);
+        // 記錄目前 lastChar
+        let lastChar = format.charAt(format.length - 1);
+        // k = 連續字符的第一個index, j為連續字符的最後一個＋1 的 index
+        let k = 0, j = 1;
+        // num 為連續的總數
+        let num = 1;
+
+        for (let i = 0; i < format.length; i++) {
+            
+            if (format[k] !== format[j]) {
+                // first
+                // 重複資料的最後 index = k - 1 
+                lastChar = format.charAt(j - 1);
+
+                if (lastChar in data) {
+                    // if format char in data object -> get data object slice,
+                    // if larger use padding, if not return original result
+                    result = result + this.PaddingLeft(data[lastChar].slice(- num), num);
+                } else {
+                    // if format char not in data object -> add it directly
+                    result = result + lastChar;
+                }
+                // reset
+                k = j;
+                num = 1;
+
             } else {
-                // if no data 補 0
-                result = result + "0"
-                format = format.substring(1)
+                // accumulate
+                num = num + 1;
             }
-        } while (format.length > 0)
+            // use for for loop
+            j = j + 1;
+
+        }
+
         return result;
+    }
+
+    static PaddingLeft(str: string, length: number): string {
+
+        let result;
+
+        if(str.length >= length) {
+            result = str;
+            return result;
+        } else {
+            // padding
+            result = str;
+            result = "0".repeat(length-str.length) + result;
+            return result;
+        }
     }
 }
 
