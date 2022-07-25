@@ -12,13 +12,11 @@ class Common {
         const currentDayBeforeMonday = (new Date(timestamp).getDay() - 1) * interval;
         const currentMondayTimestamp = timestamp - (timestamp % interval) - currentDayBeforeMonday;        
         const result = new Date(currentMondayTimestamp);
-
         return result;
     
     }
 
     // ++ ToDo: complete exception handler
-
     static getFormatedDate(date: Date, format = "YYYYMMDD"): string {
 
         // if date can't be the transfer to date
@@ -52,16 +50,17 @@ class Common {
         let result = "";
         do{
             const firstChar = format.charAt(0);
-            if(data[format.charAt(0)].length !== 0){
-                // add char in data to formated_data
-                result = result + data[format.charAt(0)][0];
+            if(data[firstChar].length !== 0){
+                // add char in data to result
+                result = result + data[firstChar][0];
                 // pop the element in data
-                data[format.charAt(0)] = data[format.charAt(0)].substring(1);
+                data[firstChar] = data[firstChar].substring(1);
                 //  pop the format element
                 format = format.substring(1);
-            } else if(firstChar==="/"||firstChar==="-"){
-                // check not number result=result + format.charAt(0);
-                result = result + format.charAt(0);
+            // check firstChar == "/" or "-" which is not in data object
+            } else if(firstChar === "/"||firstChar === "-"){
+                // check not number result=result + firstChar;
+                result = result + firstChar;
                 format = format.substring(1);
             } else {
                 // if no data 補 0
