@@ -1,4 +1,5 @@
-
+import DateError from "./date_error";
+import { ERROR_CODE } from "server/constant/error_code";
 class Common {
 
     // type input getCurrentMonday
@@ -20,18 +21,24 @@ class Common {
 
     static getFormatedDate(date: Date, format = "YYYYMMDD"): string {
 
-        // change time to local time
-        const off = date.getTimezoneOffset();
-        const raw = new Date(date.getTime() - off*60*1000).toISOString().replace("Z", "").split("T");
-        const elements = raw[0].split("-").concat(raw[1].split(":"));
-        const data = {
-            Y: elements[0],
-            M: elements[1],
-            D: elements[2]
-        };
-        // if date can't be the 
-        const result = this.dataFormater(data, format);
-        return result;
+        // if date can't be the transfer to date
+        try {
+            // change time to local time
+            const off = date.getTimezoneOffset();
+            const raw = new Date(date.getTime() - off*60*1000).toISOString().replace("Z", "").split("T");
+            const elements = raw[0].split("-").concat(raw[1].split(":"));
+            const data = {
+                Y: elements[0],
+                M: elements[1],
+                D: elements[2]
+            };
+            const result = this.dataFormater(data, format);
+            return result;
+        } catch (e) {
+            // catch the error (for example: RangeError: invalid date)
+            throw new DateError(ERROR_CODE.INVALID_DATE_ERROR, "invalid date")
+        }
+
     }
 
     // ++ ToDo: complete formater
