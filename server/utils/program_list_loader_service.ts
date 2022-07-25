@@ -101,7 +101,7 @@ class ProgramlistLoader {
         const currentMondayDate = Common.getCurrentMonday(unixtimestamp);
         // normalize monday date to local monday and ge the normalized monday date 'YYYYMMDD'
         const normalizedMondayDate = await Common.getFormatedDate(new Date(currentMondayDate.getTime()), 'YYYYMMDD');
-    
+
         // readfile -> transfer excel to json -> format the result and return it
         // Error:
         // 1. invalid path

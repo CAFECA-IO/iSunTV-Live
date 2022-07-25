@@ -81,7 +81,7 @@ class ChinasunService {
         if(this.programList[thisMonday.getTime()] == undefined) {
             // load the data and get the programlist
             // set list in programlist
-            result = await ProgramlistLoader.getProgramListWithUnixTimestamp(this.xlsFolder, thisMonday.getTime());
+            result = await ProgramlistLoader.getProgramListWithUnixTimestamp(this.xlsFolder, unixtimestamp);
             this.programList[result["timestamp"]] = result["list"];
             return this.programList[result["timestamp"]] || [];
         }

@@ -6,11 +6,17 @@ class Common {
     // type output getCurrentMonday
     // 加上 變數type註解
     static getCurrentMonday(unixtimestamp: number): Date {
+        
+        const normalizedTime = new Date(Math.floor(unixtimestamp));
+        const normalizedUnixtimestamp = normalizedTime.getTime();
+        const offset = normalizedTime.getTimezoneOffset();
+
         const interval = 24 * 60 * 60 * 1000;
-        const timestamp = unixtimestamp > 0 ? Math.floor(unixtimestamp): new Date().getTime();
+        const timestamp = normalizedUnixtimestamp > 0 ? Math.floor(normalizedUnixtimestamp) - (offset * 60 * 1000): new Date().getTime();
         const currentDayBeforeMonday = (new Date(timestamp).getDay() - 1) * interval;
         const currentMondayTimestamp = timestamp - (timestamp % interval) - currentDayBeforeMonday;        
         const result = new Date(currentMondayTimestamp);
+
         return result;
 
 
@@ -22,8 +28,7 @@ class Common {
         // if date can't be the transfer to date
         try {
             // change time to local time
-            const off = date.getTimezoneOffset();
-            const raw = new Date(date.getTime() - off*60*1000).toISOString().replace("Z", "").split("T");
+            const raw = new Date(date.getTime()).toISOString().replace("Z", "").split("T");
             const elements = raw[0].split("-").concat(raw[1].split(":"));
             const data = {
                 Y: elements[0],

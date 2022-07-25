@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './container/app/app';
-import REPORT_WEB_VITALS from './utils/reportWebVitals';
+import reportWebVitals from './utils/reportWebVitals';
 import './i18n/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { CookiesProvider } from 'react-cookie';
@@ -24,4 +24,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-REPORT_WEB_VITALS(console.log);
+reportWebVitals(console.log);
