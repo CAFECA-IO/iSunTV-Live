@@ -59,7 +59,7 @@ class Common {
                 // pop the format element (because we met the requirement before)
                 format = format.substring(1);
             // check firstChar == "/" or "-" which is not in data object
-            } else if(firstChar === "/"||firstChar === "-"){
+            } else if(firstChar === "/" || firstChar === "-"){
                 // check not number result = result + firstChar;
                 result = result + firstChar;
                 format = format.substring(1);
