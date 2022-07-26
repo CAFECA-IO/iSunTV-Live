@@ -1,6 +1,6 @@
 import React from 'react';
 import update from 'immutability-helper';
-import './Contact.scss';
+import './contact.scss';
 
 class Contact extends React.Component {
     
@@ -115,7 +115,7 @@ class Contact extends React.Component {
             };
 
             // put send mail in redux
-            fetch("http://localhost:3000/api/v1/sendmail", {
+            fetch("/api/v1/sendmail", {
 
                 method: "POST", 
                 body: JSON.stringify(DATA),
@@ -123,7 +123,7 @@ class Contact extends React.Component {
                     'Content-type': 'application/json; charset=UTF-8'
                 }
             
-            }).then(res => {
+            }).then(() => {
 
                 // set 送出成功 message to the button
                 this.setState(update(this.state, {
@@ -148,23 +148,18 @@ class Contact extends React.Component {
             });
 
         } else {
-
+            
+            // set 欄位未完成 message to the button
             this.setState( update(this.state, {
-
                 message: { $set: '欄位未完成' },
                 messageClass: { $set: 'error' }
-            
             }), () => {
-            
+                // return the 送出 message to let user know it's time that the system can send the msg
                 setTimeout(() => {
-            
-                    this.setState(update(this.state, {
-                    
+                    this.setState(update(this.state, {               
                         message: { $set: '送出' },
-                        messageClass: { $set: '' }
-                    
+                        messageClass: { $set: '' }             
                     }));
-            
                 }, 2500);
             
             });

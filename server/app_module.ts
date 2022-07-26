@@ -1,11 +1,11 @@
-import { MiddlewareConsumer, Module,NestModule,OnModuleInit,RequestMethod } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import { join } from 'path';
-import AppController from './app.controller';
-import AppService from './app.service';
-import MiddlewaremainMiddleware from './middleware/middlewaremain.middleware';
-import ApiModule from './module/api.module';
+import AppController from './app_controller';
+import AppService from './app_service';
+import MiddlewaremainMiddleware from './middleware/middlewaremain_middleware';
+import ApiModule from './module/api_module';
 
 // import ConfigModule, ApiModule
 @Module({

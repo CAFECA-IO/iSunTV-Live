@@ -2,8 +2,8 @@ import { combineReducers } from 'redux';
 import chinasuntv from './chinasuntv';
 
 // put chinasun reducer into root reducer
-const ROOTREDUCER = combineReducers({
+const rootProducer = combineReducers({
     chinasuntv
 });
 
-export default ROOTREDUCER;
+export default rootProducer;

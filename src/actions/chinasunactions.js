@@ -1,27 +1,25 @@
-export const FETCH_PROGRAMLIST = 'FETCH_PROGRAMLIST'
-export const SEND_EMAIL = 'SEND_EMAIL'
+export const fetchProgramlist = 'FETCH_PROGRAMLIST'
+export const sendEmail = 'SEND_EMAIL'
 
 
 // fetch the programlist
-export function fetchProgramlist() {
+export function fetchProgramlistAction() {
 
     // return fetch(`http://localhost:3000/api/v1/programlist`)
     //     .then(response => response.json())
     //     .then(json => dispatch(receivePosts(subreddit, json)))
 
     return {
-      type: GET_PROGRAMLIST,
-      payload
+      type: fetchProgramlist
     }
   
 }
 
 // send the email with email config
-export function sendEmail(conig) {
+export function sendEmailAction() {
 
     return {
-      type: SEND_EMAIL,
-      payload 
+      type: sendEmail
     }
 
 }

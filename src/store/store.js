@@ -3,10 +3,10 @@ import rootReducer from '../reducers/reducer';
 
 // store: 把 reducer, action, state 整合的地方
 // configureStore 再看看 怎麼寫
-const STORE = configureStore({
+const store = configureStore({
     reducer: {
         rootReducer
     },
 });
 
-export default STORE; 
+export default store; 

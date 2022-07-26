@@ -1,7 +1,15 @@
 import fs from 'fs';
 import xlsx from 'xlsx';
-import FileError from './FileError';
-import { ERROR_CODE }  from './ErrorCode';
+import FileError from './file_error';
+import { ERROR_CODE }  from '../constant/error_code';
+
+type fileJson = {
+    name: string;
+    atime: number;
+    birthtime: number;
+    mtime: number;
+    ctime: number;
+};
 
 class FileOperator{
 
@@ -14,9 +22,9 @@ class FileOperator{
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async getFileList(path) {
+    static async getFileList(path: string): Promise<fileJson[]> {
 
-        return new Promise<any[]>((resolve, reject) => {
+        return new Promise<fileJson[]>(() => {
 
             fs.readdir(path, (err, files) => {
                 // err handling (add try catch)
@@ -27,11 +35,11 @@ class FileOperator{
                 
                     if (err.code === 'ENOENT') {
                 
-                        reject(new FileError(ERROR_CODE.INVALID_PATH_ERROR,"invalid path"))
+                        new FileError(ERROR_CODE.INVALID_PATH_ERROR,"invalid path")
                 
                     } else {
                 
-                        reject(new FileError(ERROR_CODE.FOLDER_NO_READ_ERROR,"Folder can't be read"))
+                        new FileError(ERROR_CODE.FOLDER_NO_READ_ERROR,"Folder can't be read")
                 
                     }
                 }
@@ -53,7 +61,7 @@ class FileOperator{
                 
                 })
 
-                resolve(result);
+                return(result);
             });
         });
     }
@@ -63,7 +71,7 @@ class FileOperator{
      * @param sheetBuffer options to start the function with
      * @returns result when the transformation is completed
      */
-    static excelToJson(sheetBuffer) {
+    static excelToJson(sheetBuffer: any): any {
         // transfer excel to json
         const result = xlsx.utils.sheet_to_json(sheetBuffer.Sheets[sheetBuffer.SheetNames[0]]);
         return result;
@@ -75,7 +83,7 @@ class FileOperator{
      * @param path options to start the function with
      * @returns a promise resolved result when the function is ready to be called
      */
-    static async readFile(path) {
+    static async readFile(path: string): Promise<any> {
         let file;
         try {
             file = xlsx.readFile(path, { type:'binary', cellDates:true } )

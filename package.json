@@ -50,6 +50,7 @@
     "start:react": "react-scripts start",
     "start": "nest start",
     "build:nest": "nest build",
+    "debug:nest": "nest start --debug --watch",
     "build:react": "react-scripts build",
     "test:react": "react-scripts test",
     "eject:react": "react-scripts eject"

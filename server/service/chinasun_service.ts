@@ -1,7 +1,8 @@
 import { Injectable } from '@nestjs/common';
-import ProgramlistLoader from 'server/utils/ProgramListLoader.service';
+import ProgramlistLoader from 'server/utils/program_list_loader_service';
 import Common from '../utils/common';
 import * as hound from 'hound';
+
 
 /**
  * handle the programlist service for chinasun controller
@@ -14,6 +15,7 @@ class ChinasunService {
     xlsFolder: string;
     // add json param
     programList = {};
+
     //the class constructor
     /**
      * set the default constructor without param
@@ -22,11 +24,12 @@ class ChinasunService {
         // nothing to do
     }
     
-    async initialize({ XLSFOLDER_DIR }){
+    async initialize(XLSFOLDER_DIR: string): Promise<boolean> {
         
         this.xlsFolder = XLSFOLDER_DIR;
         await this.getLatestProgramList();
 
+        // set the watcher here, if the watcher start, call getLatestProgramList() to store the result 
         const watcher = hound.watch(this.xlsFolder);
 
         watcher.on('create', async () => {
@@ -44,21 +47,23 @@ class ChinasunService {
         return true;
     }
 
-    async getLatestProgramList() {
+    async getLatestProgramList(): Promise<boolean> {
+
         const result = await ProgramlistLoader.getLatestProgramList(this.xlsFolder);
         this.programList[result["timestamp"]] = result["list"];
         return true;
+    
     }
 
     //the function of getting updated data
     /**
      * return @param {string} result store the current yyyymmdd string
      */
-    async getProgramlist() {    
+    async getProgramlist(): Promise<object[]> {    
 
-        // timestamp now
+        // use now timestamp to get now programlist
         const now = new Date().getTime();
-        return this.getProgramlistWithTimestamp(now);
+        return this.getProgramlistWithUnixTimestamp(now);
 
     }
 
@@ -66,19 +71,26 @@ class ChinasunService {
     /**
      * return @param {string} result store the current yyyymmdd string
      */
-     async getProgramlistWithTimestamp(timestamp) {   
+     async getProgramlistWithUnixTimestamp(unixtimestamp: number): Promise<object[]> {   
+
         let result;
-        const thisMonday = Common.getCurrentMonday(timestamp);
-        const index = (thisMonday.getTime() / 1000).toString();
-        // if programlist contains key named timestamp
-        if(this.programList[index] == undefined) {
-            result = await ProgramlistLoader.getProgramListWithTimestamp(this.xlsFolder, index);
-            // ++ todo: check result
+        // get unixtimestamp of thisMonday to set the key
+        const thisMonday = Common.getCurrentMonday(unixtimestamp);
+
+        // if no this timestamp as key be stored in the parameter (this.programlist)
+        if(this.programList[thisMonday.getTime()] == undefined) {
+            
+            // load the data and get the programlist
+            // set list in programlist
+            result = await ProgramlistLoader.getProgramListWithUnixTimestamp(this.xlsFolder, unixtimestamp);
             this.programList[result["timestamp"]] = result["list"];
-            return result || [];
+            
+            // return pure result list
+            return this.programList[result["timestamp"]] || [];
         }
         else {
-            return this.programList[index];
+            // is programlist is stored in the app, then resturn parameter (this.programlist) first
+            return this.programList[thisMonday.getTime()];
         }
     }
         

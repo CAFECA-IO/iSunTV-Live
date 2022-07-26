@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import SendMailService from '../service/sendmail.service'; 
+import SendMailService from '../service/sendmail_service'; 
 
 @Controller('sendmail')
 class SendMailController {
@@ -26,14 +26,12 @@ class SendMailController {
    */
   initialize() {
   
-    const CONFIG = {
-      
-      GOOGLE_CLIENT_ID: this.configService.get('GOOGLE_CLIENT_ID'),
-      GOOGLE_CLIENT_PASSWORD: this.configService.get('GOOGLE_CLIENT_PASSWORD')
-
+    const config = {
+      googleClientID: this.configService.get('GOOGLE_CLIENT_ID'),     
+      googleClientPassword: this.configService.get('GOOGLE_CLIENT_PASSWORD')
     }
     
-    this.sendmailService.initialze(CONFIG);
+    this.sendmailService.initialze(config);
 
   }
 
@@ -42,7 +40,7 @@ class SendMailController {
    * initialize the SendMailService with the email config
    */
   @Post()
-  async sendMail(@Body('comment') comment: string) {
+  async sendMail(@Body('comment') comment: string): Promise<any> {
 
     return await this.sendmailService.sendMail(comment);
 

@@ -1,11 +1,16 @@
-import SendMail from '../utils/SendMail';
+import SendMail from '../utils/sendmail';
+
+type emailConfig = {
+    googleClientID: string; 
+    googleClientPassword: string; 
+}
 
 class JobWorker {
 
     /** @param {any} jobQueue default job queue*/
     jobQueue : any;
-    /** @param {any} config default email config*/
-    config : any;
+    /** @param {object} config default email config*/
+    config : emailConfig;
 
     //the class constructor
     /**
@@ -20,7 +25,7 @@ class JobWorker {
      * @param q means job queue
      * @param config means email config
      */
-    initialize(q, config){
+    initialize(q: any, config: emailConfig){
         
         this.jobQueue = q;
         this.config = config;
@@ -39,13 +44,13 @@ class JobWorker {
      * @param comment means email comment
      * @returns a promise resolved result when the function is ready to be called
      */
-    pushQueue(config, comment) {
+    pushQueue(config: emailConfig, comment: string): Promise<any> {
 
         // push new job
-        this.jobQueue.push(function () {
+        return this.jobQueue.push(() => {
 
-            return SendMail.sendMail(config, comment);          
-        
+            return SendMail.sendMail(config, comment);
+
         });
     
     }
@@ -57,7 +62,7 @@ class JobWorker {
      * @param config means email comment
      * @returns a promise resolved result when the function is ready to be called
      */
-    async runQueueLoop(q, config, comment) {
+    async runQueueLoop(q: any, config: emailConfig, comment: string) {
 
         const runQueue = this.runQueue;
 
@@ -89,7 +94,7 @@ class JobWorker {
      * wake up the worker to run jobQueue loop
      * @param comment means email comment
      */
-    workerOn(comment) {
+    workerOn(comment: string): string {
 
         const q = this.jobQueue;
         const config = this.config;
@@ -109,30 +114,26 @@ class JobWorker {
      * @param comment means email comment
      * @returns a promise resolved result when the function is ready to be called
      */
-    async runQueue(q, config, comment) {
-
-        return new Promise<any>((resolve, reject) => {
+    async runQueue(q: any, config: emailConfig, comment: string) {
             
-            // start to run the queue
-            q.start((err)=> {
+        // start to run the queue
+        q.start((err)=> {
 
-                if (err) {
-                    // call push job function
-                    q.push(function () {
-                        return SendMail.sendMail(config, comment);          
-                    });
+            if (err) {
+                // call push job function
+                q.push(() => {
+                    return SendMail.sendMail(config, comment);          
+                });
 
-                    // add job worker error
-                    reject(err);        
-                    
-                } else {
-                    
-                    resolve(q.results);
+                // add job worker error
+                throw(err);        
                 
-                }
+            } else {
+                
+                return(q.results);
             
-            })
-    
+            }
+        
         })
 
     }  
