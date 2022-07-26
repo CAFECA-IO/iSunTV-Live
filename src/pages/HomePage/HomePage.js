@@ -1,11 +1,11 @@
 import React, { Fragment } from "react";
 import Header from '../../components/Header/Header';
-import FOOTER from "../../components/Footer/Footer";
-import Chinasuntv from "../../components/Chinasuntv/Chinasuntv";
-import ProgramList from "../../components/Programlist/Programlist";
-import Contact from "../../components/Contact/Contact";
-import About from "../../components/About/About";
-import './HomePage.scss';
+import Footer from "../../components/Footer/Footer";
+import Chinasuntv from "../../components/chinasuntv/chinasuntv";
+import ProgramList from "../../components/programlist/programlist";
+import Contact from "../../components/contact/contact";
+import About from "../../components/about/about";
+import './homepage.scss';
 
 class HomePage extends React.Component {
 
@@ -31,7 +31,7 @@ class HomePage extends React.Component {
           <ProgramList></ProgramList>
           <About></About>
           <Contact></Contact>
-          <FOOTER></FOOTER>
+          <Footer></Footer>
         </div>
       </Fragment>
     

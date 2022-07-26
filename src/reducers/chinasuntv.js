@@ -2,8 +2,8 @@ import update from 'immutability-helper';
 import * as types from '../actions/chinasunactions';
 
 /** @param {ChinasunService} chinasunService handle the programlist related service*/
-const INITIAL_ITEMS = {
-    INFO: { WEEK: [], WEEK_INFO: {} }
+const initialItems = {
+    info: { week: [], weekInfo: {} }
 };
 
 // A function is used to get chinasuntv actions and update state
@@ -12,7 +12,7 @@ const INITIAL_ITEMS = {
  * @param state means the passed state
  * @param action means action which is needed to be passed into the function
  */
-export default function getChinaSuntv(state = INITIAL_ITEMS, action = {}) {
+export default function getChinaSuntv(state = initialItems, action = {}) {
     
     switch (action.type) {
         
@@ -20,7 +20,7 @@ export default function getChinaSuntv(state = INITIAL_ITEMS, action = {}) {
     
         return update(state, {
 
-            INFO: { $set: action.data }
+            info: { $set: action.data }
         
         });
         

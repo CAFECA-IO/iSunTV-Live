@@ -1,7 +1,7 @@
 /* eslint-disable no-extra-boolean-cast */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { transferToTime, transferToWeek, transferToWeekInfo, getThisWeekDay } from '../../utils/TimeOperator';
+import { transferToTime, transferToWeek, transferToWeekInfo, getThisWeekDay } from '../../utils/time_operator';
 import update from 'immutability-helper';
 import moment from 'moment';
 import './programlist.scss';
@@ -39,9 +39,9 @@ class ProgramList extends React.Component {
      * @param data means payload data from the api
      */ 
     updateState(data) {
-
-        const WEEK = transferToWeek(data.payload) ;
-        this.setState({ data : data.payload, weekInfo: transferToWeekInfo(data.payload, WEEK) }); 
+        // no payload
+        const week = (("payload" in data) === true) ? transferToWeek(data) : [];
+        this.setState({ data : data.payload, weekInfo: transferToWeekInfo(data.payload, week) }); 
     
     }
 
@@ -85,9 +85,9 @@ class ProgramList extends React.Component {
     renderTabs() {
 
         /** @param {object} TABS tabs's classname of active selected by user*/
-        const TABS = this.state.tabs;
-        const WEEK = getThisWeekDay();
-        const TODAYDAY = new Date().getDay(); 
+        const tabs = this.state.tabs;
+        const week = getThisWeekDay();
+        const todayDay = new Date().getDay(); 
 
         let weekTabs = [];
         let today;
@@ -130,20 +130,20 @@ class ProgramList extends React.Component {
         }
 
         // if week contains things
-        if(!!WEEK) {
+        if(!!week) {
 
             let index = 0;
             
-            WEEK.forEach((date)=> {
+            week.forEach((date)=> {
                 // get the weekdate in this week
-                const WEEKDATE = moment(new Date(date)).format('dddd').slice(0, 3);
-                const DAY = chineseWeek[WEEKDATE];
+                const weekDate = moment(new Date(date)).format('dddd').slice(0, 3);
+                const DAY = chineseWeek[weekDate];
                 const DATE_NUM = date.slice(-2);
 
                 let now_tag = '';
 
                 // if it's today , add "now" class name 
-                if (WEEKDATE === moment().format('dddd').slice(0, 3)) {
+                if (weekDate === moment().format('dddd').slice(0, 3)) {
 
                     now_tag = 'now';
                 
@@ -153,8 +153,8 @@ class ProgramList extends React.Component {
                 const CONTENT = (
                     <div
                         key = { DATE_NUM }
-                        className={`${now_tag} ${TABS[WEEKDATE]}${TODAYDAY === Number(index) + today || TODAYDAY === Number(index) + yesterday || TODAYDAY === Number(index) + tomorrow ? '' : ' hidden'}`}
-                        onClick={() => this.selectProgrmaList(WEEKDATE)}
+                        className={`${now_tag} ${tabs[weekDate]}${todayDay === Number(index) + today || todayDay === Number(index) + yesterday || todayDay === Number(index) + tomorrow ? '' : ' hidden'}`}
+                        onClick={() => this.selectProgrmaList(weekDate)}
                     >
                         <div>{ DATE_NUM }<span>{ DAY }</span></div>
                     </div>
@@ -180,65 +180,65 @@ class ProgramList extends React.Component {
     renderProgramList() {
 
         // need to organize the programInfo data structure
-        const WEEK = getThisWeekDay();
-        const WEEK_INFO = this.state.weekInfo;
+        const week = getThisWeekDay();
+        const weekInfo = this.state.weekInfo;
         let programList = [];
 
         // if week info contains things
-        if (WEEK_INFO !== null) {
+        if (weekInfo !== null) {
 
             let day = {
-                Mon: WEEK[0],
-                Tue: WEEK[1],
-                Wed: WEEK[2],
-                Thu: WEEK[3],
-                Fri: WEEK[4],
-                Sat: WEEK[5],
-                Sun: WEEK[6]
+                Mon: week[0],
+                Tue: week[1],
+                Wed: week[2],
+                Thu: week[3],
+                Fri: week[4],
+                Sat: week[5],
+                Sun: week[6]
             }
 
 
             let arr;
 
             // if data == data in this week
-            if (typeof(WEEK_INFO[day.Mon]) !== 'undefined') {
+            if (typeof(weekInfo[day.Mon]) !== 'undefined') {
 
                 // if we get weekInfo this week, we set the action of changing info which could be triggered by the user's selection
                 switch (this.day) {
 
                     case 'Mon':
 
-                        arr = WEEK_INFO[day.Mon];
+                        arr = weekInfo[day.Mon];
                         break;
 
                     case 'Tue':
 
-                        arr = WEEK_INFO[day.Tue];
+                        arr = weekInfo[day.Tue];
                         break;
     
                     case 'Wed':
 
-                        arr = WEEK_INFO[day.Wed];
+                        arr = weekInfo[day.Wed];
                         break;
 
                     case 'Thu':
 
-                        arr = WEEK_INFO[day.Thu];
+                        arr = weekInfo[day.Thu];
                         break;
 
                     case 'Fri':
 
-                        arr = WEEK_INFO[day.Fri];
+                        arr = weekInfo[day.Fri];
                         break;
 
                     case 'Sat':
 
-                        arr = WEEK_INFO[day.Sat];
+                        arr = weekInfo[day.Sat];
                         break;
                     
                     case 'Sun':
                         
-                        arr = WEEK_INFO[day.Sun];
+                        arr = weekInfo[day.Sun];
                         break;
                     
                     default:
@@ -256,7 +256,7 @@ class ProgramList extends React.Component {
             // return the programlist of certain day
             for (let item of arr) {
 
-                const CONTENT = (
+                const content = (
                 
                     <div key = { transferToTime(item.PlayTime) } className = 'scroll'>
                         <div>{ transferToTime(item.PlayTime) }</div>
@@ -267,22 +267,22 @@ class ProgramList extends React.Component {
                 );
 
                 // push every program to the programlist
-                programList.push(CONTENT);
+                programList.push(content);
             
             }
 
             // if no data, return tab of "目前無資料"
             if (programList.length === 0) {
 
-                const CONTENT_NULL = (
+                const noContent = (
                 
                     <div className = 'no_content'>
-                        目前無資料
+                        目前尚無資料
                     </div>
                 
                 );
                 // push element of no data to the programlist
-                programList.push(CONTENT_NULL);                
+                programList.push(noContent);                
             }
         
         } 
@@ -303,15 +303,15 @@ class ProgramList extends React.Component {
     // A function is used to render programlist 
     render() {
 
-        const YEAR = new Date().getFullYear();
-        const MONTH = new Date().getMonth() + 1;
+        const year = new Date().getFullYear();
+        const month = new Date().getMonth() + 1;
 
         // return the programlist data this week
         return (
         
             <div className="c_programList">
                 <div className="date">
-                    <div>{ `${YEAR}年${MONTH}月` }</div>
+                    <div>{ `${year}年${month}月` }</div>
                 </div>
                 <div className="tabs">
                     { this.renderTabs() }

@@ -2,7 +2,7 @@ import { React } from "react";
 import './footer.scss';
 
 // use function component to pass the footer text
-const FOOTER = (props) => {    
+const Footer = () => {    
 
     return (
 
@@ -19,4 +19,4 @@ const FOOTER = (props) => {
 
 }
 
-export default FOOTER;
+export default Footer;
