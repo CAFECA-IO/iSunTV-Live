@@ -42,7 +42,6 @@ function transferToTime(datetime) {
 function transferToWeek(data) {
 
         const weekSet = new Set();
-        
         data.forEach((item) => {
         
             let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");

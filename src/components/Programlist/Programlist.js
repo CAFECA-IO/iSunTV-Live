@@ -40,7 +40,7 @@ class ProgramList extends React.Component {
      */ 
     updateState(data) {
         // no payload
-        const week = (("payload" in data) === true) ? transferToWeek(data) : [];
+        const week = (("payload" in data) === true) ? transferToWeek(data["payload"]) : [];
         this.setState({ data : data.payload, weekInfo: transferToWeekInfo(data.payload, week) }); 
     
     }
