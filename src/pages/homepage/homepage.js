@@ -1,6 +1,6 @@
 import React, { Fragment } from "react";
-import Header from '../../components/Header/Header';
-import Footer from "../../components/Footer/Footer";
+import Header from '../../components/header/header';
+import Footer from "../../components/footer/footer";
 import Chinasuntv from "../../components/chinasuntv/chinasuntv";
 import ProgramList from "../../components/programlist/programlist";
 import Contact from "../../components/contact/contact";
