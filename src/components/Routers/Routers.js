@@ -1,9 +1,9 @@
 import React from "react";
-import HOMEPAGE from "../../pages/HomePage/HomePage";
+import HOMEPAGE from "../../pages/homepage/homepage";
 import { BrowserRouter, Routes , Route } from "react-router-dom";
 
 // routers return the BrowserRouter and pages(viewer)
-const ROUTERS = (props) => {
+const routers = () => {
 
   return (
   
@@ -17,4 +17,4 @@ const ROUTERS = (props) => {
 
 }
 
-export default ROUTERS; 
+export default routers; 

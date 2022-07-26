@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Video from '../video/video';
-import { transferToTime } from '../../utils/TimeOperator';
+import { transferToTime } from '../../utils/time_operator';
 import './chinasuntv.scss';
 
 class Chinasuntv extends React.Component {
@@ -33,29 +33,38 @@ class Chinasuntv extends React.Component {
 
         // Changing state 
         const playlist = data.payload;
-        let playlist_array = [];
-        // get the closest time
-        var closet_time = playlist.map(d => Math.abs(new Date() - new Date(d.PlayTime).getTime()));
-        var idx = closet_time.indexOf(Math.min(...closet_time));
+        let playlistArray = [];
 
-        // update the data as the normalized data
-        if ( ( idx + 1 ) > ( playlist.length - 1 )){
+        if (!("payload" in data)){
+            // set the normalized data to state: data, => no data
+            playlistArray.push({ pre: "" , time: "" , tag: "" });
+            playlistArray.push({ now: "" , time: "" , tag: "目前尚無資料" });
+            playlistArray.push({ next: "" , time: "" , tag: "" });            
 
-            playlist_array.push({ pre: playlist[idx-2].prgName , time: transferToTime( playlist[idx - 2].PlayTime ) , tag: playlist[idx - 2].prgColumn });
-            playlist_array.push({ now: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn });
-            playlist_array.push({ next: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn });
-        
         } else {
-        
-            playlist_array.push({ pre: playlist[idx-1].prgName , time: transferToTime( playlist[idx - 1].PlayTime ) , tag: playlist[idx - 1].prgColumn });
-            playlist_array.push({ now: playlist[idx].prgName , time: transferToTime( playlist[idx].PlayTime ) , tag: playlist[idx].prgColumn });
-            playlist_array.push({ next: playlist[idx+1].prgName , time: transferToTime( playlist[idx + 1].PlayTime) , tag: playlist[idx + 1].prgColumn });            
-        
-        }
 
+            // get the closest time
+            let closetTime = playlist.map(d => Math.abs(new Date() - new Date(d.PlayTime).getTime()));
+            let idx = closetTime.indexOf(Math.min(...closetTime));
+
+            // update the data as the normalized data
+            if ( ( idx + 1 ) > ( playlist.length - 1 )){
+
+                playlistArray.push({ pre: playlist[idx - 2].prgName , time: transferToTime(playlist[idx - 2].PlayTime) , tag: playlist[idx - 2].prgColumn });
+                playlistArray.push({ now: playlist[idx - 1].prgName , time: transferToTime(playlist[idx - 1].PlayTime) , tag: playlist[idx - 1].prgColumn });
+                playlistArray.push({ next: playlist[idx].prgName , time: transferToTime(playlist[idx].PlayTime) , tag: playlist[idx].prgColumn });
+            
+            } else {
+            
+                playlistArray.push({ pre: playlist[idx - 1].prgName , time: transferToTime(playlist[idx - 1].PlayTime) , tag: playlist[idx - 1].prgColumn });
+                playlistArray.push({ now: playlist[idx].prgName , time: transferToTime(playlist[idx].PlayTime) , tag: playlist[idx].prgColumn });
+                playlistArray.push({ next: playlist[idx + 1].prgName , time: transferToTime(playlist[idx + 1].PlayTime) , tag: playlist[idx + 1].prgColumn });            
+            
+            }
+
+        }
         // set the normalized data to state: data
-        this.setState({ data : playlist_array }); 
-    
+        this.setState({ data : playlistArray }); 
     }
     
     componentDidMount() {
@@ -67,10 +76,10 @@ class Chinasuntv extends React.Component {
 
     render() {
         // get time now and put the data in the list 
-        const FADE  = this.state.fade;
-        const DATA = this.state.data;
+        const fade  = this.state.fade;
+        const data = this.state.data;
 
-        const PLAY_DETAILS = {
+        const playDetails = {
             fill: true,
             fluid: true,
             autoplay: false,
@@ -87,18 +96,18 @@ class Chinasuntv extends React.Component {
         return (
 
             <div className="c_chinaSuntv">
-                <Video {...PLAY_DETAILS} />
+                <Video {...playDetails} />
                 <div className="paddingBottom" />
                 <div className="nowPlaying">
                     <div>Now Playing</div>
-                    <div className={FADE}>{ !!DATA ? DATA[1].now : ''}</div>
+                    <div className={fade}>{ !!data ? data[1].now : ''}</div>
                 </div>
                 <div className="paddingBottom" />
                  <div className="preNext">
                     <div>
-                        <span className={FADE}>{ !!DATA ? DATA[0].time : ''}</span>
-                        <span className={FADE}>{ !!DATA ? DATA[1].time : ''}</span>
-                        <span className={FADE}>{ !!DATA ? DATA[2].time : ''}</span>
+                        <span className={fade}>{ !!data ? data[0].time : ''}</span>
+                        <span className={fade}>{ !!data ? data[1].time : ''}</span>
+                        <span className={fade}>{ !!data ? data[2].time : ''}</span>
                     </div>
                     <div>
                         <div><div /></div>
@@ -106,14 +115,14 @@ class Chinasuntv extends React.Component {
                         <div><div /></div>
                     </div>
                     <div className="programTag">
-                        <div><span className={FADE}>{ !!DATA ? DATA[0].tag : ''}</span></div>
-                        <div className="center"><span className={FADE}>{ !!DATA ? DATA[1].tag : ''}</span></div>
-                        <div><span className={FADE}>{ !!DATA ? DATA[2].tag : ''}</span></div>
+                        <div><span className={fade}>{ !!data ? data[0].tag : ''}</span></div>
+                        <div className="center"><span className={fade}>{ !!data ? data[1].tag : ''}</span></div>
+                        <div><span className={fade}>{ !!data ? data[2].tag : ''}</span></div>
                     </div>
                     <div className="programName">
-                        <span className={FADE}>{ !!DATA ? DATA[0].pre : ''}</span>
-                        <span className={`center ${FADE}`}>{ !!DATA ? DATA[1].now : ''}</span>
-                        <span className={FADE}>{ !!DATA ? DATA[2].next : ''}</span>
+                        <span className={fade}>{ !!data ? data[0].pre : ''}</span>
+                        <span className={`center ${fade}`}>{ !!data ? data[1].now : ''}</span>
+                        <span className={fade}>{ !!data ? data[2].next : ''}</span>
                     </div>
                 </div>
             </div>
@@ -125,9 +134,7 @@ class Chinasuntv extends React.Component {
 }
 
 Chinasuntv.propTypes = {
-
     data: PropTypes.object.isRequired
-
 };
 
 export default Chinasuntv;

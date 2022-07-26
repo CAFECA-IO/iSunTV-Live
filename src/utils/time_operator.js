@@ -42,14 +42,13 @@ function transferToTime(datetime) {
 function transferToWeek(data) {
 
         const weekSet = new Set();
+        data.forEach((item) => {
         
-        data.forEach((item, index) => {
-
             let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
             weekSet.add(datetime);
     
         });
-        
+
         return [...weekSet];
     
 }
@@ -68,8 +67,7 @@ function transferToWeekInfo(data, week) {
 
             let oneWeekInfo = [];
             
-            data.forEach((item)=>
-            {
+            data.forEach((item)=> {
                 let datetime = moment(new Date(item.PlayTime)).format("YYYY-MM-DD");
                 if (datetime === weekday) {
                     oneWeekInfo.push(item);

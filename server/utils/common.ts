@@ -102,7 +102,6 @@ class Common {
             j = j + 1;
 
         }
-
         return result;
     }
 

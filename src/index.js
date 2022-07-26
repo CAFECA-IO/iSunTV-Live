@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.scss';
 import App from './container/app/app';
-import reportWebVitals from './utils/reportWebVitals';
+import reportWebVitals from './utils/report_web_vitals';
 import './i18n/i18n';
 import { I18nextProvider } from 'react-i18next';
 import { CookiesProvider } from 'react-cookie';
@@ -20,6 +20,7 @@ root.render(
     </CookiesProvider>
   </I18nextProvider>
 );
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
