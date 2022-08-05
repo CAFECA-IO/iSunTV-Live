@@ -37,7 +37,7 @@ curl -X GET http://localhost:3000/api/v1/chinasun/programlist/
 確認有回傳節目表 表示成功
 
 # How to run the api?
-1. 確保 [http://localhost:3000/](http://localhost:3000/) 並未被佔有
+1. 確保 [http://localhost:{config port}/](http://localhost:3000/) 並未被佔有
 2. 執行以下的 command
 ```
 ＃執行 npm run build:nest 並將其編譯到 dist 中
@@ -46,7 +46,7 @@ npm run build:nest
 ＃執行 npm run start 來執行 node server 
 npm run start
 ```
-3. 進入 [http://localhost:3000/api/v1](http://localhost:3000/api/v1) 即進入 api
+3. 進入 [http://localhost:{config port}/api/v1](http://localhost:3000/api/v1) 即進入 api
 4. 使用 api 的規則請詳閱 wiki
 
 # Folder structure
