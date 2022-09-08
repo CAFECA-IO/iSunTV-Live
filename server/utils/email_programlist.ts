@@ -13,7 +13,7 @@ class EmailService {
    * getEmailAttachment function is used to get email attachment
    * @param user google client id
    * @param password google client password
-   * @returns result when the transformation is completed
+   * @returns get mail attachment status
    */
   static getMailAttachment(user, password): boolean {
     const mailServer = new Imap({
