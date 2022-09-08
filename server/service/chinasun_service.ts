@@ -33,13 +33,13 @@ class ChinasunService {
         const watcher = hound.watch(this.xlsFolder);
 
         watcher.on('create', async () => {
-
+            console.log('create');
             this.getLatestProgramList();
         
         });
 
         watcher.on('change', async () => {
-
+            console.log('change');
             this.getLatestProgramList();
         
         })
@@ -76,7 +76,6 @@ class ChinasunService {
         let result;
         // get unixtimestamp of thisMonday to set the key
         const thisMonday = Common.getCurrentMonday(unixtimestamp);
-
         // if no this timestamp as key be stored in the parameter (this.programlist)
         if(this.programList[thisMonday.getTime()] == undefined) {
             
@@ -84,7 +83,6 @@ class ChinasunService {
             // set list in programlist
             result = await ProgramlistLoader.getProgramListWithUnixTimestamp(this.xlsFolder, unixtimestamp);
             this.programList[result["timestamp"]] = result["list"];
-            
             // return pure result list
             return this.programList[result["timestamp"]] || [];
         }

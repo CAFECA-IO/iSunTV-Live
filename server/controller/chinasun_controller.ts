@@ -59,7 +59,6 @@ class ChinasunController {
         //get the latest data
         let data;
         let result;
-
         if(isNaN(parseInt(query.timestamp))) {
             // if user get timestamp without value
             try {
