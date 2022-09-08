@@ -109,3 +109,5 @@ dist
 # dist
 dist/
 build/
+
+.env
