@@ -1,7 +1,17 @@
+/* eslint-disable import/no-unresolved */
 import {Injectable} from '@nestjs/common';
+// eslint-disable-next-line import/no-unresolved
 import ProgramlistLoader from 'server/utils/program_list_loader_service';
 import Common from '../utils/common';
 import * as hound from 'hound';
+import EmailService from 'server/utils/email_programlist';
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+// const schedule = require('node-schedule');
+
+type emailConfig = {
+  googleClientID: string;
+  googleClientPassword: string;
+};
 
 /**
  * handle the programlist service for chinasun controller
@@ -11,6 +21,8 @@ import * as hound from 'hound';
 class ChinasunService {
   /** @param {string} xlsFolder default xls folder path*/
   xlsFolder: string;
+  /** @param {any} config default email config*/
+  config: emailConfig;
   // add json param
   programList = {};
 
@@ -22,7 +34,12 @@ class ChinasunService {
     // nothing to do
   }
 
-  async initialize(XLSFOLDER_DIR: string): Promise<boolean> {
+  async initialize(XLSFOLDER_DIR: string, config: emailConfig): Promise<boolean> {
+    // need to schedule the job here
+    // call email programlist function
+
+    EmailService.getMailAttachment(config.googleClientID, config.googleClientPassword);
+
     this.xlsFolder = XLSFOLDER_DIR;
     await this.getLatestProgramList();
 

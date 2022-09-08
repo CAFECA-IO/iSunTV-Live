@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import {Injectable} from '@nestjs/common';
 import queue from 'queue';
 import JobWorker from './jobworker_service';

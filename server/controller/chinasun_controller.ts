@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import {Controller, Get, Query} from '@nestjs/common';
 import {ConfigService} from '@nestjs/config';
 import FormatterService from 'server/utils/formatter_service';
@@ -41,7 +42,11 @@ class ChinasunController {
     // 先執行config
     const xlsFolderDir = process.cwd() + this.configService.get('XLSFOLDER_DIR');
     const config = xlsFolderDir;
-    this.chinasunService.initialize(config);
+    const emailConfig = {
+      googleClientID: this.configService.get('GOOGLE_CLIENT_ID'),
+      googleClientPassword: this.configService.get('GOOGLE_CLIENT_PASSWORD'),
+    };
+    this.chinasunService.initialize(config, emailConfig);
   }
 
   /**
