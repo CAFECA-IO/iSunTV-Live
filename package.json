@@ -13,6 +13,7 @@
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
     "babel-loader": "^8.2.5",
+    "base64-stream": "^1.0.0",
     "deep-equal": "^2.0.5",
     "file-name": "^0.1.0",
     "fs": "^0.0.1-security",
