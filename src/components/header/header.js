@@ -1,9 +1,9 @@
-import React from 'react';
+import React, {Component} from 'react';
 import update from 'immutability-helper';
 import {addEventListener} from '../../utils/event';
 import './header.scss';
 
-class Header extends React.Component {
+class Header extends Component {
   // A constructor is used to inherit the value (prop) from upper class
   /**
    * @param props means value from the upper class

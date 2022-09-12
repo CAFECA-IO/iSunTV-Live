@@ -1,6 +1,6 @@
 /* eslint-disable no-extra-boolean-cast */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {PropTypes} from 'prop-types';
 import {
   transferToTime,
   transferToWeek,
@@ -13,7 +13,7 @@ import './programlist.scss';
 
 // change the programlist here
 // we need to change prop to our upper class's (APP) componentdatamount data first
-class ProgramList extends React.Component {
+class ProgramList extends Component {
   constructor(props) {
     const DAY = new Date().getDay();
     super(props);

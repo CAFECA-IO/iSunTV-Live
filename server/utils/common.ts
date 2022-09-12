@@ -1,3 +1,4 @@
+/* eslint-disable import/no-unresolved */
 import DateError from './date_error';
 import {ERROR_CODE} from 'server/constant/error_code';
 

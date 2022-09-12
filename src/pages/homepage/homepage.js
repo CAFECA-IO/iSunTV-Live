@@ -1,4 +1,4 @@
-import React, {Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import Header from '../../components/header/header';
 import Footer from '../../components/footer/footer';
 import Chinasuntv from '../../components/chinasuntv/chinasuntv';
@@ -7,7 +7,7 @@ import Contact from '../../components/contact/contact';
 import About from '../../components/about/about';
 import './homepage.scss';
 
-class HomePage extends React.Component {
+class HomePage extends Component {
   // A constructor is used to inherit the value (prop)  from upper class
   /**
    * inherit the value (prop)  from upper class

@@ -1,11 +1,11 @@
 /* eslint-disable no-extra-boolean-cast */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, {Component} from 'react';
+import {PropTypes} from 'prop-types';
 import Video from '../video/video';
 import {transferToTime} from '../../utils/time_operator';
 import './chinasuntv.scss';
 
-class Chinasuntv extends React.Component {
+class Chinasuntv extends Component {
   // A constructor is used to inherit the value (prop)  from upper class
   /**
    * @param props means value from the upper class

@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import update from 'immutability-helper';
 import './contact.scss';
 
-class Contact extends React.Component {
+class Contact extends Component {
   // A constructor is used to inherit the value (prop) from upper class
   /**
    * @param props means value from the upper class

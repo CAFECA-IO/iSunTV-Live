@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
     "@testing-library/user-event": "^13.5.0",
+    "babel-loader": "^8.2.5",
     "deep-equal": "^2.0.5",
     "file-name": "^0.1.0",
     "fs": "^0.0.1-security",
@@ -38,7 +39,7 @@
     "react-player": "^2.10.1",
     "react-redux": "^8.0.2",
     "react-router-dom": "^6.3.0",
-    "react-scripts": "5.0.1",
+    "react-scripts": "^5.0.1",
     "redux": "^4.2.0",
     "reflect-metadata": "^0.1.13",
     "sass": "^1.53.0",
@@ -59,7 +60,7 @@
     "check-format": "prettier --ignore-path .gitignore --list-different \"**/*.+(js|ts|json)\"",
     "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|ts|json)\"",
     "lint": "eslint --ignore-path .gitignore .",
-    "validate": "npm run check-format && npm run lint"
+    "validate": "npm run lint && npm run check-format"
   },
   "husky": {
     "hooks": {
@@ -88,10 +89,13 @@
     "@typescript-eslint/eslint-plugin": "^5.36.2",
     "@typescript-eslint/parser": "^5.36.2",
     "eslint": "^8.23.0",
+    "eslint-config-airbnb": "^19.0.4",
     "eslint-import-resolver-typescript": "^3.5.1",
     "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.6.1",
     "eslint-plugin-prettier": "^4.2.1",
-    "eslint-plugin-react": "^7.30.1",
+    "eslint-plugin-react": "^7.31.8",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "husky": "^4.3.8",
     "lint-staged": "^13.0.3",
     "react-i18next": "^11.18.1",
