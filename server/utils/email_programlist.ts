@@ -3,6 +3,9 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import Imap from 'imap';
 import fs from 'fs';
+import ProgramlistLoader from './program_list_loader_service';
+import Common from './common';
+
 const {Base64Decode} = require('base64-stream');
 
 const inspect = require('util').inspect;
@@ -17,32 +20,38 @@ class EmailService {
    * @param password google client password
    * @returns get mail attachment status
    */
-  static getMailAttachment(user, password): boolean {
-    const mailServer = new Imap({
-      user: user,
-      password: password,
-      host: 'imap.gmail.com',
-      port: 993,
-      tls: true,
-      tlsOptions: {
-        rejectUnauthorized: false,
-      },
-      authTimeout: 3000,
-    }).once('error', function () {
-      // need to do
-    });
-    const getInboxEmail = this.getInboxEmail;
-    mailServer.once('ready', function () {
-      mailServer.openBox('INBOX', true, function (err) {
-        if (err) throw err;
+  static async getMailAttachment(
+    user: string,
+    password: string,
+    temp_path: string,
+    uidList?: string[]
+  ): Promise<string[]> {
+    return new Promise<string[]>(resolve => {
+      const mailServer = new Imap({
+        user: user,
+        password: password,
+        host: 'imap.gmail.com',
+        port: 993,
+        tls: true,
+        tlsOptions: {
+          rejectUnauthorized: false,
+        },
+        authTimeout: 3000,
+      }).once('error', function (err) {
+        // need to do
+      });
+      const getInboxEmail = this.getInboxEmail;
+      let uid;
+      mailServer.once('ready', async () => {
+        mailServer.openBox('INBOX', true, async err => {
+          if (err) throw err;
+        });
+
+        uid = await getInboxEmail(mailServer, uidList, temp_path);
       });
 
-      getInboxEmail(mailServer);
+      mailServer.connect();
     });
-
-    mailServer.connect();
-
-    return true;
   }
 
   /**
@@ -50,58 +59,70 @@ class EmailService {
    * @param mailServer mailServer
    * @returns get email is finshed or not
    */
-  static getInboxEmail(mailServer: any): boolean {
-    mailServer.openBox('INBOX', true, function (err) {
-      if (err) throw err;
+  static async getInboxEmail(
+    mailServer: any,
+    uidList: string[],
+    temp_path: string
+  ): Promise<string[]> {
+    return new Promise<string[]>(resolve => {
+      mailServer.openBox('INBOX', true, function (err) {
+        if (err) throw err;
 
-      const f = mailServer.seq.fetch('1:*', {
-        bodies: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
-        struct: true,
-      });
+        // set 'SINCE' date
+        const currentDate = new Date();
+        const dateBeforeOneWeek = currentDate.setDate(currentDate.getDate() - 7);
 
-      f.on('message', function (msg, seqno) {
-        // console.log('Message #%d', seqno);
-        const prefix = '(#' + seqno + ') ';
+        // get email in a week
+        mailServer.search([['ALL'], ['SINCE', dateBeforeOneWeek]], function (err, results) {
+          if (err) throw err;
 
-        msg.on('body', function (stream) {
-          let buffer = '';
-
-          stream.on('data', function (chunk) {
-            buffer += chunk.toString('utf8');
+          const f = mailServer.fetch(results, {
+            bodies: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
+            struct: true,
           });
 
-          stream.once('end', function () {
-            // console.log(prefix + 'Parsed header: %s', inspect(Imap.parseHeader(buffer)));
-          });
-        });
-        msg.once('attributes', function (attrs) {
-          const attachments = EmailService.getAttachmentParts(attrs.struct, []);
-          for (let i = 0, len = attachments.length; i < len; ++i) {
-            const attachment = attachments[i];
-            const f = mailServer.fetch(attrs.uid, {
-              //do not use imap.seq.fetch here
-              bodies: [attachment.partID],
-              struct: true,
+          f.on('message', function (msg) {
+            msg.once('attributes', function (attrs) {
+              if (uidList.includes(attrs.uid)) {
+                // do nothing
+              } else {
+                // fetch and download attachment
+                const attachments = EmailService.getAttachmentParts(attrs.struct, []);
+                for (let i = 0, len = attachments.length; i < len; ++i) {
+                  const attachment = attachments[i];
+                  const f = mailServer.fetch(attrs.uid, {
+                    //do not use imap.seq.fetch here
+                    bodies: [attachment.partID],
+                    struct: true,
+                  });
+                  //build function to process attachment message
+                  f.on(
+                    'message',
+                    EmailService.downloadAttachment(attachment, attrs.uid, temp_path)
+                    // download 全數完成再回傳 (如何判斷cron job 已經執行完成)
+                  );
+                }
+                // push uidList
+                uidList.push(attrs.uid);
+              }
             });
-            //build function to process attachment message
-            f.on('message', EmailService.downloadAttachment(attachment));
-          }
-        });
-        msg.once('end', function () {
-          // nothing to do
-        });
-      });
 
-      f.once('error', function () {
-        // console.log('Fetch error: ' + err);
-      });
+            msg.once('end', () => {
+              // console.log(prefix + 'Finished');
+            });
+          });
 
-      f.once('end', function () {
-        // console.log('Done fetching all messages!');
+          f.once('error', err => {
+            // console.log('Fetch error: ' + err);
+          });
+
+          f.once('end', () => {
+            mailServer.end();
+            resolve(uidList);
+          });
+        });
       });
     });
-
-    return true;
   }
 
   // test download related function
@@ -125,7 +146,6 @@ class EmailService {
       }
     }
     return attachments;
-    return ['attachment_file1', 'attachment_file2'];
   }
 
   /**
@@ -133,31 +153,39 @@ class EmailService {
    * @param attachment attachment from mail
    * @returns UID
    */
-  static downloadAttachment(attachment: any): any {
+  static downloadAttachment(attachment: any, uid: string, temp_path: string): any {
     const filename = attachment.params.name;
+
+    // const fileExtension =
+    //   filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
+
     const encoding = attachment.encoding;
 
-    return function (msg, seqno) {
-      const prefix = '(#' + seqno + ') ';
-      msg.on('body', function (stream, info) {
+    return function (msg) {
+      msg.on('body', function (stream) {
+        let writeStream;
         //Create a write stream so that we can stream the attachment to file;
-        const writeStream = fs.createWriteStream(process.cwd() + '/temp/' + filename);
-        writeStream.on('finish', function () {
-          // nothing to do
-        });
+        if (filename.includes('.xls')) {
+          // deal with xls file
+          writeStream = fs.createWriteStream(temp_path + uid + '.xls');
 
-        //stream.pipe(writeStream); this would write base64 data to the file.
-        //so we decode during streaming using
-        if (encoding.toUpperCase() === 'BASE64') {
-          //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
-          stream.pipe(new Base64Decode()).pipe(writeStream);
-        } else {
-          //here we have none or some other decoding streamed directly to the file which renders it useless probably
-          stream.pipe(writeStream);
+          writeStream.on('finish', function () {
+            // nothing to do
+          });
+          //stream.pipe(writeStream); this would write base64 data to the file.
+          //so we decode during streaming using
+          if (encoding.toUpperCase() === 'BASE64') {
+            //the stream is base64 encoded, so here the stream is decode on the fly and piped to the write stream (file)
+            stream.pipe(new Base64Decode()).pipe(writeStream);
+          } else {
+            //here we have none or some other decoding streamed directly to the file which renders it useless probably
+            stream.pipe(writeStream);
+          }
         }
       });
+
       msg.once('end', function () {
-        // nothing to do
+        // one attachment is downloaded
       });
     };
   }
@@ -167,10 +195,29 @@ class EmailService {
    * @param attachment attachment from mail
    * @returns if attachment is downloaded ok
    */
-  static attachmentChecker(uid: any): boolean {
-    const file_uid = uid;
-    file_uid;
-    return true;
+  static async attachmentChecker(temp_path: string, xls_path: string): Promise<boolean> {
+    return new Promise<boolean>(async resolve => {
+      const programlist = await ProgramlistLoader.getLatestProgramListWithCurrentTempFile(
+        temp_path
+      );
+
+      // get file's first column
+      const filename = (
+        await Common.getFormatedDate(new Date(programlist.list[0]['PlayTime'] + ' UTC'), 'YYYYMMDD')
+      ).toString();
+
+      // copy file to xls folder
+      fs.copyFile(
+        temp_path + programlist.currentWeekTempFile,
+        xls_path + filename + 'chinasuntv.xls',
+        err => {
+          if (err) throw err;
+          // console.log('File was copied to destination');
+        }
+      );
+
+      resolve(true);
+    });
   }
 }
 

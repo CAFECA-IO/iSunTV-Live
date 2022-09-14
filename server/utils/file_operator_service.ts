@@ -26,7 +26,7 @@ class FileOperator {
    * @returns a promise resolved result when the function is ready to be called
    */
   static async getFileList(path: string): Promise<fileJson[]> {
-    return new Promise<fileJson[]>(() => {
+    return new Promise<fileJson[]>(resolve => {
       fs.readdir(path, (err, files) => {
         // err handling (add try catch)
         // 1. invalid path
@@ -38,6 +38,7 @@ class FileOperator {
           } else {
             new FileError(ERROR_CODE.FOLDER_NO_READ_ERROR, "Folder can't be read");
           }
+          console.log('error');
         }
 
         const result = files
@@ -54,8 +55,7 @@ class FileOperator {
             //sort
             return a.ctime - b.ctime;
           });
-
-        return result;
+        resolve(result);
       });
     });
   }

@@ -41,12 +41,14 @@ class ChinasunController {
   async initialize() {
     // 先執行config
     const xlsFolderDir = process.cwd() + this.configService.get('XLSFOLDER_DIR');
-    const config = xlsFolderDir;
+    const tempDir = process.cwd() + this.configService.get('TEMP_DIR');
+    console.log(tempDir);
     const emailConfig = {
       googleClientID: this.configService.get('GOOGLE_CLIENT_ID'),
       googleClientPassword: this.configService.get('GOOGLE_CLIENT_PASSWORD'),
     };
-    this.chinasunService.initialize(config, emailConfig);
+
+    this.chinasunService.initialize(xlsFolderDir, tempDir, emailConfig);
   }
 
   /**

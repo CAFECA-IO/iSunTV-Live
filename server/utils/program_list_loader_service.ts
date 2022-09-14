@@ -9,6 +9,12 @@ type programList = {
   list: object[];
 };
 
+type programListWithUid = {
+  timestamp: string;
+  list: object[];
+  currentWeekTempFile: string;
+};
+
 type original_progrmalist = {
   prgID: string;
   prgName: string;
@@ -29,6 +35,7 @@ class ProgramlistLoader {
    */
   static async getLatestProgramList(path: string): Promise<programList> {
     const fileList = await FileOperator.getFileList(path);
+
     let result;
     let fileIndex;
     fileIndex = fileList.length - 1;
@@ -36,6 +43,45 @@ class ProgramlistLoader {
     do {
       try {
         result = await this.getProgramListFromFile(path + fileList[fileIndex].name);
+        fileIndex = fileIndex - 1;
+        break;
+      } catch (e) {
+        // throw invalid path error
+        let error;
+        if (e.code === 'ENOENT') {
+          error = new FileError(ERROR_CODE.INVALID_PATH_ERROR, 'invalid path');
+          throw error;
+        } else {
+          // call getprogramlist-> if []/fail do again
+          // while loop continue here
+          // if read the last file -> throw the no file can be read error
+          if (fileIndex == -1) {
+            error = new FileError(ERROR_CODE.FILE_NOT_READ_ERROR, 'no file can be read');
+            throw error;
+          }
+        }
+      }
+    } while (fileIndex >= 0);
+
+    return result;
+  }
+
+  /**
+   * get the latest programlist with given options, this is used for initialization
+   * @param path options to start the function with
+   * @returns a promise resolved result when the function is ready to be called
+   */
+  static async getLatestProgramListWithCurrentTempFile(path: string): Promise<programListWithUid> {
+    const fileList = await FileOperator.getFileList(path);
+
+    let result;
+    let fileIndex;
+    fileIndex = fileList.length - 1;
+
+    do {
+      try {
+        result = await this.getProgramListFromFile(path + fileList[fileIndex].name);
+        result['currentWeekTempFile'] = fileList[fileIndex].name;
         fileIndex = fileIndex - 1;
         break;
       } catch (e) {

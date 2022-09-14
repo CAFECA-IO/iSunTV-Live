@@ -5,6 +5,9 @@ import ProgramlistLoader from 'server/utils/program_list_loader_service';
 import Common from '../utils/common';
 import * as hound from 'hound';
 import EmailService from 'server/utils/email_programlist';
+import events from 'events';
+// import schedule from 'node-schedule';
+
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 // const schedule = require('node-schedule');
 
@@ -23,8 +26,10 @@ class ChinasunService {
   xlsFolder: string;
   /** @param {any} config default email config*/
   config: emailConfig;
+  tempFolder: string;
   // add json param
   programList = {};
+  uidList: string[];
 
   //the class constructor
   /**
@@ -32,13 +37,44 @@ class ChinasunService {
    */
   constructor() {
     // nothing to do
+    this.uidList = [];
   }
 
-  async initialize(XLSFOLDER_DIR: string, config: emailConfig): Promise<boolean> {
+  async initialize(XLSFOLDER_DIR: string, TEMP_DIR: string, config: emailConfig): Promise<boolean> {
     // need to schedule the job here
-    // call email programlist function
 
-    EmailService.getMailAttachment(config.googleClientID, config.googleClientPassword);
+    const emitter = new events.EventEmitter();
+
+    //綁定事件函式
+    emitter.on('finished', async () => {
+      console.log('JOB FINISHED');
+      const filelist = await EmailService.attachmentChecker(TEMP_DIR, XLSFOLDER_DIR);
+      console.log(filelist);
+    });
+
+    // need to fix
+    // const rule = new schedule.RecurrenceRule();
+    // rule.minute = 57;
+
+    this.uidList = await EmailService.getMailAttachment(
+      config.googleClientID,
+      config.googleClientPassword,
+      TEMP_DIR,
+      this.uidList
+    );
+    emitter.emit('finished');
+
+    // schedule.scheduleJob(rule, async () => {
+    //   // Execute Your Jobs code Here
+    //   this.uidList = await EmailService.getMailAttachment(
+    //     config.googleClientID,
+    //     config.googleClientPassword,
+    //     TEMP_DIR,
+    //     this.uidList
+    //   );
+    //   emitter.emit('finished'); // Emit your job done emitter when you are done.
+    //   // console.log('test');
+    // });
 
     this.xlsFolder = XLSFOLDER_DIR;
     await this.getLatestProgramList();
