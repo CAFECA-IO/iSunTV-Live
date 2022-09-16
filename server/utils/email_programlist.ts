@@ -24,6 +24,7 @@ class EmailService {
     user: string,
     password: string,
     temp_path: string,
+    xls_path: string,
     uidList?: string[]
   ): Promise<string[]> {
     return new Promise<string[]>(resolve => {
@@ -47,7 +48,8 @@ class EmailService {
           if (err) throw err;
         });
 
-        uid = await getInboxEmail(mailServer, uidList, temp_path);
+        uid = await getInboxEmail(mailServer, uidList, temp_path, xls_path);
+        resolve(uid);
       });
 
       mailServer.connect();
@@ -59,23 +61,22 @@ class EmailService {
    * @param mailServer mailServer
    * @returns get email is finshed or not
    */
-  static async getInboxEmail(
+  static getInboxEmail(
     mailServer: any,
     uidList: string[],
-    temp_path: string
+    temp_path: string,
+    xls_path: string
   ): Promise<string[]> {
-    return new Promise<string[]>(resolve => {
+    return new Promise<string[]>((resolve, reject) => {
       mailServer.openBox('INBOX', true, function (err) {
         if (err) throw err;
 
         // set 'SINCE' date
         const currentDate = new Date();
         const dateBeforeOneWeek = currentDate.setDate(currentDate.getDate() - 7);
-
         // get email in a week
         mailServer.search([['ALL'], ['SINCE', dateBeforeOneWeek]], function (err, results) {
           if (err) throw err;
-
           const f = mailServer.fetch(results, {
             bodies: 'HEADER.FIELDS (FROM TO SUBJECT DATE)',
             struct: true,
@@ -88,6 +89,7 @@ class EmailService {
               } else {
                 // fetch and download attachment
                 const attachments = EmailService.getAttachmentParts(attrs.struct, []);
+
                 for (let i = 0, len = attachments.length; i < len; ++i) {
                   const attachment = attachments[i];
                   const f = mailServer.fetch(attrs.uid, {
@@ -98,8 +100,8 @@ class EmailService {
                   //build function to process attachment message
                   f.on(
                     'message',
-                    EmailService.downloadAttachment(attachment, attrs.uid, temp_path)
-                    // download 全數完成再回傳 (如何判斷cron job 已經執行完成)
+                    // download 完成再回傳
+                    EmailService.downloadAttachment(attachment, attrs.uid, temp_path, xls_path)
                   );
                 }
                 // push uidList
@@ -108,12 +110,12 @@ class EmailService {
             });
 
             msg.once('end', () => {
-              // console.log(prefix + 'Finished');
+              // end message
             });
           });
 
           f.once('error', err => {
-            // console.log('Fetch error: ' + err);
+            // error message
           });
 
           f.once('end', () => {
@@ -153,24 +155,33 @@ class EmailService {
    * @param attachment attachment from mail
    * @returns UID
    */
-  static downloadAttachment(attachment: any, uid: string, temp_path: string): any {
+  static downloadAttachment(attachment: any, uid: string, temp_path: string, xls_path: string) {
     const filename = attachment.params.name;
-
     // const fileExtension =
     //   filename.substring(filename.lastIndexOf('.') + 1, filename.length) || filename;
-
     const encoding = attachment.encoding;
 
     return function (msg) {
       msg.on('body', function (stream) {
         let writeStream;
         //Create a write stream so that we can stream the attachment to file;
-        if (filename.includes('.xls')) {
+        if (filename.includes('.xls') || filename.includes('.xlsx')) {
           // deal with xls file
-          writeStream = fs.createWriteStream(temp_path + uid + '.xls');
+          if (filename.includes('.xls')) {
+            writeStream = fs.createWriteStream(temp_path + uid + '.xls');
+          } else {
+            writeStream = fs.createWriteStream(temp_path + uid + '.xlsx');
+          }
+
+          writeStream.on('error', function () {
+            // cancel download
+            writeStream.end();
+            // this function will be called if we have next message
+          });
 
           writeStream.on('finish', function () {
             // nothing to do
+            EmailService.attachmentChecker(temp_path, xls_path);
           });
           //stream.pipe(writeStream); this would write base64 data to the file.
           //so we decode during streaming using

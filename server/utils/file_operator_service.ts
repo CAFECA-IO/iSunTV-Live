@@ -38,7 +38,7 @@ class FileOperator {
           } else {
             new FileError(ERROR_CODE.FOLDER_NO_READ_ERROR, "Folder can't be read");
           }
-          console.log('error');
+          // console.log('error');
         }
 
         const result = files

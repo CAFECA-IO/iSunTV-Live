@@ -42,7 +42,7 @@ class ChinasunController {
     // 先執行config
     const xlsFolderDir = process.cwd() + this.configService.get('XLSFOLDER_DIR');
     const tempDir = process.cwd() + this.configService.get('TEMP_DIR');
-    console.log(tempDir);
+
     const emailConfig = {
       googleClientID: this.configService.get('GOOGLE_CLIENT_ID'),
       googleClientPassword: this.configService.get('GOOGLE_CLIENT_PASSWORD'),
