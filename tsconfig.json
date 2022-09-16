@@ -14,9 +14,7 @@
     "incremental": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "esModuleInterop": true,
+    "esModuleInterop": true
   },
-  "include": [
-    "server/"
-, "server/config/.env"  ]
+  "include": ["server/", "server/config/.env"]
 }

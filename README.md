@@ -2,7 +2,7 @@
 Live Stream of iSunTV
 
 # Requirements
-支援 node.js v 14.15.1 版本以上
+支援 node.js v 14.20.0 版本以上
 
 
 # Settings
