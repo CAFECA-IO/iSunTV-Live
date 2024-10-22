@@ -16,8 +16,6 @@ REMOTE=$(git rev-parse @{u})
 if [ "$LOCAL" != "$REMOTE" ]; then
   echo "New commits detected. Pulling latest changes..."
   git pull
-  pm2 delete "$APP_NAME"
-  pm2 start npm --name "$APP_NAME" -- start
 else
   echo "No new commits."
 fi
