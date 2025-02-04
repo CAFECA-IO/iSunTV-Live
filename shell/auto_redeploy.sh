@@ -16,6 +16,8 @@ REMOTE=$(git rev-parse @{u})
 if [ "$LOCAL" != "$REMOTE" ]; then
   echo "New commits detected. Pulling latest changes..."
   git pull
+
+  # 編譯並重啟服務
   npm run build:nest
   pm2 restart "$APP_NAME"
 else
