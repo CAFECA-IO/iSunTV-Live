@@ -157,8 +157,17 @@ class ProgramlistLoader {
     // 2. File can't be read
     // unix time -> current date
     try {
+      /*
       const filePath = path + normalizedMondayDate + 'chinasuntv.xls';
       result = await this.getProgramListFromFile(filePath);
+      */
+
+      // read the latest file in the folder, sort by ctime
+      const fileList = await FileOperator.getFileList(path);
+      const latestList = fileList.sort((a, b) => {
+        return b.ctime - a.ctime;
+      })[0];
+      result = await this.getProgramListFromFile(path + latestList.name);
     } catch (e) {
       // throw invalid path error
       const error = new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR, 'no file can be read');
