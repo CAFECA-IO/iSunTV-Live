@@ -16,6 +16,8 @@ REMOTE=$(git rev-parse @{u})
 if [ "$LOCAL" != "$REMOTE" ]; then
   echo "New commits detected. Pulling latest changes..."
   git pull
+  npm run build:nest
+  pm2 restart "$APP_NAME"
 else
   echo "No new commits."
 fi
