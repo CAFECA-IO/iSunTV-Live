@@ -162,12 +162,20 @@ class ProgramlistLoader {
       result = await this.getProgramListFromFile(filePath);
       */
 
-      // read the latest file in the folder, sort by ctime
+      // read the latest file in the folder, sort by name
       const fileList = await FileOperator.getFileList(path);
-      const latestList = fileList.sort((a, b) => {
-        return b.ctime - a.ctime;
-      })[0];
-      result = await this.getProgramListFromFile(path + latestList.name);
+      const latestList = fileList
+        .filter(f => {
+          // fetch normalizedMondayDate from f.name
+          const date = f.name.match(/\d{8}/);
+          // date is not greater than currentMondayDate
+          return date && date[0] >= normalizedMondayDate;
+        })
+        .sort((a, b) => {
+          return a.name.localeCompare(b.name);
+        });
+
+      result = await this.getProgramListFromFile(path + latestList[0].name);
     } catch (e) {
       // throw invalid path error
       const error = new FileError(ERROR_CODE.NO_FILE_CAN_READ_ERROR, 'no file can be read');
